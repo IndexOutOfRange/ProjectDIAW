@@ -2,7 +2,9 @@
 <resources>
 
     <string name="app_name">ProjectDIAW</string>
-    <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
+    <string name="login_text_button">Login</string>
+    <string name="pass_label">Password</string>
+    <string name="login_label">Login</string>
 
 </resources>

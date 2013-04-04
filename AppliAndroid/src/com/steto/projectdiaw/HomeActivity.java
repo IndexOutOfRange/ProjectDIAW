@@ -3,7 +3,7 @@ package com.steto.projectdiaw;
 import android.app.Activity;
 import android.os.Bundle;
 
-public class AcceuilActivity extends Activity{
+public class HomeActivity extends Activity{
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

@@ -8,6 +8,18 @@ public class Episode {
 	private String mLogin;
 	private String mMdp;
 	
+	public Episode() {
+		
+	}
+
+	public Episode( String name, int season, int episode, String login, String pass ) {
+		setShowName(name);
+		setSeasonNumber(season);
+		setmEpisodeNumber(episode);
+		setLogin(login);
+		setMdp(pass);
+	}
+	
 	public Episode( String name, int season, int episode ) {
 		setShowName(name);
 		setSeasonNumber(season);
@@ -52,6 +64,10 @@ public class Episode {
 
 	public void setShowName(String mShowName) {
 		this.mShowName = mShowName;
+	}
+	
+	public void cleanShowName() {
+		mShowName = mShowName.replace(".", " " );
 	}
 	
 }

@@ -17,6 +17,7 @@ public class DIAWMain {
 				}
 			}
 		}
+
 		
 		Diaw myDiaw = new Diaw();
 		myDiaw.addEpisode(showName);

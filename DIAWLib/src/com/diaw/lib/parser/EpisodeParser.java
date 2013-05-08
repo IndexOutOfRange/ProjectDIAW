@@ -1,15 +1,14 @@
 package com.diaw.lib.parser;
 
-import java.io.ByteArrayOutputStream;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.StringWriter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.diaw.lib.model.Episode;
-import com.diaw.lib.model.User;
 import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,26 +19,74 @@ public class EpisodeParser {
 
 
 	private int mResultCode = -1;
-	private static final String REGEX_NUMBER_ONE = "(.*?)[.\\s][sS](\\d{2})[eE](\\d{2}).*";
+	private static final String REGEX_NUMBER_ONE = "(.*?)[.\\s_-]*[sS](\\d{1,})[eE](\\d{1,}).*";
+	private static final String REGEX_NUMBER_TWO = "(.*?)[.\\s_-]*(\\d{1,})[xX](\\d{1,}).*";
 	public static final int DATA_OK = 0;
 	public static final int PARSER_KO_JSON_MALFORMED = 1;
 	public static final int PARSER_KO_JSON_OBJETS_INVALID = 2;
 	public static final int PARSER_KO = 3;
-	private String[] tests = { "xyz title name S01E02 bla bla", "bla bla title name.S03E04", "the season title name s05e03" };
+	
+	//episode's URI from vlc re like : file:///E:/BRD%20WIP/South%20Park/Saison1/South%20Park%201x01_-_Cartman_a_une_sonde_anale.avi
+	//file:///E:/BRD WIP/South Park/Saison1/South Park 1x01_-_Cartman_a_une_sonde_anale.avi
 	
 	public Episode parse( String episodeName ) {
+		episodeName = episodeName.replace("%20", " ");
+		episodeName = episodeName.replace("_", " ");
+		Episode ret = null;
+		ret = parseRegex1( episodeName );
+		if( ret == null ) {
+			ret = parseRegex2(episodeName);
+			if( ret == null ) {
+				ret = parseRegex3(episodeName);
+			}
+		}
+		if( ret != null ) {
+			ret.cleanShowName();
+		}
+	    return ret;
+	}
+	
+	private Episode  parseRegex1(String episodeName) {
 		Pattern p = Pattern.compile(REGEX_NUMBER_ONE);
-
-
 		Matcher m = p.matcher(episodeName);
 		Episode current = null;
+		
 	    if (m.matches()) {
-	    	System.out.printf("Name: %-23s Season: %s Episode: %s%n", m.group(1), m.group(2), m.group(3));
 	    	current = new Episode(m.group(1), Integer.parseInt(m.group(2)), Integer.parseInt(m.group(3)));
 	    }
 	    return current;
 	}
 	
+	private Episode  parseRegex2(String episodeName) {
+		episodeName = extractFileName(episodeName);
+		Pattern p = Pattern.compile(REGEX_NUMBER_ONE);
+		Matcher m = p.matcher(episodeName);
+		Episode current = null;
+		
+	    if (m.matches()) {
+	    	current = new Episode(m.group(1), Integer.parseInt(m.group(2)), Integer.parseInt(m.group(3)));
+	    }
+	    return current;
+	}
+	
+	private Episode  parseRegex3(String episodeName) {
+		episodeName = extractFileName(episodeName);
+		Pattern p = Pattern.compile(REGEX_NUMBER_TWO);
+		Matcher m = p.matcher(episodeName);
+		Episode current = null;
+		
+	    if (m.matches()) {
+	    	current = new Episode(m.group(1), Integer.parseInt(m.group(2)), Integer.parseInt(m.group(3)));
+	    }
+	    return current;
+	}
+
+	private String extractFileName(String episodeName) {
+		int lastSlash = episodeName.lastIndexOf("/");
+		episodeName = episodeName.substring(lastSlash + 1);
+		return episodeName;
+	}
+
 	public String serialize( Episode ep) {
 		mResultCode = -1;
 		ObjectMapper mapper = new ObjectMapper(); // can reuse, share globally
@@ -58,6 +105,7 @@ public class EpisodeParser {
 
 		return ret.getBuffer().toString();
 	}
+
 
 	public int getResultCode() {
 		return mResultCode;

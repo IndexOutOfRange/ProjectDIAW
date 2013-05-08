@@ -45,19 +45,18 @@ public class Diaw {
 	}
 
 	private boolean isAlreadySeen(Episode current) {
+		ShowConnector myConnector = new ShowConnector();
+		myConnector.requestFromNetwork(createQueryString(current), HTTPMethod.GET, "");
+		if( myConnector.getStatusCode() == 200 && myConnector.getResponseBody() != null) {
+			ResultsParser myParser = new ResultsParser();
+			Results ep = myParser.deserialize(myConnector.getResponseBody());
+			if( ep != null && ep.results != null && ep.results.length > 0) {
+				return true;
+			}else {
+				return false;
+			}
+		}
 		return false;
-//		ShowConnector myConnector = new ShowConnector();
-//		myConnector.requestFromNetwork(createQueryString(current), HTTPMethod.GET, "");
-//		if( myConnector.getStatusCode() == 200 && myConnector.getResponseBody() != null) {
-//			ResultsParser myParser = new ResultsParser();
-//			Results ep = myParser.deserialize(myConnector.getResponseBody());
-//			if( ep != null ) {
-//				return true;
-//			}else {
-//				return false;
-//			}
-//		}
-//		return false;
 	}
 
 	private String createQueryString(Episode current) {

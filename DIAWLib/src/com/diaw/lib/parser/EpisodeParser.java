@@ -19,8 +19,7 @@ public class EpisodeParser {
 
 
 	private int mResultCode = -1;
-	private static final String REGEX_NUMBER_ONE = "(.*?)[.\\s_-]*[sS](\\d{1,})[eE](\\d{1,}).*";
-	private static final String REGEX_NUMBER_TWO = "(.*?)[.\\s_-]*(\\d{1,})[xX](\\d{1,}).*";
+	private static final String REGEX_NUMBER_ONE = "(.*?)[.\\s_-]*[sS]?(\\d{1,})[eExX](\\d{1,}).*";
 	public static final int DATA_OK = 0;
 	public static final int PARSER_KO_JSON_MALFORMED = 1;
 	public static final int PARSER_KO_JSON_OBJETS_INVALID = 2;
@@ -33,45 +32,16 @@ public class EpisodeParser {
 		episodeName = episodeName.replace("%20", " ");
 		episodeName = episodeName.replace("_", " ");
 		Episode ret = null;
-		ret = parseRegex1( episodeName );
-		if( ret == null ) {
-			ret = parseRegex2(episodeName);
-			if( ret == null ) {
-				ret = parseRegex3(episodeName);
-			}
-		}
+		ret = parseRegex( episodeName );
 		if( ret != null ) {
 			ret.cleanShowName();
 		}
 	    return ret;
 	}
 	
-	private Episode  parseRegex1(String episodeName) {
-		Pattern p = Pattern.compile(REGEX_NUMBER_ONE);
-		Matcher m = p.matcher(episodeName);
-		Episode current = null;
-		
-	    if (m.matches()) {
-	    	current = new Episode(m.group(1), Integer.parseInt(m.group(2)), Integer.parseInt(m.group(3)));
-	    }
-	    return current;
-	}
-	
-	private Episode  parseRegex2(String episodeName) {
+	private Episode  parseRegex(String episodeName) {
 		episodeName = extractFileName(episodeName);
 		Pattern p = Pattern.compile(REGEX_NUMBER_ONE);
-		Matcher m = p.matcher(episodeName);
-		Episode current = null;
-		
-	    if (m.matches()) {
-	    	current = new Episode(m.group(1), Integer.parseInt(m.group(2)), Integer.parseInt(m.group(3)));
-	    }
-	    return current;
-	}
-	
-	private Episode  parseRegex3(String episodeName) {
-		episodeName = extractFileName(episodeName);
-		Pattern p = Pattern.compile(REGEX_NUMBER_TWO);
 		Matcher m = p.matcher(episodeName);
 		Episode current = null;
 		

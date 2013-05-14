@@ -12,7 +12,8 @@ import com.diaw.lib.web.ParseConnector.HTTPMethod;
 
 public class Diaw {
 
-	private String mConfigFilePath = "E:/Code/DIAWRelease/diaw.ini";
+	//private String mConfigFilePath = "E:/Code/DIAWRelease/diaw.ini";
+	private String mConfigFilePath = "D:/diaw.ini";
 	public static String RESTAPI = "Pq2pfW4DLkU1TZfcotp2igvsAosgNhDN0UMIRV87";
 	public static String APPKey = "NWvYWhOOjIfE3cwQhHGH4Ic6Sdc8FYbTWBKYwPR8";
 	
@@ -39,6 +40,14 @@ public class Diaw {
 				if( !isAlreadySeen(current)) {
 					ShowConnector myConnector = new ShowConnector();
 					myConnector.requestFromNetwork("", HTTPMethod.POST, myParser.serialize(current));
+				}
+				// Manage double episode
+				if(current.isDoubleEpisode()) {
+					current.setEpisodeNumber(current.getEpisodeNumber()+1);
+					if( !isAlreadySeen(current)) {
+						ShowConnector myConnector = new ShowConnector();
+						myConnector.requestFromNetwork("", HTTPMethod.POST, myParser.serialize(current));
+					}
 				}
 			}			
 		}		

@@ -1,6 +1,5 @@
 package com.diaw.lib.parser;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.regex.Matcher;
@@ -8,7 +7,6 @@ import java.util.regex.Pattern;
 
 import com.diaw.lib.model.Episode;
 import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,7 +17,8 @@ public class EpisodeParser {
 
 
 	private int mResultCode = -1;
-	private static final String REGEX_NUMBER_ONE = "(.*?)[.\\s_-]*[sS]?(\\d{1,})[eExX](\\d{1,}).*";
+	private static final String REGEX_NUMBER_ONE = "(.*?)[.\\s_-]*[sS]?(\\d{1,})[eExX](\\d{1,})(.*)";
+	private static final String REGEX_DOUBLE_EPISODE = "[eExX_-](\\d{1,}).*";
 	public static final int DATA_OK = 0;
 	public static final int PARSER_KO_JSON_MALFORMED = 1;
 	public static final int PARSER_KO_JSON_OBJETS_INVALID = 2;
@@ -47,6 +46,13 @@ public class EpisodeParser {
 		
 	    if (m.matches()) {
 	    	current = new Episode(m.group(1), Integer.parseInt(m.group(2)), Integer.parseInt(m.group(3)));
+	    	// Manage double episodes
+	    	String endName = m.group(4);
+	    	Pattern pDoubleEp = Pattern.compile(REGEX_DOUBLE_EPISODE);
+	    	Matcher mDoubleEp = pDoubleEp.matcher(endName);
+	    	if(mDoubleEp.matches() && Integer.parseInt(mDoubleEp.group(1)) == current.getEpisodeNumber()+1) {
+	    		current.setDoubleEpisode(true);
+	    	}
 	    }
 	    return current;
 	}
@@ -57,7 +63,7 @@ public class EpisodeParser {
 		return episodeName;
 	}
 
-	public String serialize( Episode ep) {
+	public String serialize(Episode ep) {
 		mResultCode = -1;
 		ObjectMapper mapper = new ObjectMapper(); // can reuse, share globally
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -72,7 +78,6 @@ public class EpisodeParser {
 		} catch (IOException e) {
 			setResultCode(PARSER_KO);
 		}
-
 		return ret.getBuffer().toString();
 	}
 

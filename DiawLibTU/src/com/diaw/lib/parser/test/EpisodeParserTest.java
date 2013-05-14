@@ -30,6 +30,7 @@ public class EpisodeParserTest {
 		Assert.assertEquals(one.getShowName(), "The Office US");
 		Assert.assertEquals(one.getSeasonNumber(), 9);
 		Assert.assertEquals(one.getEpisodeNumber(), 22);
+		Assert.assertEquals(one.isDoubleEpisode(), true);
 	}
 	
 	@Test
@@ -40,6 +41,7 @@ public class EpisodeParserTest {
 		Assert.assertEquals(one.getShowName(), "Mad Men");
 		Assert.assertEquals(one.getSeasonNumber(), 6);
 		Assert.assertEquals(one.getEpisodeNumber(), 1);
+		Assert.assertEquals(one.isDoubleEpisode(), true);
 	}
 	
 	@Test

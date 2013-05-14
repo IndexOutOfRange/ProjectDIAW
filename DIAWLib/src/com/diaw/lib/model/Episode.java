@@ -1,5 +1,7 @@
 package com.diaw.lib.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Episode {
 
 	private String mShowName;
@@ -7,6 +9,7 @@ public class Episode {
 	private int mEpisodeNumber;
 	private String mLogin;
 	private String mMdp;
+	@JsonIgnore
 	private boolean mDoubleEpisode = false;
 	
 	public Episode() {

@@ -1,5 +1,7 @@
 package com.diaw.lib.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Episode {
 
 	private String mShowName;
@@ -7,15 +9,16 @@ public class Episode {
 	private int mEpisodeNumber;
 	private String mLogin;
 	private String mMdp;
+	@JsonIgnore
+	private boolean mDoubleEpisode = false;
 	
 	public Episode() {
-		
 	}
 
 	public Episode( String name, int season, int episode, String login, String pass ) {
 		setShowName(name);
 		setSeasonNumber(season);
-		setmEpisodeNumber(episode);
+		setEpisodeNumber(episode);
 		setLogin(login);
 		setMdp(pass);
 	}
@@ -23,7 +26,7 @@ public class Episode {
 	public Episode( String name, int season, int episode ) {
 		setShowName(name);
 		setSeasonNumber(season);
-		setmEpisodeNumber(episode);
+		setEpisodeNumber(episode);
 	}
 
 	public String getLogin() {
@@ -46,7 +49,7 @@ public class Episode {
 		return mEpisodeNumber;
 	}
 
-	public void setmEpisodeNumber(int mEpisodeNumber) {
+	public void setEpisodeNumber(int mEpisodeNumber) {
 		this.mEpisodeNumber = mEpisodeNumber;
 	}
 
@@ -66,6 +69,14 @@ public class Episode {
 		this.mShowName = mShowName;
 	}
 	
+	public boolean isDoubleEpisode() {
+		return mDoubleEpisode;
+	}
+
+	public void setDoubleEpisode(boolean doubleEpisode) {
+		this.mDoubleEpisode = doubleEpisode;
+	}
+
 	public void cleanShowName() {
 		mShowName = mShowName.replace(".", " " );
 	}

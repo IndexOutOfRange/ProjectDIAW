@@ -19,6 +19,30 @@ public class EpisodeParserTest {
 	private String showName8 = "Black Mirror (2011) - 01x01 - The National Anthem.RiVER.English.HI.C.updated.Addic7ed.com";
 	private String showName9 = "Breaking.Bad.S02E01.HDTV.XviD-0TV";
 	private String showName10 = "Two.And.A.Half.Men.S03E01.VOSTFR.DVDRip.XviD-GKS";
+	private String showName11 = "Mad Men - 06x01-02 - The Doorway, Part 1-2.PROPER EVOLVE.English.HI.C.orig.Addic7ed.com";
+	private String showName12 = "The Office US S09E22E23 HDTV x264-LOL";
+	
+	@Test
+	public void parseShow12() {
+		EpisodeParser myParser = new EpisodeParser();
+		Episode one = myParser.parse(showName12);
+		Assert.assertNotNull(one);
+		Assert.assertEquals(one.getShowName(), "The Office US");
+		Assert.assertEquals(one.getSeasonNumber(), 9);
+		Assert.assertEquals(one.getEpisodeNumber(), 22);
+		Assert.assertEquals(one.isDoubleEpisode(), true);
+	}
+	
+	@Test
+	public void parseShow11() {
+		EpisodeParser myParser = new EpisodeParser();
+		Episode one = myParser.parse(showName11);
+		Assert.assertNotNull(one);
+		Assert.assertEquals(one.getShowName(), "Mad Men");
+		Assert.assertEquals(one.getSeasonNumber(), 6);
+		Assert.assertEquals(one.getEpisodeNumber(), 1);
+		Assert.assertEquals(one.isDoubleEpisode(), true);
+	}
 	
 	@Test
 	public void parseShow10() {

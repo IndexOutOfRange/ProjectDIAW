@@ -3,7 +3,6 @@ package com.diaw.lib.parser;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
-import com.diaw.lib.model.Episode;
 import com.diaw.lib.model.Results;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.DeserializationFeature;

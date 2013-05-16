@@ -26,7 +26,7 @@ public class HttpConnection {
 	private void initHTTPSConnection() {
 
 		try{         
-		    //Remplace le vérifieur de nom d'hôte par un autre moins restrictif
+		    //Remplace le verifieur de nom d'hote par un autre moins restrictif
 		    HostnameVerifier hostnameVerifier=new HostnameVerifier(){
 		        public boolean verify(String urlHostName,SSLSession session){
 		            return true;
@@ -34,7 +34,7 @@ public class HttpConnection {
 		    };
 		    HttpsURLConnection.setDefaultHostnameVerifier(hostnameVerifier);
 		 
-		    //Remplace le vérifieur de certificat par un autre moins restrictif
+		    //Remplace le verifieur de certificat par un autre moins restrictif
 		    TrustManager[] trustAllCerts=new TrustManager[]{
 		        new X509TrustManager(){
 		            public java.security.cert.X509Certificate[] getAcceptedIssuers(){return null;}
@@ -69,7 +69,7 @@ public class HttpConnection {
 	    URL url = new URL(DNS + path);
 	    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 	    addHeader(connection);
-	    connection.setDoOutput(true); // Pour pouvoir envoyer des données
+	    connection.setDoOutput(true); // Pour pouvoir envoyer des donnees
 	    connection.setRequestMethod("POST");
 	    OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
 	    writer.write(content);

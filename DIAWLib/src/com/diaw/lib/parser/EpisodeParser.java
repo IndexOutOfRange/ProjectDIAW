@@ -30,6 +30,8 @@ public class EpisodeParser {
 	public Episode parse( String episodeName ) {
 		episodeName = episodeName.replace("%20", " ");
 		episodeName = episodeName.replace("_", " ");
+		episodeName = episodeName.replace("%28", "(");
+		episodeName = episodeName.replace("%29", ")");
 		Episode ret = null;
 		ret = parseRegex( episodeName );
 		if( ret != null ) {

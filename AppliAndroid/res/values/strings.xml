@@ -5,8 +5,13 @@
     <string name="login_text_button">Login</string>
     <string name="pass_label">Password</string>
     <string name="login_label">Login</string>
+    <string name="search">Recherche</string>
     
     <!-- content description -->
     <string name="desc_splash_screen">Splash screen image</string>
+    
+    <!-- celllist -->
+    <string name="hint_section">Section</string>
+    <string name="hint_show_title">TV Show</string>
 
 </resources>

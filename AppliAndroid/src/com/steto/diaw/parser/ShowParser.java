@@ -1,36 +1,51 @@
 package com.steto.diaw.parser;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.steto.diaw.model.Episode;
-import com.steto.diaw.model.ListEpisodes;
+import com.steto.diaw.model.Results;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
 
 public class ShowParser {
 
+    public static int PARSER_OK = 0;
+    public static int PARSER_MALFORMED_JSON = -1;
+    public static int PARSER_OBJECT_MALFORMED = -2;
+    public static int PARSER_GENERAL_EXCEPTION = -3;
+
+    private int mStatusCode = PARSER_OK;
+
 	public List<Episode> parse( InputStream in) {
 		ObjectMapper myMapper = new ObjectMapper();
-		ListEpisodes current = null;
+        myMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		Results current = null;
 		try {
-			current = myMapper.readValue(in, ListEpisodes.class);
+			current = myMapper.readValue(in, Results.class);
 		} catch (JsonParseException e) {
-			// TODO Auto-generated catch block
+            setStatusCode(PARSER_MALFORMED_JSON);
 			e.printStackTrace();
 		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
+            setStatusCode(PARSER_OBJECT_MALFORMED);
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+            setStatusCode(PARSER_GENERAL_EXCEPTION);
 			e.printStackTrace();
 		}
 		return current == null ? null : Arrays.asList(current.results);
 		
 	}
-	
+
+    public int getStatusCode() {
+        return mStatusCode;
+    }
+
+    public void setStatusCode(int mStatusCode) {
+        this.mStatusCode = mStatusCode;
+    }
 }

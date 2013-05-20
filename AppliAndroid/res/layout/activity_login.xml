@@ -1,41 +1,42 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:layout_marginLeft="20dp"
+              android:layout_marginRight="20dp"
+              android:layout_marginTop="20dp"
+              android:layout_marginBottom="20dp"
+        >
+    <LinearLayout android:layout_weight="1.0"
+                  android:layout_width="match_parent"
+                  android:layout_height="0dip"
+                  android:orientation="vertical">
+        <TextView android:id="@+id/presentation_appli"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:text="@string/msg_app_description_login_screen"
+                  android:layout_marginBottom="20dp"/>
 
-    <LinearLayout android:id="@+id/layout_login"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_centerVertical="true"
-        android:orientation="horizontal">
-        <TextView android:text="@string/login_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-        <EditText android:id="@+id/login_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="text"/>
+        <TextView android:id="@+id/pourquoi_se_loger"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:text="@string/msg_pourquoi_se_loger"
+                  android:layout_marginBottom="20dp"/>
+
+        <EditText android:id="@+id/email_edit_text"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:inputType="text"
+                  android:hint="@string/email_hint"/>
+        <CheckBox android:id="@+id/send_plugin"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="@string/msg_send_vlc_plugin"/>
     </LinearLayout>
-    
-    <LinearLayout android:id="@+id/layout_pass"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="horizontal"
-        android:layout_centerVertical="true"
-        android:layout_below="@id/layout_login">
-        <TextView android:text="@string/pass_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-        <EditText android:id="@+id/pass_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"/>
-    </LinearLayout>
-    
+
     <Button android:id="@+id/login_button"
-        android:text="@string/login_text_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/layout_pass"/>
+            android:text="@string/login_text_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
-</RelativeLayout>
+</LinearLayout>

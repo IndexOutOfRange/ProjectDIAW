@@ -39,6 +39,7 @@ public class ShowService extends IntentService {
     public String createQueryString(String mail) {
 
         QueryString myQuery = new QueryString();
+        myQuery.add("limit", "500");
         myQuery.add(WS_QUERY_WHERE, createWhereClause(mail));
         return myQuery.toString();
     }

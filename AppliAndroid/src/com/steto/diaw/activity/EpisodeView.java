@@ -31,7 +31,7 @@ public class EpisodeView extends LinearLayout {
     public void setData( Episode ep) {
         mEp = ep;
         mTitle.setText(ep.getShowName());
-        String sub = String.valueOf(ep.getSeasonNumber()) + String.valueOf(ep.getEpisodeNumber());
+        String sub = "Saison " + String.valueOf(ep.getSeasonNumber()) + " Episode " +  String.valueOf(ep.getEpisodeNumber());
         mSubTitle.setText(sub);
     }
 }

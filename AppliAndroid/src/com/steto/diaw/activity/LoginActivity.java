@@ -40,7 +40,9 @@ public class LoginActivity extends Activity {
                 String mail = mMailText.getText().toString();
 
                 SharedPreferences mySP = getSharedPreferences(Tools.SHARED_PREF_FILE, 0);
-                mySP.edit().putString(Tools.SHARED_PREF_LOGIN, mail);
+                SharedPreferences.Editor myEditor = mySP.edit();
+                myEditor.putString(Tools.SHARED_PREF_LOGIN, mail);
+                myEditor.commit();
                 getBackShows(mail);
 
             }

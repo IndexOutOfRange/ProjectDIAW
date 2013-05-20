@@ -1,22 +1,28 @@
 package com.steto.diaw.service;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
-import java.net.MalformedURLException;
+import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
+import org.apache.http.HttpStatus;
+
+import android.app.Activity;
 import android.app.IntentService;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.ResultReceiver;
 
+import com.steto.diaw.dao.EpisodeDao;
 import com.steto.diaw.model.Episode;
 import com.steto.diaw.parser.ShowParser;
+import com.steto.diaw.tools.DatabaseHelper;
 import com.steto.diaw.tools.QueryString;
+import com.steto.diaw.tools.Tools;
 import com.steto.diaw.web.ParseConnector;
 import com.steto.diaw.web.ShowConnector;
-import org.apache.http.HttpStatus;
 
 public class ShowService extends IntentService {
 
@@ -33,7 +39,6 @@ public class ShowService extends IntentService {
 
     public ShowService(String name) {
         super(name);
-        // TODO Auto-generated constructor stub
     }
 
     public String createQueryString(String mail) {
@@ -62,6 +67,8 @@ public class ShowService extends IntentService {
             ShowParser myParser = new ShowParser();
             allEp = myParser.parse(response);
             responseCode = myParser.getStatusCode();
+            
+            addInDatabase(allEp);
         } else {
             responseCode = myWeb.getStatusCode();
 
@@ -71,5 +78,22 @@ public class ShowService extends IntentService {
         sender.send(responseCode, ret);
 
     }
+
+	private void addInDatabase(List<Episode> allEp) {
+		DatabaseHelper databaseHelper = DatabaseHelper.getInstance(this);
+		
+		try {
+			EpisodeDao epDao = databaseHelper.getEpisodeDao();
+			for(Episode episode : allEp) {
+				epDao.createOrUpdate(episode);
+			}
+			SharedPreferences settings = getSharedPreferences(Tools.SHARED_PREF_FILE, Activity.MODE_PRIVATE);
+			SharedPreferences.Editor editor = settings.edit();
+			editor.putLong(Tools.SHARED_PREF_LAST_UPDATE,(new Date()).getTime());
+			editor.commit();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
 }

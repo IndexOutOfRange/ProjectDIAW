@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.steto.diaw.model.Episode;
 import com.steto.projectdiaw.R;
 
@@ -23,9 +24,9 @@ public class EpisodeView extends LinearLayout {
         mContext = context;
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        inflater.inflate(R.layout.episode_home_cell, this);
-        mTitle = (TextView)findViewById(R.id.show_name);
-        mSubTitle = (TextView)findViewById(R.id.episode_name);
+        inflater.inflate(R.layout.celllist_show_title, this);
+        mTitle = (TextView)findViewById(R.id.celllist_show_title_show_name);
+        mSubTitle = (TextView)findViewById(R.id.celllist_show_title_episode_name);
     }
 
     public void setData( Episode ep) {

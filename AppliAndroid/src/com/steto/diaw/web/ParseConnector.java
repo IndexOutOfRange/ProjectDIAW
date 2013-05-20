@@ -7,9 +7,6 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.security.KeyStore;
 
-import com.steto.diaw.tools.FakeSocketFactory;
-import com.steto.diaw.tools.MySSLSocketFactory;
-import com.steto.diaw.tools.Tools;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
 import org.apache.http.client.HttpClient;
@@ -30,6 +27,9 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.HTTP;
+
+import com.steto.diaw.tools.FakeSocketFactory;
+import com.steto.diaw.tools.MySSLSocketFactory;
 
 
 public abstract class ParseConnector {

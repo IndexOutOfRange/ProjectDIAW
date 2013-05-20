@@ -3,10 +3,10 @@
 
     <!-- Size (margin/padding) -->
     <dimen name="very_small">8dp</dimen>
-    <dimen name="small">16dp</dimen>
-    <dimen name="normal">32dp</dimen>
-    <dimen name="big">64dp</dimen>
-    <dimen name="enormous">96dp</dimen>
+    <dimen name="small">12dp</dimen>
+    <dimen name="normal">20dp</dimen>
+    <dimen name="big">30dp</dimen>
+    <dimen name="enormous">42dp</dimen>
 
     <!-- Text -->
     <dimen name="text_small">12sp</dimen>

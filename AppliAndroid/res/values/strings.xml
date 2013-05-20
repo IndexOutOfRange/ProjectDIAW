@@ -6,6 +6,8 @@
     <string name="pass_label">Password</string>
     <string name="login_label">Login</string>
     <string name="search">Recherche</string>
+    <string name="loading">Chargement</string>
+    <string name="login_title">Connection DIAW</string>
     
     <!-- content description -->
     <string name="desc_splash_screen">Splash screen image</string>
@@ -20,5 +22,6 @@
     <string name="msg_app_description_login_screen">Bienvenue dans l\'application qui va vous permettre de gérer vos séries ainsi que d\'etre tenu informé des evolutions de vos series préférées.</string>
     <string name="msg_pourquoi_se_loger">En ayant un compte l\'application vous permettra de suivre l\'évolution des séries que vous regardez.</string>
     <string name="email_hint">mon@adresse.mail</string>
-
+    <string name="email_error">Veuillez indiquer votre email</string>
+    
 </resources>

@@ -8,5 +8,14 @@
     
     <!-- content description -->
     <string name="desc_splash_screen">Splash screen image</string>
+    <string name="msg_erreur_reseau">Unable to get response from server</string>
+    <string name="msg_send_vlc_plugin">Recevoir le plugin VLC par email</string>
+    <string name="msg_app_description_login_screen">Bienvenue dans l\'application qui va vous permettre de gérer vos
+        séries ainsi que d\'etre tenu informé des evolutions de vos series préférées.
+    </string>
+    <string name="msg_pourquoi_se_loger">En ayant un compte l\'application vous permettra de suivre l\'évolution des
+        séries que vous regardez.
+    </string>
+    <string name="email_hint">mon@adresse.mail</string>
 
 </resources>

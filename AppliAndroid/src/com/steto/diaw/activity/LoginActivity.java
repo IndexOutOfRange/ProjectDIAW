@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import com.steto.diaw.service.ShowService;
 import com.steto.diaw.tools.Tools;
 import com.steto.projectdiaw.R;
@@ -26,9 +25,9 @@ public class LoginActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
-		
+
 		getActionBar().setTitle(R.string.login_title);
-		
+
 		initLayoutFields();
 		initListeners();
 	}

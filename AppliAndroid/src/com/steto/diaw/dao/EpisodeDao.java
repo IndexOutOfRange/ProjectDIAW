@@ -6,6 +6,7 @@ import com.j256.ormlite.support.ConnectionSource;
 import com.steto.diaw.model.Episode;
 
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.List;
 
 public class EpisodeDao extends BaseDaoImpl<Episode, String> {
@@ -43,5 +44,12 @@ public class EpisodeDao extends BaseDaoImpl<Episode, String> {
 		} else {
 			return new CreateOrUpdateStatus(false, false, 0);
 		}
+	}
+
+	@Override
+	public List<Episode> queryForAll() throws SQLException {
+		List<Episode> episodeList = super.queryForAll();
+		Collections.sort(episodeList);
+		return episodeList;
 	}
 }

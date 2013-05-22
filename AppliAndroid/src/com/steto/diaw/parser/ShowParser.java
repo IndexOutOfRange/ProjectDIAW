@@ -14,38 +14,38 @@ import java.util.List;
 
 public class ShowParser {
 
-    public static int PARSER_OK = 0;
-    public static int PARSER_MALFORMED_JSON = -1;
-    public static int PARSER_OBJECT_MALFORMED = -2;
-    public static int PARSER_GENERAL_EXCEPTION = -3;
+	public static int PARSER_OK = 0;
+	public static int PARSER_MALFORMED_JSON = -1;
+	public static int PARSER_OBJECT_MALFORMED = -2;
+	public static int PARSER_GENERAL_EXCEPTION = -3;
 
-    private int mStatusCode = PARSER_OK;
+	private int mStatusCode = PARSER_OK;
 
-	public List<Episode> parse( InputStream in) {
+	public List<Episode> parse(InputStream in) {
 		ObjectMapper myMapper = new ObjectMapper();
-        myMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		myMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		Results current = null;
 		try {
 			current = myMapper.readValue(in, Results.class);
 		} catch (JsonParseException e) {
-            setStatusCode(PARSER_MALFORMED_JSON);
+			setStatusCode(PARSER_MALFORMED_JSON);
 			e.printStackTrace();
 		} catch (JsonMappingException e) {
-            setStatusCode(PARSER_OBJECT_MALFORMED);
+			setStatusCode(PARSER_OBJECT_MALFORMED);
 			e.printStackTrace();
 		} catch (IOException e) {
-            setStatusCode(PARSER_GENERAL_EXCEPTION);
+			setStatusCode(PARSER_GENERAL_EXCEPTION);
 			e.printStackTrace();
 		}
 		return current == null ? null : Arrays.asList(current.results);
-		
+
 	}
 
-    public int getStatusCode() {
-        return mStatusCode;
-    }
+	public int getStatusCode() {
+		return mStatusCode;
+	}
 
-    public void setStatusCode(int mStatusCode) {
-        this.mStatusCode = mStatusCode;
-    }
+	public void setStatusCode(int mStatusCode) {
+		this.mStatusCode = mStatusCode;
+	}
 }

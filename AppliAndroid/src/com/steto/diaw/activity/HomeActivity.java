@@ -6,7 +6,10 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.ResultReceiver;
 import android.util.Log;
-import android.view.*;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.Window;
 import android.widget.ListView;
 import android.widget.Toast;
 import com.steto.diaw.adapter.ListEpisodeHomeAdapter;
@@ -23,6 +26,9 @@ import java.util.List;
 public class HomeActivity extends Activity {
 
 	private static final String TAG = "HomeActivity";
+	private static final String INTENT_UPDATE = "IntentUpdate";
+
+	private static boolean sUpdateInProgress;
 	private List<Episode> mAllEp = new ArrayList<Episode>();
 	private ListView mList;
 	private ListEpisodeHomeAdapter mAdapter;
@@ -34,7 +40,6 @@ public class HomeActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.activity_home);
 
-		setProgressBarIndeterminateVisibility(false);
 		getActionBar().setTitle("Derniers Episodes Regardés");
 
 		readDatabase();
@@ -45,20 +50,28 @@ public class HomeActivity extends Activity {
 	}
 
 	@Override
-	protected void onNewIntent(Intent intent) {
-		super.onNewIntent(intent);
-		Log.i(TAG, "onNewIntent");
+	protected void onResume() {
+		super.onResume();
+		invalidateOptionsMenu();
+	}
 
-		setProgressBarIndeterminateVisibility(false);
-		findViewById(R.id.menu_update).setVisibility(View.VISIBLE);
-		readDatabase();
-		mAdapter.notifyDataSetChanged();
+	@Override
+	protected void onNewIntent(Intent intent) {
+		boolean update = intent.getExtras().containsKey(INTENT_UPDATE);
+		if (update) {
+			processUpdateListEpisodes();
+		}
+		super.onNewIntent(intent);
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.episode_list, menu);
+
+		menu.getItem(0).setVisible(!HomeActivity.sUpdateInProgress);
+		setProgressBarIndeterminateVisibility(HomeActivity.sUpdateInProgress);
+
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -69,10 +82,8 @@ public class HomeActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.menu_update:
-				findViewById(R.id.menu_update).setVisibility(View.GONE);
-				updateListEpisodes();
+				startUpdateListEpisodes();
 				return true;
-
 			default:
 				return super.onOptionsItemSelected(item);
 		}
@@ -88,9 +99,9 @@ public class HomeActivity extends Activity {
 	}
 
 	/* Update Data */
-	private void updateListEpisodes() {
-		Log.i(TAG, "update from menu");
-		setProgressBarIndeterminateVisibility(true);
+	private void startUpdateListEpisodes() {
+		HomeActivity.sUpdateInProgress = true;
+		invalidateOptionsMenu();
 		initShowResultReceiver();
 		getBackShows();
 	}
@@ -113,7 +124,9 @@ public class HomeActivity extends Activity {
 					super.onReceiveResult(resultCode, resultData);
 					Log.i(TAG, "onResult");
 					if (resultCode == ShowService.RESULT_CODE_OK) {
-						startActivity(new Intent(HomeActivity.this, HomeActivity.class));
+						Intent intent = new Intent(HomeActivity.this, HomeActivity.class);
+						intent.putExtra(INTENT_UPDATE, true);
+						startActivity(intent);
 					} else {
 						Toast.makeText(HomeActivity.this, getString(R.string.msg_erreur_reseau), Toast.LENGTH_SHORT).show();
 					}
@@ -121,6 +134,13 @@ public class HomeActivity extends Activity {
 			};
 		}
 		return mShowResultReceiver;
+	}
+
+	private void processUpdateListEpisodes() {
+		HomeActivity.sUpdateInProgress = false;
+		invalidateOptionsMenu();
+		readDatabase();
+		mAdapter.notifyDataSetChanged();
 	}
 
 }

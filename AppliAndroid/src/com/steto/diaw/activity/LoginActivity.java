@@ -10,11 +10,12 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
+import com.actionbarsherlock.app.SherlockActivity;
 import com.steto.diaw.service.ShowService;
 import com.steto.diaw.tools.Tools;
 import com.steto.projectdiaw.R;
 
-public class LoginActivity extends Activity {
+public class LoginActivity extends SherlockActivity {
 
 	private Button mValidateButton;
 	private EditText mMailText;
@@ -26,7 +27,7 @@ public class LoginActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 
-		getActionBar().setTitle(R.string.login_title);
+		getSupportActionBar().setTitle(R.string.login_title);
 
 		initLayoutFields();
 		initListeners();
@@ -39,7 +40,7 @@ public class LoginActivity extends Activity {
 
 				if (!"".equals(mMailText.getText().toString())) {
 					findViewById(R.id.login_form_layout).setVisibility(View.GONE);
-					getActionBar().setTitle(R.string.loading);
+					getSupportActionBar().setTitle(R.string.loading);
 
 					initShowResultReceiver();
 					String mail = mMailText.getText().toString();

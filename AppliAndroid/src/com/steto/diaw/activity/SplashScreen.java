@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.ResultReceiver;
 import android.util.Log;
 import android.widget.Toast;
+import com.actionbarsherlock.app.SherlockActivity;
 import com.steto.diaw.service.ShowService;
 import com.steto.diaw.tools.Tools;
 import com.steto.projectdiaw.R;
@@ -14,7 +15,7 @@ import com.steto.projectdiaw.R;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-public class SplashScreen extends Activity {
+public class SplashScreen extends SherlockActivity {
 
 
 	private static final String TAG = "SplashScreen";

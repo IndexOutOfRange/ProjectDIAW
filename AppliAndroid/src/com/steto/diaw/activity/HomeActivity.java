@@ -6,12 +6,13 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.ResultReceiver;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.Window;
 import android.widget.ListView;
 import android.widget.Toast;
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.Window;
 import com.steto.diaw.adapter.ListEpisodeHomeAdapter;
 import com.steto.diaw.model.Episode;
 import com.steto.diaw.service.ShowService;
@@ -23,7 +24,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeActivity extends Activity {
+public class HomeActivity extends SherlockActivity {
 
 	private static final String TAG = "HomeActivity";
 	private static final String INTENT_UPDATE = "IntentUpdate";
@@ -40,7 +41,7 @@ public class HomeActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.activity_home);
 
-		getActionBar().setTitle("Derniers Episodes Regardés");
+		getSupportActionBar().setTitle("Derniers Episodes Regardés");
 
 		readDatabase();
 
@@ -66,11 +67,11 @@ public class HomeActivity extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
+		MenuInflater inflater = getSupportMenuInflater();
 		inflater.inflate(R.menu.episode_list, menu);
 
 		menu.getItem(0).setVisible(!HomeActivity.sUpdateInProgress);
-		setProgressBarIndeterminateVisibility(HomeActivity.sUpdateInProgress);
+		setSupportProgressBarIndeterminateVisibility(HomeActivity.sUpdateInProgress);
 
 		return super.onCreateOptionsMenu(menu);
 	}

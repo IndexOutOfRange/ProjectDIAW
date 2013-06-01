@@ -27,8 +27,6 @@ public class LoginActivity extends SherlockActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 
-		getSupportActionBar().setTitle(R.string.login_title);
-
 		initLayoutFields();
 		initListeners();
 	}
@@ -87,7 +85,6 @@ public class LoginActivity extends SherlockActivity {
 					}
 				}
 			};
-
 		}
 		return showReceiver;
 	}

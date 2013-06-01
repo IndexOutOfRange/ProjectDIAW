@@ -4,13 +4,13 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
+              android:gravity="center"
               tools:context="com.steto.diaw.activity.SplashScreen">
 
-	<ImageView
-			android:id="@+id/splash_screen_image"
-			android:layout_width="fill_parent"
-			android:layout_height="fill_parent"
-			android:src="@drawable/troll"
-			android:contentDescription="@string/desc_splash_screen"/>
+	<ProgressBar
+			android:id="@+id/login_progress"
+			style="?android:attr/progressBarStyleLarge"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
 
 </LinearLayout>

@@ -8,7 +8,7 @@ import android.os.ResultReceiver;
 import android.util.Log;
 import android.widget.ListView;
 import android.widget.Toast;
-import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
@@ -24,7 +24,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeActivity extends SherlockActivity {
+public class HomeActivity extends SherlockListActivity {
 
 	private static final String TAG = "HomeActivity";
 	private static final String INTENT_UPDATE = "IntentUpdate";
@@ -41,11 +41,9 @@ public class HomeActivity extends SherlockActivity {
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.activity_home);
 
-		getSupportActionBar().setTitle("Derniers Episodes Regardés");
-
 		readDatabase();
 
-		mList = (ListView) findViewById(R.id.list_episode);
+		mList = getListView();
 		mAdapter = new ListEpisodeHomeAdapter(this, mAllEp);
 		mList.setAdapter(mAdapter);
 	}
@@ -85,6 +83,8 @@ public class HomeActivity extends SherlockActivity {
 			case R.id.menu_update:
 				startUpdateListEpisodes();
 				return true;
+			case R.id.menu_go_to_shows_list:
+				startActivity(new Intent(this, ListShowsActivity.class));
 			default:
 				return super.onOptionsItemSelected(item);
 		}

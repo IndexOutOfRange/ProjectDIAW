@@ -109,6 +109,14 @@ public class Episode implements Serializable, Comparable<Episode> {
 		this.mUpdatedAt = updatedAt;
 	}
 
+	public int getId() {
+		return mId;
+	}
+
+	public void setId(int id) {
+		this.mId = id;
+	}
+
 	@Override
 	public int compareTo(Episode episode) {
 		return episode.getUpdatedAt().compareTo(this.getUpdatedAt());

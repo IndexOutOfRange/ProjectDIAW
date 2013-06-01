@@ -7,4 +7,9 @@
 			android:title="@string/update"
 			android:showAsAction="always"/>
 
+	<item
+			android:id="@+id/menu_go_to_shows_list"
+			android:title="Liste série"
+			android:showAsAction="ifRoom"/>
+
 </menu>

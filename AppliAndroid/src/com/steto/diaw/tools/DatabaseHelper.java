@@ -8,7 +8,9 @@ import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import com.steto.diaw.dao.EpisodeDao;
+import com.steto.diaw.dao.ShowDao;
 import com.steto.diaw.model.Episode;
+import com.steto.diaw.model.Show;
 
 import java.sql.SQLException;
 
@@ -16,11 +18,12 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
 	private static final String TAG = "DatabaseHelper";
 	private static final String DATABASE_NAME = "diaw.db";
-	private static final int DATABASE_VERSION = 2;
+	private static final int DATABASE_VERSION = 3;
 
 	private static DatabaseHelper instance;
 
 	private EpisodeDao episodeDao = null;
+	private ShowDao showDao = null;
 
 	private DatabaseHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -34,11 +37,11 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 	}
 
 	@Override
-	public void onCreate(SQLiteDatabase sqliteDatabase,
-	                     ConnectionSource connectionSource) {
+	public void onCreate(SQLiteDatabase sqliteDatabase, ConnectionSource connectionSource) {
 		Log.i(TAG, "onCreate");
 		try {
 			TableUtils.createTable(connectionSource, Episode.class);
+			TableUtils.createTable(connectionSource, Show.class);
 		} catch (SQLException e) {
 			Log.e(TAG, "Unable to create databases", e);
 		}
@@ -46,15 +49,14 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 	}
 
 	@Override
-	public void onUpgrade(SQLiteDatabase sqliteDatabase,
-	                      ConnectionSource connectionSource, int oldVersion, int newVersion) {
+	public void onUpgrade(SQLiteDatabase sqliteDatabase, ConnectionSource connectionSource, int oldVersion, int newVersion) {
 		try {
 			TableUtils.dropTable(connectionSource, Episode.class, true);
+			TableUtils.dropTable(connectionSource, Show.class, true);
 
 			onCreate(sqliteDatabase, connectionSource);
 		} catch (SQLException e) {
-			Log.e(TAG, "Unable to upgrade database from version " + oldVersion
-					+ " to new " + newVersion, e);
+			Log.e(TAG, "Unable to upgrade database from version " + oldVersion + " to new " + newVersion, e);
 		}
 	}
 
@@ -62,11 +64,23 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 		if (episodeDao == null) {
 			try {
 				episodeDao = DaoManager.createDao(getConnectionSource(), Episode.class);
-			} catch (java.sql.SQLException e) {
+			} catch (SQLException e) {
 				Log.e(TAG, "Unable to get the EpisodeDao", e);
 			}
 		}
 		return episodeDao;
 	}
+
+	public ShowDao getShowDao() throws SQLException {
+		if (showDao == null) {
+			try {
+				showDao = DaoManager.createDao(getConnectionSource(), Show.class);
+			} catch (SQLException e) {
+				Log.e(TAG, "Unable to get the ShowDao", e);
+			}
+		}
+		return showDao;
+	}
+
 
 }

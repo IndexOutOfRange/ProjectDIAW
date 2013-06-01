@@ -9,8 +9,7 @@ import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 
-public class EpisodeDao extends BaseDaoImpl<Episode, String> {
-
+public class EpisodeDao extends BaseDaoImpl<Episode, Integer> {
 
 	private static final String TAG = "EpisodeDao";
 

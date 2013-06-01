@@ -7,7 +7,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.ResultReceiver;
 import com.steto.diaw.dao.EpisodeDao;
+import com.steto.diaw.dao.ShowDao;
 import com.steto.diaw.model.Episode;
+import com.steto.diaw.model.Show;
 import com.steto.diaw.parser.ShowParser;
 import com.steto.diaw.tools.DatabaseHelper;
 import com.steto.diaw.tools.QueryString;
@@ -40,7 +42,6 @@ public class ShowService extends IntentService {
 	}
 
 	public String createQueryString(String mail) {
-
 		QueryString myQuery = new QueryString();
 		myQuery.add("limit", "500");
 		myQuery.add(WS_QUERY_WHERE, createWhereClause(mail));
@@ -81,8 +82,10 @@ public class ShowService extends IntentService {
 
 		try {
 			EpisodeDao epDao = databaseHelper.getEpisodeDao();
+			ShowDao showDao = databaseHelper.getShowDao();
 			for (Episode episode : allEp) {
 				epDao.createOrUpdate(episode);
+				showDao.createIfNotExists(new Show(episode.getShowName()));
 			}
 			SharedPreferences settings = getSharedPreferences(Tools.SHARED_PREF_FILE, Activity.MODE_PRIVATE);
 			SharedPreferences.Editor editor = settings.edit();

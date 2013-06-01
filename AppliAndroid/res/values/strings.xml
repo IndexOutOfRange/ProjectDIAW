@@ -8,7 +8,10 @@
 	<string name="search">Recherche</string>
 	<string name="loading">Chargement</string>
 	<string name="update">Mettre à jour</string>
-	<string name="login_title">Connection DIAW</string>
+
+	<string name="activity_title_list_show">Mes séries</string>
+	<string name="activity_title_home">Derniers Episodes</string>
+	<string name="activity_title_login">Connection DIAW</string>
 
 	<!-- content description -->
 	<string name="desc_splash_screen">Splash screen image</string>

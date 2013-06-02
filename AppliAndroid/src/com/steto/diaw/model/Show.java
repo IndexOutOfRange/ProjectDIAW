@@ -43,6 +43,9 @@ public class Show implements Serializable, Comparable<Show> {
     @DatabaseField
     @Element(name = "Status", required = false )
     private String mStatus;
+    @DatabaseField
+    @Element(name = "banner", required = false )
+    private String mBannerURL;
 
 	public Show() {
 	}
@@ -152,5 +155,13 @@ public class Show implements Serializable, Comparable<Show> {
 
     public void setDateDebut(Date dateDebut) {
         mDateDebut = dateDebut;
+    }
+
+    public String getBannerURL() {
+        return mBannerURL;
+    }
+
+    public void setBannerURL(String bannerURL) {
+        mBannerURL = bannerURL;
     }
 }

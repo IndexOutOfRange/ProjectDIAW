@@ -23,7 +23,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
 	private static final String TAG = "DatabaseHelper";
 	private static final String DATABASE_NAME = "diaw.db";
-	private static final int DATABASE_VERSION = 4;
+	private static final int DATABASE_VERSION = 5;
 
 	private static DatabaseHelper instance;
 

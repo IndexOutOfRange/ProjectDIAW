@@ -63,6 +63,7 @@ public class EpisodeDao extends BaseDaoImpl<Episode, Integer> {
      */
     public int createOrUpdate(List<Episode> allEp) throws SQLException {
         int nbCreated = 0;
+
         for (Episode episode : allEp) {
             CreateOrUpdateStatus ret = createOrUpdate(episode);
             if(ret.isCreated()) {

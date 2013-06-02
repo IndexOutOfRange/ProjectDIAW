@@ -18,15 +18,15 @@ public class SeriesParser extends AbstractParser {
     public List<Show> parse(InputStream in) {
         TVDBContainerData current = null;
         Serializer serializer = new Persister();
+        List<Show> ret = new ArrayList<Show>();
 
         try {
             current = serializer.read(TVDBContainerData.class, in);
+            ret.add(current.mShow);
         } catch (Exception e) {
             setStatusCode(PARSER_GENERAL_EXCEPTION);
             e.printStackTrace();
         }
-        List<Show> ret = new ArrayList<Show>();
-        ret.add(current.mShow);
         return current == null ? null : ret;
 
     }

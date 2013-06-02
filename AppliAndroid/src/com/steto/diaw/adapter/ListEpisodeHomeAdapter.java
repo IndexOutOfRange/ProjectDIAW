@@ -27,9 +27,7 @@ public class ListEpisodeHomeAdapter extends AbstractListDataAdapter<Episode> {
 		} else {
 			current = (ListItemViewEpisode) view;
 		}
-
 		current.setData(mData.get(i));
-
 		return current;
 	}
 }

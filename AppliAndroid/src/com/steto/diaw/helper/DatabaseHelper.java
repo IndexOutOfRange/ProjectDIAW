@@ -1,4 +1,4 @@
-package com.steto.diaw.tools;
+package com.steto.diaw.helper;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

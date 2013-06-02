@@ -6,17 +6,19 @@ import com.j256.ormlite.table.DatabaseTable;
 import com.steto.diaw.dao.EpisodeDao;
 
 import java.io.Serializable;
+import java.util.Comparator;
 import java.util.Date;
 
 @DatabaseTable(tableName = "Episode", daoClass = EpisodeDao.class)
 public class Episode implements Serializable, Comparable<Episode> {
 
 	private static final long serialVersionUID = 8857517715427495822L;
+	public static final String SHOWNAME = "showname";
 
 	@DatabaseField(generatedId = true)
 	@JsonIgnore
 	private int mId;
-	@DatabaseField
+	@DatabaseField(columnName = SHOWNAME)
 	private String mShowName;
 	@DatabaseField
 	private int mSeasonNumber;
@@ -120,5 +122,19 @@ public class Episode implements Serializable, Comparable<Episode> {
 	@Override
 	public int compareTo(Episode episode) {
 		return episode.getUpdatedAt().compareTo(this.getUpdatedAt());
+	}
+
+	public static class OrderShowComparator implements Comparator {
+		public int compare(Object o1, Object o2) {
+			Episode episode1 = (Episode) o1;
+			Episode episode2 = (Episode) o2;
+
+			int seasonComp = episode1.getSeasonNumber() - episode2.getSeasonNumber();
+
+			if (seasonComp != 0)
+				return seasonComp;
+			else
+				return episode1.getEpisodeNumber() - episode2.getEpisodeNumber();
+		}
 	}
 }

@@ -5,18 +5,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.ResultReceiver;
-import android.util.Log;
 import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockActivity;
-import com.steto.diaw.model.Episode;
+import com.steto.diaw.model.Show;
+import com.steto.diaw.service.SeriesService;
 import com.steto.diaw.service.ShowService;
 import com.steto.diaw.tools.Tools;
 import com.steto.projectdiaw.R;
-
-import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class SplashScreen extends SherlockActivity {
 
@@ -30,6 +25,8 @@ public class SplashScreen extends SherlockActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splash_screen);
+
+
 		if (needToLogin()) {
 			Intent in = new Intent(this, LoginActivity.class);
 			startActivity(in);
@@ -40,6 +37,7 @@ public class SplashScreen extends SherlockActivity {
             getBackShows();
 
 		}
+
 	}
 
 	private void getBackShows() {

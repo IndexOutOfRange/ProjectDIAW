@@ -8,14 +8,12 @@ import android.os.Bundle;
 import android.os.ResultReceiver;
 import android.util.Log;
 
-import com.steto.diaw.activity.HomeActivity;
-import com.steto.diaw.activity.SplashScreen;
 import com.steto.diaw.dao.EpisodeDao;
 import com.steto.diaw.dao.ShowDao;
 import com.steto.diaw.model.Episode;
 import com.steto.diaw.parser.ShowParser;
 import com.steto.diaw.dao.DatabaseHelper;
-import com.steto.diaw.tools.QueryString;
+import com.steto.diaw.web.QueryString;
 import com.steto.diaw.tools.Tools;
 import com.steto.diaw.web.ParseConnector;
 import com.steto.diaw.web.ShowConnector;
@@ -35,7 +33,7 @@ public class ShowService extends IntentService {
 	public static final String URL_SHOW = "/1/classes/Show";
 	public static final int RESULT_CODE_OK = 0;
 	public static final String RESULT_DATA = "RESULT_DATA";
-	private static String WS_QUERY_WHERE = "where";
+    private static String WS_QUERY_WHERE = "where";
 
 	public ShowService() {
 		super("ShowService");

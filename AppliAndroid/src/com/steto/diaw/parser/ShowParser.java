@@ -12,15 +12,7 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 
-public class ShowParser {
-
-    //les erreurs de parsing vont de 0 a -10
-	public static int PARSER_OK = 0;
-	public static int PARSER_MALFORMED_JSON = -1;
-	public static int PARSER_OBJECT_MALFORMED = -2;
-	public static int PARSER_GENERAL_EXCEPTION = -3;
-
-	private int mStatusCode = PARSER_OK;
+public class ShowParser extends AbstractParser{
 
 	public List<Episode> parse(InputStream in) {
 		ObjectMapper myMapper = new ObjectMapper();
@@ -40,13 +32,5 @@ public class ShowParser {
 		}
 		return current == null ? null : Arrays.asList(current.results);
 
-	}
-
-	public int getStatusCode() {
-		return mStatusCode;
-	}
-
-	public void setStatusCode(int mStatusCode) {
-		this.mStatusCode = mStatusCode;
 	}
 }

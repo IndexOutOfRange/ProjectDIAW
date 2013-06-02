@@ -92,7 +92,7 @@ public class HomeActivity extends SherlockListActivity {
 
 
 
-	/* Update Data */
+	/* Update TVDBContainerData */
 	private void startUpdateListEpisodes() {
 		HomeActivity.sUpdateInProgress = true;
 		invalidateOptionsMenu();
@@ -109,7 +109,7 @@ public class HomeActivity extends SherlockListActivity {
 		startService(in);
 	}
 
-	private ResultReceiver initShowResultReceiver() {
+	private void initShowResultReceiver() {
 		if (mShowResultReceiver == null) {
 
 			mShowResultReceiver = new ResultReceiver(new Handler()) {
@@ -128,7 +128,6 @@ public class HomeActivity extends SherlockListActivity {
 				}
 			};
 		}
-		return mShowResultReceiver;
 	}
 
 	private void processUpdateListEpisodes() {

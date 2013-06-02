@@ -121,4 +121,5 @@ public class Episode implements Serializable, Comparable<Episode> {
 	public int compareTo(Episode episode) {
 		return episode.getUpdatedAt().compareTo(this.getUpdatedAt());
 	}
+
 }

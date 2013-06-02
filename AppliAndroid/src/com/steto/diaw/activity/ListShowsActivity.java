@@ -9,7 +9,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.steto.diaw.adapter.ListShowAdapter;
 import com.steto.diaw.model.Show;
-import com.steto.diaw.tools.DatabaseHelper;
+import com.steto.diaw.dao.DatabaseHelper;
 import com.steto.projectdiaw.R;
 
 import java.sql.SQLException;

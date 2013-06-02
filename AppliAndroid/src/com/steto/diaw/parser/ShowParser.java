@@ -14,6 +14,7 @@ import java.util.List;
 
 public class ShowParser {
 
+    //les erreurs de parsing vont de 0 a -10
 	public static int PARSER_OK = 0;
 	public static int PARSER_MALFORMED_JSON = -1;
 	public static int PARSER_OBJECT_MALFORMED = -2;

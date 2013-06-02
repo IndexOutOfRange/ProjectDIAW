@@ -27,6 +27,12 @@ public class Show implements Serializable, Comparable<Show> {
 		setShowName(name);
 	}
 
+    public Show(String name, int numberSeasons, int numberEpisodes) {
+        setShowName(name);
+        setNumberSeasons(numberSeasons);
+        setNumberEpisodes(numberEpisodes);
+    }
+
 	public String getShowName() {
 		return mShowName;
 	}

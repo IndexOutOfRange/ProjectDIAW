@@ -1,4 +1,4 @@
-package com.steto.diaw.tools;
+package com.steto.diaw.dao;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -7,14 +7,15 @@ import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
-import com.steto.diaw.dao.EpisodeDao;
-import com.steto.diaw.dao.ShowDao;
 import com.steto.diaw.model.Episode;
 import com.steto.diaw.model.Show;
 
 import java.sql.SQLException;
 
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
+
+    //les erreurs d'ecritures en BDD commencent a -10 et sont de plus en plus petit
+    public static final int ERROR_BDD = -10;
 
 	private static final String TAG = "DatabaseHelper";
 	private static final String DATABASE_NAME = "diaw.db";

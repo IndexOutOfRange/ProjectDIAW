@@ -31,5 +31,6 @@
 	</string>
 	<string name="email_hint">mon@adresse.mail</string>
 	<string name="email_error">Veuillez indiquer votre email</string>
+	<string name="list_no_data">Pas de données</string>
 
 </resources>

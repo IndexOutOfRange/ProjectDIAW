@@ -16,6 +16,7 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.Window;
 import com.steto.diaw.adapter.ListEpisodeHomeAdapter;
+import com.steto.diaw.helper.DatabaseHelper;
 import com.steto.diaw.model.Episode;
 import com.steto.diaw.service.ShowService;
 import com.steto.diaw.tools.Tools;

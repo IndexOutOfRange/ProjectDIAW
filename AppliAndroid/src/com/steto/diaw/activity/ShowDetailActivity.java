@@ -1,34 +1,55 @@
 package com.steto.diaw.activity;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
-import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockExpandableListActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.steto.diaw.adapter.SeasonWithEpisodesExpandableAdapter;
+import com.steto.diaw.helper.DatabaseHelper;
+import com.steto.diaw.helper.TranslucideActionBarHelper;
+import com.steto.diaw.model.Episode;
+import com.steto.diaw.model.Season;
 import com.steto.diaw.model.Show;
 import com.steto.diaw.dao.DatabaseHelper;
 import com.steto.projectdiaw.R;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
-public class ShowDetailActivity extends SherlockActivity {
+public class ShowDetailActivity extends SherlockExpandableListActivity {
 	public static final String SHOW_ID = "SHOW_ID";
+	private static final String TAG = "ShowDetailActivity";
 
-	private int mId;
-	private Show mShow = new Show();
+	private Show mShow;
+	private List<Season> mListSeasons;
+
+	private View mHeaderContainer;
+	private ActionBar mActionBar;
+
+	private Drawable mActionBarBackgroundDrawable;
+	private TranslucideActionBarHelper mActionBarTranslucideHelper;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		mActionBarTranslucideHelper = new TranslucideActionBarHelper(getSupportActionBar());
 		setContentView(R.layout.activity_show_detail);
 
-		processExtras();
-		readDatabase();
+		int id = processExtras();
+		if (id == -1) {
+			finish();
+		}
+		readDatabase(id);
 
-		getSupportActionBar().setTitle(mShow.getShowName());
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		mActionBarTranslucideHelper.initActionBar(this, mShow.getShowName(), "", true, com.actionbarsherlock.R.drawable.abs__ab_solid_dark_holo);
 
 		processDataInLayout();
+		mActionBarTranslucideHelper.setOnScrollChangedListener(getExpandableListView());
 	}
 
 	@Override
@@ -52,27 +73,38 @@ public class ShowDetailActivity extends SherlockActivity {
 
 	/* Traitement */
 
-	private void processExtras() {
+	private int processExtras() {
 		if (getIntent().getExtras() != null) {
-			mId = getIntent().getExtras().getInt(SHOW_ID);
+			return getIntent().getExtras().getInt(SHOW_ID);
 		} else {
-			finish();
+			return -1;
 		}
 	}
 
-	private void readDatabase() {
+	private void readDatabase(int id) {
+		mShow = new Show();
+		List<Episode> episodes = new ArrayList<Episode>();
 		try {
-			mShow = DatabaseHelper.getInstance(this).getShowDao().queryForId(mId);
+			mShow = DatabaseHelper.getInstance(this).getShowDao().queryForId(id);
+			episodes = DatabaseHelper.getInstance(this).getEpisodeDao().queryForEq(Episode.SHOWNAME, mShow.getShowName());
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		mListSeasons = Season.getListSeason(episodes);
 	}
 
 	private void processDataInLayout() {
-		TextView title = (TextView) findViewById(R.id.activity_show_detail_title);
+		// List
+		SeasonWithEpisodesExpandableAdapter adapter = new SeasonWithEpisodesExpandableAdapter(this, mListSeasons);
+		View headerContainer = getLayoutInflater().inflate(R.layout.header_show, null);
+		getExpandableListView().addHeaderView(headerContainer);
+		setListAdapter(adapter);
+
+		// ActionBar
+		mActionBarTranslucideHelper.setHeaderContainer(headerContainer);
+
+		// Data
+		TextView title = (TextView) headerContainer.findViewById(R.id.activity_show_detail_title);
 		title.setText(mShow.getShowName());
-
-		// TODO
-
 	}
 }

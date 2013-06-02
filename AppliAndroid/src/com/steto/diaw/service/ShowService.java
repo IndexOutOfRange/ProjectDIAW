@@ -12,6 +12,7 @@ import com.steto.diaw.activity.HomeActivity;
 import com.steto.diaw.activity.SplashScreen;
 import com.steto.diaw.dao.EpisodeDao;
 import com.steto.diaw.dao.ShowDao;
+import com.steto.diaw.helper.DatabaseHelper;
 import com.steto.diaw.model.Episode;
 import com.steto.diaw.parser.ShowParser;
 import com.steto.diaw.dao.DatabaseHelper;

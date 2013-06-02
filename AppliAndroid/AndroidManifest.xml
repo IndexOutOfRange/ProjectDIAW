@@ -38,7 +38,9 @@
 				android:name="com.steto.diaw.activity.ListShowsActivity"
 				android:label="@string/activity_title_list_show"
 				android:launchMode="singleTop"/>
-		<activity android:name="com.steto.diaw.activity.ShowDetailActivity"/>
+		<activity
+				android:name="com.steto.diaw.activity.ShowDetailActivity"
+				android:theme="@style/AppTheme.TranslucentActionBar"/>
 
 		<service android:name="com.steto.diaw.service.ShowService"/>
 	</application>

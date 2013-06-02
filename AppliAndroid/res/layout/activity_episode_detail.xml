@@ -1,83 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-	<RelativeLayout
+	<LinearLayout
 			android:layout_width="match_parent"
-			android:layout_height="180dp">
+			android:layout_height="match_parent"
+			android:orientation="vertical">
 
-		<ImageView
-				android:id="@+id/activity_episode_detail_image"
+		<RelativeLayout
 				android:layout_width="match_parent"
-				android:layout_height="180dp"
-				android:scaleType="centerCrop"
-				android:src="@drawable/episode_image"/>
+				android:layout_height="180dp">
+
+			<ImageView
+					android:id="@+id/activity_episode_detail_image"
+					android:layout_width="match_parent"
+					android:layout_height="180dp"
+					android:scaleType="centerCrop"
+					android:src="@drawable/episode_image"/>
+
+			<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_alignParentBottom="true"
+					android:background="@drawable/rectangle_gradient"
+					android:orientation="vertical"
+					android:padding="@dimen/small">
+
+				<TextView
+						android:id="@+id/activity_episode_detail_title_tv"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:text="1x01 - Pilot"
+						android:textSize="@dimen/text_big"/>
+
+				<TextView
+						android:id="@+id/activity_episode_detail_on_air_tv"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:text="Diffusion le 01/03/2012 / NBC / 22:00"/>
+			</LinearLayout>
+		</RelativeLayout>
 
 		<LinearLayout
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:layout_alignParentBottom="true"
-				android:background="@drawable/rectangle_gradient"
 				android:orientation="vertical"
 				android:padding="@dimen/small">
 
 			<TextView
-					android:id="@+id/activity_episode_detail_title_tv"
+					android:id="@+id/activity_episode_detail_summary_tv"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginBottom="@dimen/small"
+					android:text="Résumé : Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec blandit vehicula porta. Morbi eget elit in mauris venenatis interdum. Phasellus condimentum vestibulum suscipit. Ut rutrum diam nec erat bibendum et rhoncus magna euismod."/>
+
+			<CheckBox
+					android:id="@+id/activity_episode_detail_seen_cb"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:text="1x01 - Pilot"
-					android:textSize="@dimen/text_big"/>
+					android:text="Je l'ai regardé !"
+					android:checked="false"/>
 
-			<TextView
-					android:id="@+id/activity_episode_detail_on_air_tv"
+			<LinearLayout
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:text="Diffusion le 01/03/2012 / NBC / 22:00"/>
+					android:gravity="center_vertical"
+					android:orientation="horizontal"
+					android:weightSum="3">
+
+				<RatingBar
+						android:id="@+id/activity_episode_detail_rate_rb"
+						android:layout_width="0dp"
+						android:layout_height="wrap_content"
+						android:layout_weight="2"
+						android:numStars="5"/>
+
+				<TextView
+						android:id="@+id/activity_episode_detail_rate_tv"
+						android:layout_width="0dp"
+						android:layout_height="wrap_content"
+						android:layout_weight="1"
+						android:text="Moyenne 4,3/5"/>
+			</LinearLayout>
 		</LinearLayout>
-	</RelativeLayout>
 
-	<LinearLayout
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:orientation="vertical"
-			android:padding="@dimen/small">
-
-		<TextView
-				android:id="@+id/activity_episode_detail_summary_tv"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginBottom="@dimen/small"
-				android:text="Résumé : Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec blandit vehicula porta. Morbi eget elit in mauris venenatis interdum. Phasellus condimentum vestibulum suscipit. Ut rutrum diam nec erat bibendum et rhoncus magna euismod."/>
-
-		<CheckBox
-				android:id="@+id/activity_episode_detail_seen_cb"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:text="Je l&apos;ai regardé !"/>
-
-		<LinearLayout
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:gravity="center_vertical"
-				android:orientation="horizontal"
-				android:weightSum="3">
-
-			<RatingBar
-					android:id="@+id/activity_episode_detail_rate_rb"
-					android:layout_width="0dp"
-					android:layout_height="wrap_content"
-					android:layout_weight="2"
-					android:numStars="5"/>
-
-			<TextView
-					android:id="@+id/activity_episode_detail_rate_tv"
-					android:layout_width="0dp"
-					android:layout_height="wrap_content"
-					android:layout_weight="1"
-					android:text="Moyenne 4,3/5"/>
-		</LinearLayout>
 	</LinearLayout>
-
-</LinearLayout>
+</ScrollView>

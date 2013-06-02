@@ -9,7 +9,6 @@ import com.actionbarsherlock.app.SherlockExpandableListActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.steto.diaw.adapter.SeasonWithEpisodesExpandableAdapter;
-import com.steto.diaw.helper.DatabaseHelper;
 import com.steto.diaw.helper.TranslucideActionBarHelper;
 import com.steto.diaw.model.Episode;
 import com.steto.diaw.model.Season;

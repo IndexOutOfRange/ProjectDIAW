@@ -31,31 +31,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fa1e8636-896c-4099-9074-13d609f075a1" name="Default" comment="Update data from HomeActivity &amp; manage the unicity of Episode">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/steto/diaw/view/ListItemEpisodeExpendable.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/steto/diaw/view/ListItemSeasonGroup.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/steto/diaw/model/Season.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/steto/diaw/adapter/SeasonWithEpisodesExpandableAdapter.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/steto/diaw/helper/TranslucideActionBarHelper.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/res/drawable/gradient.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/AndroidManifest.xml" afterPath="$PROJECT_DIR$/AndroidManifest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/AppliAndroid.iml" afterPath="$PROJECT_DIR$/AppliAndroid.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/steto/diaw/dao/DatabaseHelper.java" afterPath="$PROJECT_DIR$/src/com/steto/diaw/dao/DatabaseHelper.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/steto/diaw/helper/DatabaseHelper.java" afterPath="$PROJECT_DIR$/src/com/steto/diaw/helper/DatabaseHelper.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/steto/diaw/model/Episode.java" afterPath="$PROJECT_DIR$/src/com/steto/diaw/model/Episode.java" />
+      <change type="DELETED" beforePath="E:\Code\GitHub\ProjectDIAW\AppliAndroid\src\com\steto\diaw\helper\DatabaseHelper.java" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/steto/diaw/activity/HomeActivity.java" afterPath="$PROJECT_DIR$/src/com/steto/diaw/activity/HomeActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/steto/diaw/adapter/ListEpisodeHomeAdapter.java" afterPath="$PROJECT_DIR$/src/com/steto/diaw/adapter/ListEpisodeHomeAdapter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/steto/diaw/adapter/ListShowAdapter.java" afterPath="$PROJECT_DIR$/src/com/steto/diaw/adapter/ListShowAdapter.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/steto/diaw/activity/ListShowsActivity.java" afterPath="$PROJECT_DIR$/src/com/steto/diaw/activity/ListShowsActivity.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/steto/diaw/activity/ShowDetailActivity.java" afterPath="$PROJECT_DIR$/src/com/steto/diaw/activity/ShowDetailActivity.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/steto/diaw/service/ShowService.java" afterPath="$PROJECT_DIR$/src/com/steto/diaw/service/ShowService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/layout/activity_episode_detail.xml" afterPath="$PROJECT_DIR$/res/layout/activity_episode_detail.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/layout/activity_home.xml" afterPath="$PROJECT_DIR$/res/layout/activity_home.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/layout/activity_list_shows.xml" afterPath="$PROJECT_DIR$/res/layout/activity_list_shows.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/layout/activity_show_detail.xml" afterPath="$PROJECT_DIR$/res/layout/activity_show_detail.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/values/strings.xml" afterPath="$PROJECT_DIR$/res/values/strings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/values/styles.xml" afterPath="$PROJECT_DIR$/res/values/styles.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/values-v14/styles.xml" afterPath="$PROJECT_DIR$/res/values-v14/styles.xml" />
-      <change type="MOVED" beforePath="E:\Code\GitHub\ProjectDIAW\AppliAndroid\res\layout\activity_show_detail.xml" afterPath="$PROJECT_DIR$/res/layout/header_show.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="ProjectDIAW.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -72,7 +53,7 @@
     <file path="/ShowService.java" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1370180142616" ignored="false" />
     <file path="/ShowParser.java" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1370178193708" ignored="false" />
     <file path="/HomeActivity.java" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1370179759853" ignored="false" />
-    <file path="/Dummy.txt" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1370176350140" ignored="false" />
+    <file path="/Dummy.txt" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1370184019746" ignored="false" />
     <file path="/activity_home.xml" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1369064811060" ignored="false" />
     <file path="/episode_home_cell.xml" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1369065035567" ignored="false" />
     <file path="/ListEpisodeHomeAdapter.java" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1369065767764" ignored="false" />
@@ -105,7 +86,6 @@
     <disable_hints />
   </component>
   <component name="DebuggerManager">
-    <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <breakpoint_any default_suspend_policy="SuspendAll" default_condition_enabled="true">
       <breakpoint>
         <option name="NOTIFY_CAUGHT" value="true" />
@@ -159,6 +139,7 @@
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
     </line_breakpoints>
+    <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <breakpoint_rules />
     <ui_properties />
   </component>
@@ -171,19 +152,20 @@
       <file leaf-file-name="ShowService.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/service/ShowService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="93" column="51" selection-start="3263" selection-end="3263" vertical-scroll-proportion="0.0">
-              <folding />
+            <state line="95" column="49" selection-start="3558" selection-end="3558" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="HomeActivity.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="HomeActivity.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/activity/HomeActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="62" column="9" selection-start="1968" selection-end="1968" vertical-scroll-proportion="-0.61290324">
+            <state line="61" column="9" selection-start="1923" selection-end="1923" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#3918#3955#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -192,7 +174,7 @@
       <file leaf-file-name="ListShowsActivity.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/activity/ListShowsActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="76" column="15" selection-start="2030" selection-end="2030" vertical-scroll-proportion="0.0">
+            <state line="9" column="46" selection-start="334" selection-end="334" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -202,9 +184,7 @@
         <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/activity/SplashScreen.java">
           <provider selected="true" editor-type-id="text-editor">
             <state line="39" column="24" selection-start="1073" selection-end="1085" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="e#1982#2019#0" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -213,10 +193,7 @@
         <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/activity/LoginActivity.java">
           <provider selected="true" editor-type-id="text-editor">
             <state line="39" column="32" selection-start="1106" selection-end="1106" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="e#1591#1622#0" expanded="true" />
-                <element signature="e#2719#2756#0" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -224,10 +201,19 @@
       <file leaf-file-name="ShowDetailActivity.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/activity/ShowDetailActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="27" column="13" selection-start="940" selection-end="940" vertical-scroll-proportion="0.0">
+            <state line="24" column="20" selection-start="881" selection-end="881" vertical-scroll-proportion="0.0">
               <folding>
-                <element signature="imports" expanded="false" />
+                <element signature="imports" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="EpisodeDao.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/dao/EpisodeDao.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="52" column="0" selection-start="1531" selection-end="1531" vertical-scroll-proportion="0.33333334">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -245,15 +231,6 @@
         <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/parser/ShowParser.java">
           <provider selected="true" editor-type-id="text-editor">
             <state line="16" column="44" selection-start="511" selection-end="511" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BaseDaoImpl.class" pinned="false" current="false" current-in-tab="false">
-        <entry file="jar://$PROJECT_DIR$/libs/ormlite-core-4.40.jar!/com/j256/ormlite/dao/BaseDaoImpl.class">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="59" column="57" selection-start="3559" selection-end="3559" vertical-scroll-proportion="-10.84">
               <folding />
             </state>
           </provider>
@@ -286,8 +263,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/AndroidManifest.xml" />
-        <option value="$PROJECT_DIR$/src/com/steto/diaw/activity/EpisodeView.java" />
         <option value="$PROJECT_DIR$/res/values/strings.xml" />
         <option value="$PROJECT_DIR$/res/layout/activity_splash_screen.xml" />
         <option value="$PROJECT_DIR$/res/menu/episode_list.xml" />
@@ -300,8 +275,10 @@
         <option value="$PROJECT_DIR$/src/com/steto/diaw/dao/DatabaseHelper.java" />
         <option value="$PROJECT_DIR$/src/com/steto/diaw/activity/SplashScreen.java" />
         <option value="$PROJECT_DIR$/src/com/steto/diaw/activity/LoginActivity.java" />
-        <option value="$PROJECT_DIR$/src/com/steto/diaw/service/ShowService.java" />
         <option value="$PROJECT_DIR$/src/com/steto/diaw/activity/HomeActivity.java" />
+        <option value="$PROJECT_DIR$/src/com/steto/diaw/activity/ListShowsActivity.java" />
+        <option value="$PROJECT_DIR$/src/com/steto/diaw/service/ShowService.java" />
+        <option value="$PROJECT_DIR$/src/com/steto/diaw/activity/ShowDetailActivity.java" />
       </list>
     </option>
   </component>
@@ -536,6 +513,28 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="helper" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ProjectDIAW" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="AppliAndroid" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="diaw" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="dao" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -616,8 +615,8 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -636,31 +635,13 @@
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
     <property name="ANDROID_EXTENDED_DEVICE_CHOOSER_AVD" value="AVD_for_4in_WVGA_Nexus_S" />
     <property name="restartRequiresConfirmation" value="true" />
-    <property name="MemberChooser.showClasses" value="true" />
     <property name="FullScreen" value="false" />
+    <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="options.searchVisible" value="true" />
     <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
   </component>
   <component name="RunManager" selected="Android Application.DIAW">
-    <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Tests">
-      <module name="" />
-      <option name="TESTING_TYPE" value="0" />
-      <option name="INSTRUMENTATION_RUNNER_CLASS" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="CLASS_NAME" value="" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="TARGET_SELECTION_MODE" value="EMULATOR" />
-      <option name="PREFERRED_AVD" value="" />
-      <option name="USE_COMMAND_LINE" value="true" />
-      <option name="COMMAND_LINE" value="" />
-      <option name="WIPE_USER_DATA" value="false" />
-      <option name="DISABLE_BOOT_ANIMATION" value="false" />
-      <option name="NETWORK_SPEED" value="full" />
-      <option name="NETWORK_LATENCY" value="none" />
-      <option name="CLEAR_LOGCAT" value="false" />
-      <method />
-    </configuration>
     <configuration default="true" type="MavenRunConfiguration" factoryName="Maven">
       <MavenSettings>
         <option name="myGeneralSettings" />
@@ -681,6 +662,24 @@
           </MavenRunnerParameters>
         </option>
       </MavenSettings>
+      <method />
+    </configuration>
+    <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Tests">
+      <module name="" />
+      <option name="TESTING_TYPE" value="0" />
+      <option name="INSTRUMENTATION_RUNNER_CLASS" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TARGET_SELECTION_MODE" value="EMULATOR" />
+      <option name="PREFERRED_AVD" value="" />
+      <option name="USE_COMMAND_LINE" value="true" />
+      <option name="COMMAND_LINE" value="" />
+      <option name="WIPE_USER_DATA" value="false" />
+      <option name="DISABLE_BOOT_ANIMATION" value="false" />
+      <option name="NETWORK_SPEED" value="full" />
+      <option name="NETWORK_LATENCY" value="none" />
+      <option name="CLEAR_LOGCAT" value="false" />
       <method />
     </configuration>
     <configuration default="true" type="GriffonRunConfigurationType" factoryName="Griffon">
@@ -835,11 +834,12 @@
       <workItem from="1370098960183" duration="1806000" />
       <workItem from="1370174202200" duration="1743000" />
       <workItem from="1370176347394" duration="4672000" />
+      <workItem from="1370184017876" duration="985000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="32587000" />
+    <option name="totallyTimeSpent" value="33572000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -862,7 +862,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-9" y="-9" width="1938" height="1050" extended-state="6" />
+    <frame x="-9" y="-9" width="1938" height="1050" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -874,12 +874,12 @@
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3246311" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.37003404" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.368899" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3295711" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24946581" sideWeight="0.60045403" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24919957" sideWeight="0.62996596" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24919957" sideWeight="0.631101" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.14982975" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.21558164" sideWeight="0.62806237" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -956,13 +956,6 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/web/ShowConnector.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="13" selection-start="42" selection-end="42" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/web/ParseConnector.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="44" column="5" selection-start="1701" selection-end="1701" vertical-scroll-proportion="0.0">
@@ -994,16 +987,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/dao/EpisodeDao.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="71" column="25" selection-start="2097" selection-end="2097" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$PROJECT_DIR$/libs/ormlite-core-4.40.jar!/com/j256/ormlite/dao/BaseDaoImpl.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="59" column="57" selection-start="3559" selection-end="3559" vertical-scroll-proportion="-10.84">
+        <state line="59" column="57" selection-start="3559" selection-end="3559" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -1022,6 +1008,45 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/activity/SplashScreen.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="39" column="24" selection-start="1073" selection-end="1085" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/activity/LoginActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="39" column="32" selection-start="1106" selection-end="1106" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/activity/HomeActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="61" column="9" selection-start="1923" selection-end="1923" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/activity/ListShowsActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="46" selection-start="334" selection-end="334" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/service/ShowService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="95" column="49" selection-start="3558" selection-end="3558" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/dao/DatabaseHelper.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="16" column="83" selection-start="580" selection-end="580" vertical-scroll-proportion="0.0">
@@ -1031,53 +1056,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/activity/ShowDetailActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="27" column="13" selection-start="940" selection-end="940" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/activity/ListShowsActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="76" column="15" selection-start="2030" selection-end="2030" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/activity/SplashScreen.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="39" column="24" selection-start="1073" selection-end="1085" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="e#1982#2019#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/activity/LoginActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="39" column="32" selection-start="1106" selection-end="1106" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="e#1591#1622#0" expanded="true" />
-            <element signature="e#2719#2756#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/service/ShowService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="93" column="51" selection-start="3263" selection-end="3263" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/activity/HomeActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="62" column="9" selection-start="1968" selection-end="1968" vertical-scroll-proportion="-0.61290324">
+        <state line="24" column="20" selection-start="881" selection-end="881" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#3918#3955#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/dao/EpisodeDao.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="52" column="0" selection-start="1531" selection-end="1531" vertical-scroll-proportion="0.33333334">
+          <folding />
         </state>
       </provider>
     </entry>

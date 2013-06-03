@@ -23,6 +23,7 @@ import org.apache.http.HttpStatus;
 
 import java.io.Serializable;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -51,10 +52,49 @@ public class SeriesService extends IntentService {
         int responseCode = RESULT_CODE_OK;
         List<Show> ret = null;
         if( id != 0) {
-            //3 TODO DIFFERENTS!!
-            //TODO identifier si on a deja fait l'appel a tv db avec l'id et qu'on a donc toutes les infos
-            //TODO une fois qu'on a identifier ca il faut voire si on veut rafraichir les données en rapellant tv db
-            //TODO si on veut pas rapeller TV DB il faut juste faire l'appel en base
+            ret = getShowsFromId(input, id, ret);
+        } else {
+            ret = getShowsFromName(input, ret);
+            if( ret != null && !ret.isEmpty() )
+                ret = getShowsFromId(input, ret.get(0).getTVDBID(), ret);
+        }
+
+        //retour à l'appelant
+        Bundle retBundle = new Bundle();
+        retBundle.putSerializable(OUTPUT_DATA, (Serializable) ret);
+        receiver.send(responseCode, retBundle);
+    }
+
+    private List<Show> getShowsFromName(Show input, List<Show> ret) {
+        SeriesNameConnector myWeb = new SeriesNameConnector();
+        QueryString myQuery = new QueryString();
+        myQuery.add(SERIE_NAME_QUERY, input.getShowName());
+        myWeb.requestFromNetwork(myQuery.getQuery(), WebConnector.HTTPMethod.GET,null);
+        if( myWeb.getStatusCode() == HttpStatus.SC_OK ) {
+            SeriesParser myParser = new SeriesParser();
+            ret = myParser.parse(myWeb.getResponseBody());
+
+            if( myParser.getStatusCode() == AbstractParser.PARSER_OK) {
+                //on va finalement renvoyer la serie avec toutes les infos à l'appelant
+                //au lieu de recopier une a une les infos on récupère juste l'ID de la base dans l'ancien objet et on le copie dans le nouvel objet
+                //on copie aussi le nom de la serie pour garder la correspondance avec la liste des episodes
+                ret.get(0).setId(input.getId());
+                ret.get(0).setTVDBConnected(false);
+                ret.get(0).setShowName(input.getShowName());
+                try {
+                    ShowDao myDAO = null;
+                    myDAO = DatabaseHelper.getInstance(this).getShowDao();
+                    myDAO.createOrUpdate(ret != null ? ret.get(0) : null);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return ret;
+    }
+
+    private List<Show> getShowsFromId(Show input, Integer id, List<Show> ret) {
+        if( !input.isTVDBConnected() ) {
             SeriesIDConnector myWeb = new SeriesIDConnector();
             myWeb.requestFromNetwork(id.toString() + "/en.xml", WebConnector.HTTPMethod.GET, null);
 
@@ -63,6 +103,8 @@ public class SeriesService extends IntentService {
                 ret = myParser.parse(myWeb.getResponseBody());
                 if( myParser.getStatusCode() == AbstractParser.PARSER_OK) {
                     ret.get(0).setId(input.getId());
+                    ret.get(0).setTVDBConnected(true);
+                    ret.get(0).setShowName(input.getShowName());
                     try {
                         ShowDao myDAO = null;
                         myDAO = DatabaseHelper.getInstance(this).getShowDao();
@@ -73,31 +115,10 @@ public class SeriesService extends IntentService {
                 }
             }
         } else {
-            SeriesNameConnector myWeb = new SeriesNameConnector();
-            QueryString myQuery = new QueryString();
-            myQuery.add(SERIE_NAME_QUERY, input.getShowName());
-            myWeb.requestFromNetwork(myQuery.getQuery(), WebConnector.HTTPMethod.GET,null);
-            if( myWeb.getStatusCode() == HttpStatus.SC_OK ) {
-                SeriesParser myParser = new SeriesParser();
-                ret = myParser.parse(myWeb.getResponseBody());
-
-                if( myParser.getStatusCode() == AbstractParser.PARSER_OK) {
-                    ret.get(0).setId(input.getId());
-                    try {
-                        ShowDao myDAO = null;
-                        myDAO = DatabaseHelper.getInstance(this).getShowDao();
-                        myDAO.createOrUpdate(ret != null ? ret.get(0) : null);
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
+            ret = new ArrayList<Show>();
+            ret.add(input);//si l'episode est deja complet alors on le renvois à l'apellant
         }
-
-        //retour à l'appelant
-        Bundle retBundle = new Bundle();
-        retBundle.putSerializable(OUTPUT_DATA, (Serializable) ret);
-        receiver.send(responseCode, retBundle);
+        return ret;
     }
 
     private boolean isDataExpired( ) {

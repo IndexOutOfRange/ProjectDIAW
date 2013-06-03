@@ -16,3 +16,14 @@ gen/
 local.properties
 
 .metadata
+/AppliAndroid/.idea/.name
+/AppliAndroid/.idea/codeStyleSettings.xml
+/AppliAndroid/.idea/compiler.xml
+/AppliAndroid/.idea/encodings.xml
+/AppliAndroid/.idea/inspectionProfiles/Project_Default.xml
+/AppliAndroid/.idea/inspectionProfiles/profiles_settings.xml
+/AppliAndroid/.idea/misc.xml
+/AppliAndroid/.idea/modules.xml
+/AppliAndroid/.idea/scopes/scope_settings.xml
+/AppliAndroid/.idea/vcs.xml
+/AppliAndroid/.idea/workspace.xml

@@ -1,4 +1,4 @@
-package com.steto.diaw.tools;
+package com.steto.diaw.web;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;

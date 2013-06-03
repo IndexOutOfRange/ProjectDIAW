@@ -20,7 +20,7 @@ public class LoginActivity extends SherlockActivity {
 	private Button mValidateButton;
 	private EditText mMailText;
 	private CheckBox mSendPlugin;
-	private ResultReceiver showReceiver;
+	private ResultReceiver mShowReceiver;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -64,20 +64,22 @@ public class LoginActivity extends SherlockActivity {
 	private void getBackShows(String login) {
 		Intent in = new Intent(this, ShowService.class);
 		in.putExtra(ShowService.INTENT_LOGIN, login);
-		in.putExtra(ShowService.INTENT_RESULT_RECEIVER, showReceiver);
+		in.putExtra(ShowService.INTENT_RESULT_RECEIVER, mShowReceiver);
 		startService(in);
 
 	}
 
-	private ResultReceiver initShowResultReceiver() {
-		if (showReceiver == null) {
-			showReceiver = new ResultReceiver(null) {
+	private void initShowResultReceiver() {
+		if (mShowReceiver == null) {
+			mShowReceiver = new ResultReceiver(null) {
 
 				@Override
 				protected void onReceiveResult(int resultCode, Bundle resultData) {
 					super.onReceiveResult(resultCode, resultData);
 					if (resultCode == ShowService.RESULT_CODE_OK) {
-						startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                        Intent in = new Intent(LoginActivity.this, HomeActivity.class);
+                        in.putExtra(HomeActivity.INTENT_LIST_EPISODE, resultData.getSerializable(ShowService.RESULT_DATA));
+						startActivity(in);
 						finish();
 
 					} else {
@@ -86,7 +88,6 @@ public class LoginActivity extends SherlockActivity {
 				}
 			};
 		}
-		return showReceiver;
 	}
 
 }

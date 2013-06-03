@@ -4,23 +4,23 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.ResultReceiver;
 import android.util.Log;
 import android.widget.ListView;
 import android.widget.Toast;
+
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.Window;
 import com.steto.diaw.adapter.ListEpisodeHomeAdapter;
-import com.steto.diaw.helper.DatabaseHelper;
 import com.steto.diaw.model.Episode;
 import com.steto.diaw.service.ShowService;
 import com.steto.diaw.tools.Tools;
 import com.steto.projectdiaw.R;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +28,7 @@ public class HomeActivity extends SherlockListActivity {
 
 	private static final String TAG = "HomeActivity";
 	private static final String INTENT_UPDATE = "IntentUpdate";
+    public static final String INTENT_LIST_EPISODE = "INTENT_LIST_EPISODE";
 
 	private static boolean sUpdateInProgress;
 	private List<Episode> mAllEp = new ArrayList<Episode>();
@@ -40,8 +41,7 @@ public class HomeActivity extends SherlockListActivity {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.activity_home);
-
-		readDatabase();
+        mAllEp = (List<Episode>)getIntent().getExtras().get(INTENT_LIST_EPISODE);
 
 		mList = getListView();
 		mAdapter = new ListEpisodeHomeAdapter(this, mAllEp);
@@ -90,16 +90,9 @@ public class HomeActivity extends SherlockListActivity {
 		}
 	}
 
-	private void readDatabase() {
-		try {
-			mAllEp.clear();
-			mAllEp.addAll(DatabaseHelper.getInstance(HomeActivity.this).getEpisodeDao().queryForAll());
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
 
-	/* Update Data */
+
+	/* Update TVDBContainerData */
 	private void startUpdateListEpisodes() {
 		HomeActivity.sUpdateInProgress = true;
 		invalidateOptionsMenu();
@@ -116,31 +109,30 @@ public class HomeActivity extends SherlockListActivity {
 		startService(in);
 	}
 
-	private ResultReceiver initShowResultReceiver() {
+	private void initShowResultReceiver() {
 		if (mShowResultReceiver == null) {
-			mShowResultReceiver = new ResultReceiver(null) {
+
+			mShowResultReceiver = new ResultReceiver(new Handler()) {
 
 				@Override
 				protected void onReceiveResult(int resultCode, Bundle resultData) {
 					super.onReceiveResult(resultCode, resultData);
 					Log.i(TAG, "onResult");
 					if (resultCode == ShowService.RESULT_CODE_OK) {
-						Intent intent = new Intent(HomeActivity.this, HomeActivity.class);
-						intent.putExtra(INTENT_UPDATE, true);
-						startActivity(intent);
+                        mAllEp.clear();
+                        mAllEp.addAll((List<Episode>)resultData.get(ShowService.RESULT_DATA));
+                        processUpdateListEpisodes();
 					} else {
 						Toast.makeText(HomeActivity.this, getString(R.string.msg_erreur_reseau), Toast.LENGTH_SHORT).show();
 					}
 				}
 			};
 		}
-		return mShowResultReceiver;
 	}
 
 	private void processUpdateListEpisodes() {
 		HomeActivity.sUpdateInProgress = false;
 		invalidateOptionsMenu();
-		readDatabase();
 		mAdapter.notifyDataSetChanged();
 	}
 

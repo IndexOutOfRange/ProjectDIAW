@@ -43,6 +43,8 @@
 				android:theme="@style/AppTheme.TranslucentActionBar"/>
 
 		<service android:name="com.steto.diaw.service.ShowService"/>
+        <service android:name="com.steto.diaw.service.SeriesService"/>
+        <service android:name="com.steto.diaw.service.BannerService"/>
 	</application>
 
 </manifest>

@@ -14,12 +14,7 @@ public class ListShowAdapter extends AbstractListDataAdapter<Show> {
 		super(ctx, all);
 	}
 
-	@Override
-	public long getItemId(int i) {
-		return mData.get(i).getId();
-	}
-
-	@Override
+    @Override
 	public View getView(int i, View view, ViewGroup viewGroup) {
 		ListItemViewShow current;
 		if (view == null || !(view instanceof ListItemViewShow)) {

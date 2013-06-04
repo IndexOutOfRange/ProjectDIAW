@@ -22,17 +22,6 @@ public class ShowDao extends BaseDaoImpl<Show, Integer> {
 	}
 
 	@Override
-	public Show createIfNotExists(Show data) throws SQLException {
-		List<Show> showList = queryForAll();
-		for (Show show : showList) {
-			if (show.equals(data)) {
-				return null;
-			}
-		}
-		return super.createIfNotExists(data);
-	}
-
-	@Override
 	public List<Show> queryForAll() throws SQLException {
 		List<Show> showList = super.queryForAll();
 		Collections.sort(showList);

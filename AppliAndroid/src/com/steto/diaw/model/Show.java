@@ -26,8 +26,8 @@ public class Show implements Serializable, Comparable<Show> {
 
 	private static final long serialVersionUID = 2402273750582116603L;
 
-	@DatabaseField(generatedId = true)
-	private int mId;
+    @DatabaseField(id = true, useGetSet = true)
+    private String mCustomId;
     @Element(name = "SeriesName")
 	@DatabaseField
 	private String mShowName;
@@ -115,13 +115,12 @@ public class Show implements Serializable, Comparable<Show> {
 		this.mNumberEpisodes = numberEpisodes;
 	}
 
-	public int getId() {
-		return mId;
+	public String getId() {
+		return getMCustomId();
 	}
-
-	public void setId(int id) {
-		this.mId = id;
-	}
+    public void setId(String id) {
+        setMCustomId(id);
+    }
 
     public int getTVDBID() {
         return mTVDBID;
@@ -205,5 +204,16 @@ public class Show implements Serializable, Comparable<Show> {
 
     public void setTVDBConnected(boolean TVDBConnected) {
         mTVDBConnected = TVDBConnected;
+    }
+
+    public String getMCustomId() {
+        if( mCustomId == null) {
+            setMCustomId(mShowName);
+        }
+        return mCustomId;
+    }
+
+    public void setMCustomId(String customId) {
+        mCustomId = customId;
     }
 }

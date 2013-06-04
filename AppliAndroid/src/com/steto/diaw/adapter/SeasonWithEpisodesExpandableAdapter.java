@@ -46,9 +46,10 @@ public class SeasonWithEpisodesExpandableAdapter extends BaseExpandableListAdapt
 		return getGroup(pos).getNumber();
 	}
 
+    //see http://grepcode.com/file/repository.grepcode.com/java/ext/com.google.android/android/4.2.2_r1/android/widget/SimpleExpandableListAdapter.java#SimpleExpandableListAdapter.getChildId%28int%2Cint%29
 	@Override
 	public long getChildId(int posGroup, int posChild) {
-		return getChild(posGroup, posChild).getId();
+		return posChild;
 	}
 
 	@Override

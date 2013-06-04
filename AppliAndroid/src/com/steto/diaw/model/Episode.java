@@ -15,9 +15,6 @@ public class Episode implements Serializable, Comparable<Episode> {
 	private static final long serialVersionUID = 8857517715427495822L;
 	public static final String SHOWNAME = "showname";
 
-	@DatabaseField(generatedId = true)
-	@JsonIgnore
-	private int mId;
 	@DatabaseField(columnName = SHOWNAME)
 	private String mShowName;
 	@DatabaseField
@@ -32,6 +29,9 @@ public class Episode implements Serializable, Comparable<Episode> {
 	private boolean mDoubleEpisode = false;
 	@DatabaseField
 	private Date mUpdatedAt;
+    @DatabaseField(id = true, useGetSet = true)
+    @JsonIgnore
+    private String mCustomId;
 
 	public Episode() {
 	}
@@ -111,20 +111,33 @@ public class Episode implements Serializable, Comparable<Episode> {
 		this.mUpdatedAt = updatedAt;
 	}
 
-	public int getId() {
-		return mId;
-	}
-
-	public void setId(int id) {
-		this.mId = id;
-	}
 
 	@Override
 	public int compareTo(Episode episode) {
 		return episode.getUpdatedAt().compareTo(this.getUpdatedAt());
 	}
 
-	public static class OrderShowComparator implements Comparator {
+
+    public String getId() {
+        return getMCustomId();
+    }
+
+    public void setId(String id) {
+        setMCustomId(id);
+    }
+
+    public String getMCustomId() {
+        if( mCustomId == null ) {
+            setMCustomId(mShowName + mSeasonNumber + mEpisodeNumber);
+        }
+        return mCustomId;
+    }
+
+    public void setMCustomId(String customId) {
+        mCustomId = customId;
+    }
+
+    public static class OrderShowComparator implements Comparator {
 		public int compare(Object o1, Object o2) {
 			Episode episode1 = (Episode) o1;
 			Episode episode2 = (Episode) o2;

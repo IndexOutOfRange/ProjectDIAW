@@ -33,7 +33,7 @@
     <list default="true" id="fa1e8636-896c-4099-9074-13d609f075a1" name="Default" comment="Update data from HomeActivity &amp; manage the unicity of Episode" />
     <ignored path="ProjectDIAW.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/fragment.java" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1370296888652" ignored="false" />
+    <file path="/fragment.java" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1370376884077" ignored="false" />
     <file path="/HttpConnection.java" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1368733569621" ignored="false" />
     <file path="/activity_login.xml" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1369058919877" ignored="false" />
     <file path="/bouchonShow.txt" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1368735425498" ignored="false" />
@@ -43,16 +43,16 @@
     <file path="/LoginActivity.java" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1370179863192" ignored="false" />
     <file path="/Tools.java" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1369058739831" ignored="false" />
     <file path="/ParseConnector.java" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1370189357286" ignored="false" />
-    <file path="/ShowService.java" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1370180142616" ignored="false" />
+    <file path="/ShowService.java" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1370377138159" ignored="false" />
     <file path="/ShowParser.java" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1370190598029" ignored="false" />
     <file path="/HomeActivity.java" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1370198329799" ignored="false" />
     <file path="/Dummy.txt" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1370184019746" ignored="false" />
     <file path="/activity_home.xml" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1369064811060" ignored="false" />
     <file path="/episode_home_cell.xml" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1369065035567" ignored="false" />
-    <file path="/ListEpisodeHomeAdapter.java" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1369065767764" ignored="false" />
+    <file path="/ListEpisodeHomeAdapter.java" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1370378532582" ignored="false" />
     <file path="/EpisodeView.java" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1369066359823" ignored="false" />
     <file path="/AndroidManifest.xml" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1370204116881" ignored="false" />
-    <file path="/Episode.java" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1370177230486" ignored="false" />
+    <file path="/Episode.java" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1370378675330" ignored="false" />
     <file path="/Results.java" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1369066186869" ignored="false" />
     <file path="/episode_list.xml" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1369165892762" ignored="false" />
     <file path="/strings.xml" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1369161410229" ignored="false" />
@@ -60,10 +60,10 @@
     <file path="/a.java" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1369163797709" ignored="false" />
     <file path="/sample.java" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1369163820412" ignored="false" />
     <file path="/a.html" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1369163838723" ignored="false" />
-    <file path="/EpisodeDao.java" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1370205815410" ignored="false" />
+    <file path="/EpisodeDao.java" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1370377349691" ignored="false" />
     <file path="/celllist_show_title.xml" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1369167982894" ignored="false" />
     <file path="$APPLICATION_HOME_DIR$/plugins/android/lib/android.jar!/org/jetbrains/android/android.xsd" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1370099138572" ignored="false" />
-    <file path="/Show.java" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1370294938766" ignored="false" />
+    <file path="/Show.java" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1370378634024" ignored="false" />
     <file path="/DatabaseHelper.java" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1370291544992" ignored="false" />
     <file path="/WebConnector.java" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1370193026013" ignored="false" />
     <file path="/TVDBConnector.java" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1370189541579" ignored="false" />
@@ -79,9 +79,11 @@
     <file path="/ShowDetailActivity.java" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1370296413548" ignored="false" />
     <file path="/BannerService.java" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1370290519706" ignored="false" />
     <file path="/BannerConnector.java" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1370204341025" ignored="false" />
-    <file path="/header_show.xml" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1370207028083" ignored="false" />
+    <file path="/header_show.xml" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1370375411662" ignored="false" />
     <file path="/ListShowsActivity.java" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1370294168977" ignored="false" />
     <file path="/ShowDao.java" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1370293350968" ignored="false" />
+    <file path="/AbstractListDataAdapter.java" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1370378923364" ignored="false" />
+    <file path="/SeasonWithEpisodesExpandableAdapter.java" changelist="fa1e8636-896c-4099-9074-13d609f075a1" time="1370378875202" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -142,7 +144,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/src/com/steto/diaw/activity/ShowDetailActivity.java" line="183" class="com.steto.diaw.activity.ShowDetailActivity" package="com.steto.diaw.activity">
+      <breakpoint url="file://$PROJECT_DIR$/src/com/steto/diaw/dao/ShowDao.java" line="38" class="com.steto.diaw.dao.ShowDao" package="com.steto.diaw.dao">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -157,7 +159,7 @@
         <option name="CONDITION" value="" />
         <option name="LOG_MESSAGE" value="" />
       </breakpoint>
-      <breakpoint url="file://$PROJECT_DIR$/src/com/steto/diaw/dao/ShowDao.java" line="49" class="com.steto.diaw.dao.ShowDao" package="com.steto.diaw.dao">
+      <breakpoint url="file://$PROJECT_DIR$/src/com/steto/diaw/dao/ShowDao.java" line="45" class="com.steto.diaw.dao.ShowDao" package="com.steto.diaw.dao">
         <option name="ENABLED" value="true" />
         <option name="LOG_ENABLED" value="false" />
         <option name="LOG_EXPRESSION_ENABLED" value="false" />
@@ -219,19 +221,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="SeriesService.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="SeriesService.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/service/SeriesService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="106" column="64" selection-start="4363" selection-end="4363" vertical-scroll-proportion="1.1946565">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Show.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/model/Show.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="61" column="33" selection-start="1821" selection-end="1821" vertical-scroll-proportion="0.0">
+            <state line="110" column="44" selection-start="4463" selection-end="4463" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -240,10 +233,9 @@
       <file leaf-file-name="ShowDetailActivity.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/activity/ShowDetailActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="98" column="0" selection-start="3120" selection-end="3120" vertical-scroll-proportion="0.0">
+            <state line="183" column="0" selection-start="6369" selection-end="6369" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#3908#3945#0" expanded="true" />
                 <element signature="e#5255#5264#0" expanded="true" />
               </folding>
             </state>
@@ -253,34 +245,7 @@
       <file leaf-file-name="ShowService.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/service/ShowService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="101" column="43" selection-start="3707" selection-end="3707" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Season.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/model/Season.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="44" column="0" selection-start="762" selection-end="762" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ListShowsActivity.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/activity/ListShowsActivity.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="94" column="104" selection-start="2651" selection-end="2651" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DatabaseHelper.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/dao/DatabaseHelper.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="25" column="49" selection-start="911" selection-end="911" vertical-scroll-proportion="0.0">
+            <state line="85" column="48" selection-start="2999" selection-end="2999" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -289,28 +254,62 @@
       <file leaf-file-name="EpisodeDao.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/dao/EpisodeDao.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="12" column="13" selection-start="314" selection-end="314" vertical-scroll-proportion="0.0">
+            <state line="71" column="77" selection-start="2151" selection-end="2151" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BannerService.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/service/BannerService.java">
+      <file leaf-file-name="Episode.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/model/Episode.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="38" column="0" selection-start="1184" selection-end="1184" vertical-scroll-proportion="0.0">
+            <state line="130" column="37" selection-start="2766" selection-end="2766" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ShowDao.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/dao/ShowDao.java">
+      <file leaf-file-name="SeasonWithEpisodesExpandableAdapter.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/adapter/SeasonWithEpisodesExpandableAdapter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="52" column="0" selection-start="1488" selection-end="1488" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="e#1413#1421#0" expanded="true" />
-              </folding>
+            <state line="48" column="45" selection-start="1131" selection-end="1131" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Show.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/model/Show.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="120" column="23" selection-start="3085" selection-end="3085" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ListShowAdapter.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/adapter/ListShowAdapter.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="14" column="5" selection-start="372" selection-end="372" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AbstractListDataAdapter.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/adapter/AbstractListDataAdapter.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="22" column="5" selection-start="468" selection-end="468" vertical-scroll-proportion="0.5515267">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ListEpisodeHomeAdapter.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/adapter/ListEpisodeHomeAdapter.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="14" column="5" selection-start="398" selection-end="398" vertical-scroll-proportion="0.0">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -333,22 +332,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/com/steto/diaw/web/TVDBConnector.java" />
-        <option value="$PROJECT_DIR$/src/com/steto/diaw/web/SeriesIDConnector.java" />
-        <option value="$PROJECT_DIR$/src/com/steto/diaw/web/SeriesNameConnector.java" />
-        <option value="$PROJECT_DIR$/AndroidManifest.xml" />
-        <option value="$PROJECT_DIR$/src/com/steto/diaw/web/BannerConnector.java" />
-        <option value="$PROJECT_DIR$/src/com/steto/diaw/dao/EpisodeDao.java" />
-        <option value="$PROJECT_DIR$/res/layout/header_show.xml" />
-        <option value="$PROJECT_DIR$/src/com/steto/diaw/parser/SeriesParser.java" />
         <option value="$PROJECT_DIR$/src/com/steto/diaw/service/BannerService.java" />
         <option value="$PROJECT_DIR$/src/com/steto/diaw/model/Season.java" />
-        <option value="$PROJECT_DIR$/src/com/steto/diaw/dao/ShowDao.java" />
         <option value="$PROJECT_DIR$/src/com/steto/diaw/activity/ListShowsActivity.java" />
-        <option value="$PROJECT_DIR$/src/com/steto/diaw/model/Show.java" />
-        <option value="$PROJECT_DIR$/src/com/steto/diaw/dao/DatabaseHelper.java" />
         <option value="$PROJECT_DIR$/src/com/steto/diaw/activity/ShowDetailActivity.java" />
         <option value="$PROJECT_DIR$/src/com/steto/diaw/service/SeriesService.java" />
+        <option value="$PROJECT_DIR$/src/com/steto/diaw/dao/ShowDao.java" />
+        <option value="$PROJECT_DIR$/src/com/steto/diaw/dao/DatabaseHelper.java" />
+        <option value="$PROJECT_DIR$/res/layout/header_show.xml" />
+        <option value="$PROJECT_DIR$/src/com/steto/diaw/service/ShowService.java" />
+        <option value="$PROJECT_DIR$/src/com/steto/diaw/dao/EpisodeDao.java" />
+        <option value="$PROJECT_DIR$/src/com/steto/diaw/adapter/ListShowAdapter.java" />
+        <option value="$PROJECT_DIR$/src/com/steto/diaw/adapter/ListEpisodeHomeAdapter.java" />
+        <option value="$PROJECT_DIR$/src/com/steto/diaw/model/Show.java" />
+        <option value="$PROJECT_DIR$/src/com/steto/diaw/model/Episode.java" />
+        <option value="$PROJECT_DIR$/src/com/steto/diaw/adapter/SeasonWithEpisodesExpandableAdapter.java" />
+        <option value="$PROJECT_DIR$/src/com/steto/diaw/adapter/AbstractListDataAdapter.java" />
       </list>
     </option>
   </component>
@@ -558,6 +557,38 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="activity" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="AppliAndroid" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="AppliAndroid" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="AppliAndroid" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="AppliAndroid" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="layout" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -802,12 +833,12 @@
       <workItem from="1370174202200" duration="1743000" />
       <workItem from="1370176347394" duration="4672000" />
       <workItem from="1370184017876" duration="19937000" />
-      <workItem from="1370288671090" duration="9196000" />
+      <workItem from="1370288671090" duration="16376000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="61720000" />
+    <option name="totallyTimeSpent" value="68900000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -833,7 +864,10 @@
     <frame x="-9" y="-9" width="1938" height="1050" extended-state="0" />
     <editor active="true" />
     <layout>
+      <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.21504803" sideWeight="0.62656075" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.21504803" sideWeight="0.62656075" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.38621795" sideWeight="0.62656075" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3291714" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39954597" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -847,12 +881,9 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24946581" sideWeight="0.60045403" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25080043" sideWeight="0.62656075" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25026682" sideWeight="0.62656075" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.14982975" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.21527778" sideWeight="0.6753689" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.21527778" sideWeight="0.6753689" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.38621795" sideWeight="0.62656075" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
@@ -924,16 +955,43 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/activity/LoginActivity.java">
+    <entry file="jar://$PROJECT_DIR$/libs/ormlite-core-4.40.jar!/com/j256/ormlite/dao/BaseDaoImpl.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="13" selection-start="520" selection-end="520" vertical-scroll-proportion="0.0">
+        <state line="57" column="13" selection-start="3422" selection-end="3422" vertical-scroll-proportion="-6.8">
           <folding />
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/dao/DatabaseHelper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="25" column="50" selection-start="912" selection-end="912" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/res/layout/activity_episode_detail.xml">
+      <provider editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/res/layout/activity_show_detail.xml">
+      <provider editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/res/layout/header_show.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="44" selection-start="652" selection-end="652" vertical-scroll-proportion="0.0">
+        <state line="16" column="46" selection-start="536" selection-end="536" vertical-scroll-proportion="-10.074074">
           <folding />
         </state>
       </provider>
@@ -941,106 +999,84 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/parser/SeriesParser.java">
+    <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/dao/ShowDao.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="28" column="0" selection-start="803" selection-end="803" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/model/Episode.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="13" selection-start="374" selection-end="374" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/adapter/ListShowAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="13" selection-start="239" selection-end="239" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/adapter/AbstractListDataAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="18" selection-start="496" selection-end="496" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/dao/EpisodeDao.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="13" selection-start="314" selection-end="314" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/model/Season.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="44" column="0" selection-start="762" selection-end="762" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/model/Show.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="61" column="33" selection-start="1821" selection-end="1821" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/dao/DatabaseHelper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="25" column="49" selection-start="911" selection-end="911" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/service/BannerService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="38" column="0" selection-start="1184" selection-end="1184" vertical-scroll-proportion="0.0">
-          <folding />
+        <state line="57" column="35" selection-start="1918" selection-end="1918" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="e#1170#1178#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/activity/ShowDetailActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="98" column="0" selection-start="3120" selection-end="3120" vertical-scroll-proportion="0.0">
+        <state line="183" column="0" selection-start="6369" selection-end="6369" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#3908#3945#0" expanded="true" />
             <element signature="e#5255#5264#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/activity/ListShowsActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="94" column="104" selection-start="2651" selection-end="2651" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/dao/ShowDao.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="52" column="0" selection-start="1488" selection-end="1488" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="e#1413#1421#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/service/ShowService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="101" column="43" selection-start="3707" selection-end="3707" vertical-scroll-proportion="0.0">
+        <state line="85" column="48" selection-start="2999" selection-end="2999" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/dao/EpisodeDao.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="71" column="77" selection-start="2151" selection-end="2151" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/adapter/ListShowAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="14" column="5" selection-start="372" selection-end="372" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/adapter/ListEpisodeHomeAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="14" column="5" selection-start="398" selection-end="398" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/service/SeriesService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="106" column="64" selection-start="4363" selection-end="4363" vertical-scroll-proportion="1.1946565">
+        <state line="110" column="44" selection-start="4463" selection-end="4463" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/model/Show.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="120" column="23" selection-start="3085" selection-end="3085" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/model/Episode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="130" column="37" selection-start="2766" selection-end="2766" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/adapter/SeasonWithEpisodesExpandableAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="48" column="45" selection-start="1131" selection-end="1131" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/adapter/AbstractListDataAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="22" column="5" selection-start="468" selection-end="468" vertical-scroll-proportion="0.5515267">
           <folding />
         </state>
       </provider>

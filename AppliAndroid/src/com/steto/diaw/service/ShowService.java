@@ -8,9 +8,11 @@ import android.os.Bundle;
 import android.os.ResultReceiver;
 import android.util.Log;
 
+import com.j256.ormlite.dao.Dao;
 import com.steto.diaw.dao.EpisodeDao;
 import com.steto.diaw.dao.ShowDao;
 import com.steto.diaw.model.Episode;
+import com.steto.diaw.model.Show;
 import com.steto.diaw.parser.ShowParser;
 import com.steto.diaw.dao.DatabaseHelper;
 import com.steto.diaw.web.QueryString;
@@ -74,15 +76,18 @@ public class ShowService extends IntentService {
                 InputStream response = myWeb.getResponseBody();
                 ShowParser myParser = new ShowParser();
                 allEp = myParser.parse(response);
+                Log.d("ShowService", "on a parse : " + allEp.size() + " episodes" );
                 responseCode = myParser.getStatusCode();
 
                 //enregistrement en BDD
                 try {
                     EpisodeDao epDAO = DatabaseHelper.getInstance(this).getEpisodeDao();
                     ShowDao showDAO = DatabaseHelper.getInstance(this).getShowDao();
-                    epDAO.createOrUpdate(allEp);
+                    int nbCreated = epDAO.createOrUpdate(allEp);
+                    Log.d("ShowService", nbCreated + " episodes créés en base" );
                     for(Episode current : allEp) {
-                        showDAO.createIfNotExists(epDAO.getShowFromEpisode(current));
+                        Show currentShow = new Show(current.getShowName());
+                        showDAO.createIfNotExists(currentShow);
                     }
 
                     //mise à jour de la date de MAJ

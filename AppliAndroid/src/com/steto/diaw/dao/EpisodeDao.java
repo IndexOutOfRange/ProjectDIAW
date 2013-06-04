@@ -19,7 +19,7 @@ public class EpisodeDao extends BaseDaoImpl<Episode, Integer> {
 		super(connectionSource, Episode.class);
         mSource = connectionSource;
 	}
-
+/*
 	@Override
 	public CreateOrUpdateStatus createOrUpdate(Episode data) throws SQLException {
 		List<Episode> listEpisodes = queryForAll();
@@ -47,7 +47,7 @@ public class EpisodeDao extends BaseDaoImpl<Episode, Integer> {
 			return new CreateOrUpdateStatus(false, false, 0);
 		}
 	}
-
+*/
 	@Override
 	public List<Episode> queryForAll() throws SQLException {
 		List<Episode> episodeList = super.queryForAll();
@@ -68,6 +68,8 @@ public class EpisodeDao extends BaseDaoImpl<Episode, Integer> {
             CreateOrUpdateStatus ret = createOrUpdate(episode);
             if(ret.isCreated()) {
                 nbCreated++;
+            } else {
+                Log.d("episodeDAO", "episode : " + episode.getShowName() + " " + episode.getSeasonNumber() + " " + episode.getEpisodeNumber() +" deja present en base");
             }
         }
         return nbCreated;

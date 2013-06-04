@@ -55,13 +55,19 @@ public class SeriesService extends IntentService {
             ret = getShowsFromId(input, id, ret);
         } else {
             ret = getShowsFromName(input, ret);
+            sendBackResult(receiver, responseCode, (Serializable) ret);
             if( ret != null && !ret.isEmpty() )
                 ret = getShowsFromId(input, ret.get(0).getTVDBID(), ret);
         }
+        sendBackResult(receiver, responseCode, (Serializable) ret);
 
+
+    }
+
+    private void sendBackResult(ResultReceiver receiver, int responseCode, Serializable ret) {
         //retour à l'appelant
         Bundle retBundle = new Bundle();
-        retBundle.putSerializable(OUTPUT_DATA, (Serializable) ret);
+        retBundle.putSerializable(OUTPUT_DATA, ret);
         receiver.send(responseCode, retBundle);
     }
 

@@ -6,6 +6,7 @@
       <root url="jar://$PROJECT_DIR$/libs/jackson-databind-2.0.4.jar!/" />
       <root url="jar://$PROJECT_DIR$/libs/ormlite-android-4.40.jar!/" />
       <root url="jar://$PROJECT_DIR$/libs/ormlite-core-4.40.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/simple-xml-2.7.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$PROJECT_DIR$/libs/ormlite-core-4.40-javadoc.jar!/" />

@@ -27,8 +27,11 @@ public abstract class AbstractListDataAdapter<T> extends BaseAdapter {
 		return mData.get(i);
 	}
 
+    //see http://grepcode.com/file/repository.grepcode.com/java/ext/com.google.android/android/4.2.2_r1/android/widget/ArrayAdapter.java#ArrayAdapter.getItemId%28int%29
 	@Override
-	public abstract long getItemId(int i);
+	public long getItemId(int i){
+        return i;
+    }
 
 	@Override
 	public abstract View getView(int i, View view, ViewGroup viewGroup);

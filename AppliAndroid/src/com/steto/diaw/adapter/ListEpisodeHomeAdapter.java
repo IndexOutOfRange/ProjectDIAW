@@ -15,11 +15,6 @@ public class ListEpisodeHomeAdapter extends AbstractListDataAdapter<Episode> {
 	}
 
 	@Override
-	public long getItemId(int i) {
-		return mData.get(i).getId();
-	}
-
-	@Override
 	public View getView(int i, View view, ViewGroup viewGroup) {
 		ListItemViewEpisode current;
 		if (view == null || !(view instanceof ListItemViewEpisode)) {

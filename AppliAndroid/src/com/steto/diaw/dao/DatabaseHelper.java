@@ -23,15 +23,17 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
 	private static final String TAG = "DatabaseHelper";
 	private static final String DATABASE_NAME = "diaw.db";
-	private static final int DATABASE_VERSION = 5;
+	private static final int DATABASE_VERSION = 11;
 
 	private static DatabaseHelper instance;
 
-	private EpisodeDao episodeDao = null;
-	private ShowDao showDao = null;
+	private EpisodeDao mEpisodeDao = null;
+	private ShowDao mShowDao = null;
+    private Context mContext;
 
 	private DatabaseHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        mContext = context;
 	}
 
 	public static DatabaseHelper getInstance(Context context) {
@@ -61,31 +63,41 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
 			onCreate(sqliteDatabase, connectionSource);
 
+            reinitDateMAJ();
+
 		} catch (SQLException e) {
 			Log.e(TAG, "Unable to upgrade database from version " + oldVersion + " to new " + newVersion, e);
 		}
 	}
 
+    private void reinitDateMAJ() {
+        //reboot de la date de MJ de la base
+        SharedPreferences settings = mContext.getSharedPreferences(Tools.SHARED_PREF_FILE, Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putLong(Tools.SHARED_PREF_LAST_UPDATE, 0);
+        editor.commit();
+    }
+
 	public EpisodeDao getEpisodeDao() throws SQLException {
-		if (episodeDao == null) {
+		if (mEpisodeDao == null) {
 			try {
-				episodeDao = DaoManager.createDao(getConnectionSource(), Episode.class);
+				mEpisodeDao = DaoManager.createDao(getConnectionSource(), Episode.class);
 			} catch (SQLException e) {
 				Log.e(TAG, "Unable to get the EpisodeDao", e);
 			}
 		}
-		return episodeDao;
+		return mEpisodeDao;
 	}
 
 	public ShowDao getShowDao() throws SQLException {
-		if (showDao == null) {
+		if (mShowDao == null) {
 			try {
-				showDao = DaoManager.createDao(getConnectionSource(), Show.class);
+				mShowDao = DaoManager.createDao(getConnectionSource(), Show.class);
 			} catch (SQLException e) {
 				Log.e(TAG, "Unable to get the ShowDao", e);
 			}
 		}
-		return showDao;
+		return mShowDao;
 	}
 
 

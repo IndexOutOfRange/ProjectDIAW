@@ -1,5 +1,9 @@
 package com.steto.diaw.model;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
+import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import com.steto.diaw.dao.ShowDao;
@@ -7,8 +11,14 @@ import com.steto.diaw.dao.ShowDao;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 @Root(name="Series", strict = false)
 @DatabaseTable(tableName = "Show", daoClass = ShowDao.class)
@@ -16,8 +26,8 @@ public class Show implements Serializable, Comparable<Show> {
 
 	private static final long serialVersionUID = 2402273750582116603L;
 
-	@DatabaseField(generatedId = true)
-	private int mId;
+    @DatabaseField(id = true, useGetSet = true)
+    private String mCustomId;
     @Element(name = "SeriesName")
 	@DatabaseField
 	private String mShowName;
@@ -46,6 +56,10 @@ public class Show implements Serializable, Comparable<Show> {
     @DatabaseField
     @Element(name = "banner", required = false )
     private String mBannerURL;
+    @DatabaseField( dataType=DataType.BYTE_ARRAY )
+    private byte[] mBanner;
+    @DatabaseField
+    private boolean mTVDBConnected;
 
 	public Show() {
 	}
@@ -101,13 +115,12 @@ public class Show implements Serializable, Comparable<Show> {
 		this.mNumberEpisodes = numberEpisodes;
 	}
 
-	public int getId() {
-		return mId;
+	public String getId() {
+		return getMCustomId();
 	}
-
-	public void setId(int id) {
-		this.mId = id;
-	}
+    public void setId(String id) {
+        setMCustomId(id);
+    }
 
     public int getTVDBID() {
         return mTVDBID;
@@ -163,5 +176,44 @@ public class Show implements Serializable, Comparable<Show> {
 
     public void setBannerURL(String bannerURL) {
         mBannerURL = bannerURL;
+    }
+
+    public byte[] getBanner() {
+        return mBanner;
+    }
+
+    public Bitmap getBannerAsBitmap() {
+        InputStream is = new ByteArrayInputStream(mBanner);
+        Bitmap bmp = BitmapFactory.decodeStream(is);
+        return bmp;
+    }
+
+    public void setBanner(byte[] banner) {
+        mBanner = banner;
+    }
+
+    public void setBanner(Bitmap banner) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        banner.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        mBanner = stream.toByteArray();
+    }
+
+    public boolean isTVDBConnected() {
+        return mTVDBConnected;
+    }
+
+    public void setTVDBConnected(boolean TVDBConnected) {
+        mTVDBConnected = TVDBConnected;
+    }
+
+    public String getMCustomId() {
+        if( mCustomId == null) {
+            setMCustomId(mShowName);
+        }
+        return mCustomId;
+    }
+
+    public void setMCustomId(String customId) {
+        mCustomId = customId;
     }
 }

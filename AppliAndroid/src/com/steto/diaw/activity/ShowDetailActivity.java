@@ -18,6 +18,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.Window;
 import com.steto.diaw.adapter.SeasonWithEpisodesExpandableAdapter;
+import com.steto.diaw.dao.ShowDao;
 import com.steto.diaw.helper.TranslucideActionBarHelper;
 import com.steto.diaw.model.Episode;
 import com.steto.diaw.model.Season;
@@ -38,7 +39,6 @@ public class ShowDetailActivity extends SherlockExpandableListActivity {
 
 	private Show mShow;
 	private List<Season> mListSeasons;
-    private Bitmap banner;
 
 	private View mHeaderContainer;
 	private ActionBar mActionBar;
@@ -61,8 +61,7 @@ public class ShowDetailActivity extends SherlockExpandableListActivity {
 		if (id == -1) {
 			finish();
 		}
-		readDatabase(id);
-
+        readDatabase();
 		mActionBarTranslucideHelper.initActionBar(this, mShow.getShowName(), "", true, com.actionbarsherlock.R.drawable.abs__ab_solid_dark_holo);
 
 		processDataInLayout();
@@ -101,8 +100,14 @@ public class ShowDetailActivity extends SherlockExpandableListActivity {
                     Log.i(TAG, "onResult");
                     setSupportProgressBarIndeterminateVisibility(false);
                     if (resultCode == ShowService.RESULT_CODE_OK) {
-                        mShow = ((List<Show>)resultData.get(SeriesService.OUTPUT_DATA)).get(0);
-                        refreshLayout();
+                        List<Show> response = (List<Show>)resultData.get(SeriesService.OUTPUT_DATA);
+                        if( response != null && !response.isEmpty()) {
+                            mShow = response.get(0);
+                            refreshLayout();
+                            if( mShow.getBanner() == null ) {
+                                launchBannerService();
+                            }
+                        }
                     } else {
                         Toast.makeText(ShowDetailActivity.this, getString(R.string.msg_erreur_reseau), Toast.LENGTH_SHORT).show();
                     }
@@ -122,7 +127,8 @@ public class ShowDetailActivity extends SherlockExpandableListActivity {
                     Log.i(TAG, "onResult");
                     setSupportProgressBarIndeterminateVisibility(false);
                     if (resultCode == ShowService.RESULT_CODE_OK) {
-                        banner = (Bitmap)resultData.getParcelable(BannerService.OUTPUT_BITMAP);
+                        Bitmap banner = (Bitmap)resultData.getParcelable(BannerService.OUTPUT_BITMAP);
+                        mShow.setBanner(banner);
                         refreshLayout();
                     } else {
                         Toast.makeText(ShowDetailActivity.this, getString(R.string.msg_erreur_reseau), Toast.LENGTH_SHORT).show();
@@ -134,36 +140,46 @@ public class ShowDetailActivity extends SherlockExpandableListActivity {
 
 	private int processExtras() {
 		if (getIntent().getExtras() != null) {
-			return getIntent().getExtras().getInt(SHOW_ID);
+            mShow = (Show)(getIntent().getExtras().get(SHOW_ID));
+			return 0;
 		} else {
 			return -1;
 		}
 	}
 
-	private void readDatabase(int id) {
-		mShow = new Show();
+	private void readDatabase() {
 		List<Episode> episodes = new ArrayList<Episode>();
 		try {
-			mShow = DatabaseHelper.getInstance(this).getShowDao().queryForId(id);
-			episodes = DatabaseHelper.getInstance(this).getEpisodeDao().queryForEq(Episode.SHOWNAME, mShow.getShowName());
+            ShowDao myBDD =  DatabaseHelper.getInstance(this).getShowDao();
+            mListSeasons = myBDD.getSeasonsFromShow(mShow);
 		} catch (SQLException e) {
+            Toast.makeText(this, "erreur lors de la recupération des episodes de la serie",Toast.LENGTH_SHORT).show();
 			e.printStackTrace();
 		}
-		mListSeasons = Season.getListSeason(episodes);
 
 
         setSupportProgressBarIndeterminateVisibility(true);
+        launchSerieService();
+        launchBannerService();
+    }
+
+    private void launchSerieService() {
         Intent in = new Intent(this, SeriesService.class);
         in.putExtra(SeriesService.INPUT_SERIE, mShow);
         in.putExtra(SeriesService.INPUT_RESULTRECEIVER, mShowResultReceiver);
         startService(in);
-        Intent ban= new Intent(this, BannerService.class);
-        ban.putExtra(BannerService.INPUT_SERIE, mShow);
-        ban.putExtra(BannerService.INPUT_RECEIVER, mBannerResultReceiver);
-        startService(ban);
-	}
+    }
 
-	private void processDataInLayout() {
+    private void launchBannerService() {
+        if( mShow.getBannerURL() != null) {
+            Intent ban= new Intent(this, BannerService.class);
+            ban.putExtra(BannerService.INPUT_SERIE, mShow);
+            ban.putExtra(BannerService.INPUT_RECEIVER, mBannerResultReceiver);
+            startService(ban);
+        }
+    }
+
+    private void processDataInLayout() {
 		// List
 		SeasonWithEpisodesExpandableAdapter adapter = new SeasonWithEpisodesExpandableAdapter(this, mListSeasons);
         mHeaderContainer = getLayoutInflater().inflate(R.layout.header_show, null);
@@ -178,11 +194,6 @@ public class ShowDetailActivity extends SherlockExpandableListActivity {
 
     private void refreshLayout() {
 
-        if( banner != null ) {
-            // TVDBContainerData
-            ImageView bannerView = (ImageView) mHeaderContainer.findViewById(R.id.activity_show_detail_image);
-            bannerView.setImageBitmap(banner);
-        }
         if( mShow != null ) {
             // TVDBContainerData
             TextView title = (TextView) mHeaderContainer.findViewById(R.id.activity_show_detail_title);
@@ -197,6 +208,12 @@ public class ShowDetailActivity extends SherlockExpandableListActivity {
             // TVDBContainerData
             TextView statut = (TextView) mHeaderContainer.findViewById(R.id.activity_show_detail_statut);
             statut.setText(mShow.getStatus());
+
+            if( mShow.getBanner() != null ) {
+                // TVDBContainerData
+                ImageView bannerView = (ImageView) mHeaderContainer.findViewById(R.id.activity_show_detail_image);
+                bannerView.setImageBitmap(mShow.getBannerAsBitmap());
+            }
         }
     }
 }

@@ -12,7 +12,11 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockListActivity;
-import com.actionbarsherlock.view.*;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.view.Window;
+import com.steto.diaw.actionbarcallback.ActionModeCallbackEpisode;
 import com.steto.diaw.adapter.ListEpisodeHomeAdapter;
 import com.steto.diaw.model.Episode;
 import com.steto.diaw.service.ParseService;
@@ -21,19 +25,16 @@ import com.steto.projectdiaw.R;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class HomeActivity extends SherlockListActivity {
 
 	public static final String INTENT_LIST_EPISODE = "INTENT_LIST_EPISODE";
 	private static final String TAG = "HomeActivity";
-	private static final String INTENT_UPDATE = "IntentUpdate";
 	private static boolean sUpdateInProgress;
 	private List<Episode> mAllEp = new ArrayList<Episode>();
 	private ListView mList;
 	private ListEpisodeHomeAdapter mAdapter;
 	private ResultReceiver mShowResultReceiver;
-	private ActionMode actionMode;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,39 +44,10 @@ public class HomeActivity extends SherlockListActivity {
 		mAllEp = (List<Episode>) getIntent().getExtras().get(INTENT_LIST_EPISODE);
 
 		mList = getListView();
-
-		mList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-
-			@Override
-			public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-				if (actionMode != null) {
-					// if already in action mode - do nothing
-					return false;
-				}
-				// set checked selected item and enter multi selection mode
-				mAdapter.setChecked(arg2, true);
-				HomeActivity.this.startActionMode(new ActionModeCallback());
-				actionMode.invalidate();
-				return true;
-			}
-		});
-
-		mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3)
-			{
-				if (actionMode != null) {
-					// if action mode, toggle checked state of item
-					mAdapter.toggleChecked(arg2);
-					actionMode.invalidate();
-				} else {
-					// do whatever you should on item click
-				}
-			}
-		});
-
 		mAdapter = new ListEpisodeHomeAdapter(this, mAllEp);
 		mList.setAdapter(mAdapter);
+		setActionModeCallbackOnList();
+
 	}
 
 	@Override
@@ -136,9 +108,9 @@ public class HomeActivity extends SherlockListActivity {
 					super.onReceiveResult(resultCode, resultData);
 					Log.i(TAG, "onResult");
 					if (resultCode == ParseService.RESULT_CODE_OK) {
-                        mAllEp.clear();
-                        mAllEp.addAll((List<Episode>)resultData.get(ParseService.RESULT_DATA));
-                        processUpdateListEpisodes();
+						mAllEp.clear();
+						mAllEp.addAll((List<Episode>) resultData.get(ParseService.RESULT_DATA));
+						processUpdateListEpisodes();
 					} else {
 						Toast.makeText(HomeActivity.this, getString(R.string.msg_erreur_reseau), Toast.LENGTH_SHORT).show();
 					}
@@ -153,65 +125,49 @@ public class HomeActivity extends SherlockListActivity {
 		mAdapter.notifyDataSetChanged();
 	}
 
-	private final class ActionModeCallback implements ActionMode.Callback {
+	private void setActionModeCallbackOnList() {
+		final ActionModeCallbackEpisode actionModeCallback = new ActionModeCallbackEpisode(HomeActivity.this, mAdapter);
+		mList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
-		@Override
-		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-			mAdapter.enterMultiMode();
-			// save global action mode
-			actionMode = mode;
-			return true;
-		}
-
-		@Override
-		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-			// remove previous items
-			menu.clear();
-			final int checked = mAdapter.getCheckedItemCount();
-			// update title with number of checked items
-			mode.setTitle(checked + " " + getResources().getQuantityString(R.plurals.nb_items_selected, checked));
-			switch (checked) {
-				case 0:
-					// if nothing checked - exit action mode
-					mode.finish();
-					return true;
-				case 1:
-					// all items - rename + delete
-					HomeActivity.this.getSupportMenuInflater().inflate(R.menu.context_menu, menu);
-					return true;
-				default:
-					HomeActivity.this.getSupportMenuInflater().inflate(R.menu.context_menu, menu);
-					// remove rename option - because we have more than one selected
-					menu.removeItem(R.id.context_menu_rename);
-					return true;
-			}
-		}
-
-		@Override
-		public boolean onActionItemClicked(ActionMode mode, com.actionbarsherlock.view.MenuItem item) {
-			switch (item.getItemId()) {
-				case R.id.context_menu_rename:
-					// TODO proposer dialog pour renommer l'episode
-					Log.d(TAG, "A renommer : " + mAdapter.getFirstCheckedItem().getMCustomId());
-					return true;
-
-				case R.id.context_menu_delete:
-					Set<Integer> checked = mAdapter.getCheckedItems();
-					// iterate through selected items and delete them
-					for (Integer ci : checked) {
-						// TODO appel WS pour supprimer les donnees
-						Log.d(TAG, "A supprimer : " + mAllEp.get(ci).getMCustomId());
-					}
-					return true;
-				default:
+			@Override
+			public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+				if (actionModeCallback.getActionMode() != null) {
+					// if already in action mode - do nothing
 					return false;
+				}
+				// set checked selected item and enter multi selection mode
+				mAdapter.setChecked(arg2, true);
+				HomeActivity.this.startActionMode(actionModeCallback);
+				actionModeCallback.getActionMode().invalidate();
+				return true;
 			}
-		}
+		});
 
-		@Override
-		public void onDestroyActionMode(ActionMode mode) {
-			mAdapter.exitMultiMode();
-			actionMode = null;
-		}
+		mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+				if (actionModeCallback.getActionMode() != null) {
+					// if action mode, toggle checked state of item
+					mAdapter.toggleChecked(arg2);
+					actionModeCallback.getActionMode().invalidate();
+				} else {
+					// do whatever you should on item click
+				}
+			}
+		});
+	}
+
+	public void deleteEpisode(Episode episode) {
+		// TODO
+		// service vers Parse
+		// si service ok delete ds la database puis query et notify
+	}
+
+
+	public void renameEpisode(Episode episode) {
+		// TODO
+		// dialog pour changer le nom
+		// service vers Parse
+		// si service ok update delete et create puis query et notify
 	}
 }

@@ -3,10 +3,8 @@ package com.steto.diaw.adapter;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-import com.steto.diaw.activity.HomeActivity;
 import com.steto.diaw.model.Episode;
 import com.steto.diaw.view.ListItemViewEpisode;
-import com.steto.projectdiaw.R;
 
 import java.util.HashSet;
 import java.util.List;

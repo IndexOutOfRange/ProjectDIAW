@@ -37,34 +37,45 @@ public class Show implements Serializable, Comparable<Show> {
 
 	@DatabaseField
 	private int mNumberSeasons;
+
 	@DatabaseField
 	private int mNumberEpisodes;
+
     @DatabaseField
     @Element(name = "id")
     private int mTVDBID;
+
     @JsonProperty("imdb_id")
     @DatabaseField
     private String mIMDBID;
+
     @DatabaseField
     @Element(name = "FirstAired", required = false)
     private Date mDateDebut;
+
     @DatabaseField
     @Element(name = "Genre", required = false )
     private String mGenre;
+
     @DatabaseField
     @Element(name = "Network", required = false )
     private String mChaine;
+
     @DatabaseField
     @Element(name = "Overview", required = false )
     private String mResume;
+
     @DatabaseField
     @Element(name = "Status", required = false )
     private String mStatus;
+
     @DatabaseField
     @Element(name = "banner", required = false )
     private String mBannerURL;
+
     @DatabaseField( dataType=DataType.BYTE_ARRAY )
     private byte[] mBanner;
+
     @DatabaseField
     private boolean mTVDBConnected;
 

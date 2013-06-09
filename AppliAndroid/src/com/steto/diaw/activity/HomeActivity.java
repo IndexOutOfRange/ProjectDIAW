@@ -19,7 +19,8 @@ import com.actionbarsherlock.view.Window;
 import com.steto.diaw.actionbarcallback.ActionModeCallbackEpisode;
 import com.steto.diaw.adapter.ListEpisodeHomeAdapter;
 import com.steto.diaw.model.Episode;
-import com.steto.diaw.service.ParseService;
+import com.steto.diaw.service.ParseDeleteEpisodeService;
+import com.steto.diaw.service.ParseGetEpisodesService;
 import com.steto.diaw.tools.Tools;
 import com.steto.projectdiaw.R;
 
@@ -35,6 +36,8 @@ public class HomeActivity extends SherlockListActivity {
 	private ListView mList;
 	private ListEpisodeHomeAdapter mAdapter;
 	private ResultReceiver mShowResultReceiver;
+	private ResultReceiver mDeleteEpisodeResultReceiver;
+	private ResultReceiver mRenameEpisodeResultReceiver;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +51,8 @@ public class HomeActivity extends SherlockListActivity {
 		mList.setAdapter(mAdapter);
 		setActionModeCallbackOnList();
 
+		initDeleteEpisodeResultReceiver();
+		initRenameEpisodeResultReceiver();
 	}
 
 	@Override
@@ -91,10 +96,10 @@ public class HomeActivity extends SherlockListActivity {
 	private void getBackShows() {
 		SharedPreferences mySP = getSharedPreferences(Tools.SHARED_PREF_FILE, Activity.MODE_PRIVATE);
 		String login = mySP.getString(Tools.SHARED_PREF_LOGIN, "");
-		Intent in = new Intent(this, ParseService.class);
-		in.putExtra(ParseService.INTENT_LOGIN, login);
-		in.putExtra(ParseService.INTENT_FORCE_UPDATE, true);
-		in.putExtra(ParseService.INTENT_RESULT_RECEIVER, mShowResultReceiver);
+		Intent in = new Intent(this, ParseGetEpisodesService.class);
+		in.putExtra(ParseGetEpisodesService.INTENT_LOGIN, login);
+		in.putExtra(ParseGetEpisodesService.INTENT_FORCE_UPDATE, true);
+		in.putExtra(ParseGetEpisodesService.INTENT_RESULT_RECEIVER, mShowResultReceiver);
 		startService(in);
 	}
 
@@ -107,9 +112,9 @@ public class HomeActivity extends SherlockListActivity {
 				protected void onReceiveResult(int resultCode, Bundle resultData) {
 					super.onReceiveResult(resultCode, resultData);
 					Log.i(TAG, "onResult");
-					if (resultCode == ParseService.RESULT_CODE_OK) {
+					if (resultCode == ParseGetEpisodesService.RESULT_CODE_OK) {
 						mAllEp.clear();
-						mAllEp.addAll((List<Episode>) resultData.get(ParseService.RESULT_DATA));
+						mAllEp.addAll((List<Episode>) resultData.get(ParseGetEpisodesService.RESULT_DATA));
 						processUpdateListEpisodes();
 					} else {
 						Toast.makeText(HomeActivity.this, getString(R.string.msg_erreur_reseau), Toast.LENGTH_SHORT).show();
@@ -158,16 +163,66 @@ public class HomeActivity extends SherlockListActivity {
 	}
 
 	public void deleteEpisode(Episode episode) {
-		// TODO
-		// service vers Parse
-		// si service ok delete ds la database puis query et notify
+		sUpdateInProgress = true;
+		invalidateOptionsMenu();
+
+		Intent intent = new Intent(this, ParseDeleteEpisodeService.class);
+		intent.putExtra(ParseDeleteEpisodeService.INTENT_OBJECT_ID, episode.getObjectId());
+		intent.putExtra(ParseDeleteEpisodeService.INTENT_RESULT_RECEIVER, mDeleteEpisodeResultReceiver);
+		startService(intent);
 	}
 
 
 	public void renameEpisode(Episode episode) {
-		// TODO
-		// dialog pour changer le nom
-		// service vers Parse
-		// si service ok update delete et create puis query et notify
+		// TODO pop up
+
+//		Intent intent = new Intent(this, ParseUpdateEpisodeService.class);
+//		intent.putExtra(ParseUpdateEpisodeService.INTENT_OBJECT_ID, episode.getObjectId());
+//		intent.putExtra(ParseUpdateEpisodeService.INTENT_RESULT_RECEIVER, mDeleteEpisodeResultReceiver);
+//		intent.putExtra(ParseUpdateEpisodeService.INTENT_KEY, "showName");
+//		intent.putExtra(ParseUpdateEpisodeService.INTENT_VALUE, episode.getShowName());
+//		startService(intent);
+	}
+
+	private void initRenameEpisodeResultReceiver() {
+		if (mRenameEpisodeResultReceiver == null) {
+
+			mRenameEpisodeResultReceiver = new ResultReceiver(new Handler()) {
+
+				@Override
+				protected void onReceiveResult(int resultCode, Bundle resultData) {
+					super.onReceiveResult(resultCode, resultData);
+					Log.i(TAG, "onResult");
+					if (resultCode == ParseGetEpisodesService.RESULT_CODE_OK) {
+						mAdapter.notifyDataSetChanged();
+					} else {
+						Toast.makeText(HomeActivity.this, "Unable to get result from service", Toast.LENGTH_SHORT).show();
+					}
+				}
+			};
+		}
+	}
+
+	private void initDeleteEpisodeResultReceiver() {
+		if (mDeleteEpisodeResultReceiver == null) {
+
+			mDeleteEpisodeResultReceiver = new ResultReceiver(new Handler()) {
+
+				@Override
+				protected void onReceiveResult(int resultCode, Bundle resultData) {
+					super.onReceiveResult(resultCode, resultData);
+					Log.i(TAG, "onResult");
+					if (resultCode == ParseGetEpisodesService.RESULT_CODE_OK) {
+						String objectId = resultData.getString(ParseDeleteEpisodeService.INTENT_OBJECT_ID);
+						sUpdateInProgress = false;
+						invalidateOptionsMenu();
+
+						mAdapter.notifyDataSetChanged();
+					} else {
+						Toast.makeText(HomeActivity.this, "Unable to get result from service", Toast.LENGTH_SHORT).show();
+					}
+				}
+			};
+		}
 	}
 }

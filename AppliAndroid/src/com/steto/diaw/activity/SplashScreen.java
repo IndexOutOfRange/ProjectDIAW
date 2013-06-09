@@ -7,8 +7,7 @@ import android.os.Bundle;
 import android.os.ResultReceiver;
 import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockActivity;
-import com.steto.diaw.service.IMDBService;
-import com.steto.diaw.service.ParseService;
+import com.steto.diaw.service.ParseGetEpisodesService;
 import com.steto.diaw.tools.Tools;
 import com.steto.projectdiaw.R;
 
@@ -35,9 +34,9 @@ public class SplashScreen extends SherlockActivity {
 	}
 
 	private void getBackShows() {
-		Intent in = new Intent(this, ParseService.class);
-		in.putExtra(ParseService.INTENT_LOGIN, mLogin);
-		in.putExtra(ParseService.INTENT_RESULT_RECEIVER, mShowResultReceiver);
+		Intent in = new Intent(this, ParseGetEpisodesService.class);
+		in.putExtra(ParseGetEpisodesService.INTENT_LOGIN, mLogin);
+		in.putExtra(ParseGetEpisodesService.INTENT_RESULT_RECEIVER, mShowResultReceiver);
 		startService(in);
 	}
 
@@ -48,9 +47,9 @@ public class SplashScreen extends SherlockActivity {
 				@Override
 				protected void onReceiveResult(int resultCode, Bundle resultData) {
 					super.onReceiveResult(resultCode, resultData);
-					if (resultCode == ParseService.RESULT_CODE_OK) {
+					if (resultCode == ParseGetEpisodesService.RESULT_CODE_OK) {
                         Intent in = new Intent(SplashScreen.this, HomeActivity.class);
-                        in.putExtra(HomeActivity.INTENT_LIST_EPISODE, resultData.getSerializable(ParseService.RESULT_DATA));
+                        in.putExtra(HomeActivity.INTENT_LIST_EPISODE, resultData.getSerializable(ParseGetEpisodesService.RESULT_DATA));
                         startActivity(in);
 						finish();
 					} else {

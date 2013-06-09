@@ -130,20 +130,4 @@ public class TVDBService extends IntentService {
         }
         return ret;
     }
-
-    private boolean isDataExpired( ) {
-        SharedPreferences settings = getSharedPreferences(Tools.SHARED_PREF_FILE, Activity.MODE_PRIVATE);
-        long lastUpdate = settings.getLong(Tools.SHARED_PREF_LAST_UPDATE, 0);
-        long now = new Date().getTime();
-        long oneDay = TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS);
-
-        if (now > lastUpdate + oneDay) {
-            Log.d("ParseService", "Update the show from Parse");
-
-            return true;
-        } else {
-            Log.d("ParseService", "Use database");
-            return false;
-        }
-    }
 }

@@ -63,8 +63,8 @@ public class ActionModeCallbackEpisode implements ActionMode.Callback {
 	public boolean onActionItemClicked(ActionMode mode, com.actionbarsherlock.view.MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.context_menu_rename:
-				// TODO proposer dialog pour renommer l'episode
 				((HomeActivity) activity).renameEpisode((Episode) mAdapter.getFirstCheckedItem());
+				mode.finish();
 				return true;
 
 			case R.id.context_menu_delete:
@@ -73,6 +73,7 @@ public class ActionModeCallbackEpisode implements ActionMode.Callback {
 				for (Integer ci : checked) {
 					((HomeActivity) activity).deleteEpisode((Episode) mAdapter.getItem(ci));
 				}
+				mode.finish();
 				return true;
 			default:
 				return false;

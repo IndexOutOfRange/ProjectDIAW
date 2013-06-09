@@ -23,7 +23,7 @@ import com.steto.diaw.model.Season;
 import com.steto.diaw.model.Show;
 import com.steto.diaw.service.BannerService;
 import com.steto.diaw.service.TVDBService;
-import com.steto.diaw.service.ParseService;
+import com.steto.diaw.service.ParseGetEpisodesService;
 import com.steto.projectdiaw.R;
 
 import java.sql.SQLException;
@@ -93,7 +93,7 @@ public class ShowDetailActivity extends SherlockExpandableListActivity {
                     super.onReceiveResult(resultCode, resultData);
                     Log.i(TAG, "onResult");
                     setSupportProgressBarIndeterminateVisibility(false);
-                    if (resultCode == ParseService.RESULT_CODE_OK) {
+                    if (resultCode == ParseGetEpisodesService.RESULT_CODE_OK) {
                         List<Show> response = (List<Show>)resultData.get(TVDBService.OUTPUT_DATA);
                         if( response != null && !response.isEmpty()) {
                             mShow = response.get(0);
@@ -128,7 +128,7 @@ public class ShowDetailActivity extends SherlockExpandableListActivity {
                     super.onReceiveResult(resultCode, resultData);
                     Log.i(TAG, "onResult");
                     setSupportProgressBarIndeterminateVisibility(false);
-                    if (resultCode == ParseService.RESULT_CODE_OK) {
+                    if (resultCode == ParseGetEpisodesService.RESULT_CODE_OK) {
                         Bitmap banner = (Bitmap)resultData.getParcelable(BannerService.OUTPUT_BITMAP);
                         mShow.setBanner(banner);
                         refreshLayout();

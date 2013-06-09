@@ -6,10 +6,7 @@ import com.steto.diaw.tools.MySSLSocketFactory;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.methods.*;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
@@ -41,7 +38,7 @@ public abstract class WebConnector {
     protected InputStream mResponseBody = null;
 
     public enum HTTPMethod {
-        GET, POST, PUT
+        GET, POST, PUT, DELETE
     }
 
     public WebConnector() {
@@ -97,6 +94,9 @@ public abstract class WebConnector {
             case POST:
                 call = buildPostRequest(query, body);
                 break;
+	        case DELETE:
+		        call = buildDeleteRequest();
+		        break;
             default:
                 call = buildGetRequest(query);
                 break;
@@ -111,10 +111,8 @@ public abstract class WebConnector {
             setStatusCode(response.getStatusLine().getStatusCode());
             System.out.println("http call to " + call.getURI() + " status code : " + mStatusCode + " body response : " + mResponseBody);
         } catch (IOException e) {
-            System.out.println("http call to " + call.getURI() + " generating excpetion : " + e);
+            System.out.println("http call to " + call.getURI() + " generating exception : " + e);
         }
-
-//		return response;
     }
 
     public String streamToString ( InputStream in) {
@@ -154,6 +152,13 @@ public abstract class WebConnector {
 
         return get;
     }
+
+	private HttpDelete buildDeleteRequest() {
+		HttpDelete delete = new HttpDelete(getDNS() + getURL());
+		addHeader(delete);
+
+		return delete;
+	}
 
     public HttpPut buildPutRequest(String query, String content) {
 

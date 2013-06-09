@@ -27,21 +27,20 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class ParseService extends IntentService {
+public class ParseGetEpisodesService extends IntentService {
 
 	public static final String INTENT_RESULT_RECEIVER = "INTENT_RESULT_RECEIVER";
 	public static final String INTENT_FORCE_UPDATE = "INTENT_FORCE_UPDATE";
 	public static final String INTENT_LOGIN = "INTENT_LOGIN";
-	public static final String URL_SHOW = "/1/classes/Show";
 	public static final int RESULT_CODE_OK = 0;
 	public static final String RESULT_DATA = "RESULT_DATA";
 	private static String WS_QUERY_WHERE = "where";
 
-	public ParseService() {
-		super("ParseService");
+	public ParseGetEpisodesService() {
+		super("ParseGetEpisodesService");
 	}
 
-	public ParseService(String name) {
+	public ParseGetEpisodesService(String name) {
 		super(name);
 	}
 
@@ -73,25 +72,25 @@ public class ParseService extends IntentService {
 			myWeb.requestFromNetwork(query, ParseConnector.HTTPMethod.GET, null);
 			if (myWeb.getStatusCode() == HttpStatus.SC_OK) {
 
-                //parsing des données JSON
-                InputStream response = myWeb.getResponseBody();
-                ShowParser myParser = new ShowParser();
-                allEp = myParser.parse(response);
-                Log.d("ParseService", "on a parse : " + allEp.size() + " episodes" );
-                responseCode = myParser.getStatusCode();
+				//parsing des données JSON
+				InputStream response = myWeb.getResponseBody();
+				ShowParser myParser = new ShowParser();
+				allEp = myParser.parse(response);
+				Log.d("ParseGetEpisodesService", "on a parse : " + allEp.size() + " episodes");
+				responseCode = myParser.getStatusCode();
 
 				//enregistrement en BDD
 				try {
 					EpisodeDao epDAO = DatabaseHelper.getInstance(this).getEpisodeDao();
 					ShowDao showDAO = DatabaseHelper.getInstance(this).getShowDao();
-					// on inverse la liste pour arreter l'appel à la BDD qd on arrive sur un episode deja en base
-					Collections.reverse(allEp);
 					int nbCreated = epDAO.createOrUpdate(allEp);
 					Log.d("ShowService", nbCreated + " episodes créés en base");
 					for (Episode current : allEp) {
 						Show currentShow = new Show(current.getShowName());
 						showDAO.createIfNotExists(currentShow);
 					}
+
+					allEp = DatabaseHelper.getInstance(this).getEpisodeDao().queryForAll();
 
 					//mise à jour de la date de MAJ
 					SharedPreferences settings = getSharedPreferences(Tools.SHARED_PREF_FILE, Activity.MODE_PRIVATE);
@@ -114,7 +113,6 @@ public class ParseService extends IntentService {
 			}
 		}
 
-
 		//retour à l'appelant
 		Bundle ret = new Bundle();
 		ret.putSerializable(RESULT_DATA, (Serializable) allEp);
@@ -127,15 +125,15 @@ public class ParseService extends IntentService {
 		long now = new Date().getTime();
 		long oneDay = TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS);
 
-        if (now > lastUpdate + oneDay) {
-            Log.d("ParseService", "Update the show from Parse");
+		if (now > lastUpdate + oneDay) {
+			Log.d("ParseGetEpisodesService", "Update the show from Parse");
 
-            return true;
-        } else {
-            Log.d("ParseService", "Use database");
-            return false;
-        }
-    }
+			return true;
+		} else {
+			Log.d("ParseGetEpisodesService", "Use database");
+			return false;
+		}
+	}
 
 
 }

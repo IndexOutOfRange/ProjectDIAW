@@ -11,7 +11,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockActivity;
-import com.steto.diaw.service.ParseService;
+import com.steto.diaw.service.ParseGetEpisodesService;
 import com.steto.diaw.tools.Tools;
 import com.steto.projectdiaw.R;
 
@@ -62,9 +62,9 @@ public class LoginActivity extends SherlockActivity {
 	}
 
 	private void getBackShows(String login) {
-		Intent in = new Intent(this, ParseService.class);
-		in.putExtra(ParseService.INTENT_LOGIN, login);
-		in.putExtra(ParseService.INTENT_RESULT_RECEIVER, mShowReceiver);
+		Intent in = new Intent(this, ParseGetEpisodesService.class);
+		in.putExtra(ParseGetEpisodesService.INTENT_LOGIN, login);
+		in.putExtra(ParseGetEpisodesService.INTENT_RESULT_RECEIVER, mShowReceiver);
 		startService(in);
 
 	}
@@ -76,9 +76,9 @@ public class LoginActivity extends SherlockActivity {
 				@Override
 				protected void onReceiveResult(int resultCode, Bundle resultData) {
 					super.onReceiveResult(resultCode, resultData);
-					if (resultCode == ParseService.RESULT_CODE_OK) {
+					if (resultCode == ParseGetEpisodesService.RESULT_CODE_OK) {
                         Intent in = new Intent(LoginActivity.this, HomeActivity.class);
-                        in.putExtra(HomeActivity.INTENT_LIST_EPISODE, resultData.getSerializable(ParseService.RESULT_DATA));
+                        in.putExtra(HomeActivity.INTENT_LIST_EPISODE, resultData.getSerializable(ParseGetEpisodesService.RESULT_DATA));
 						startActivity(in);
 						finish();
 

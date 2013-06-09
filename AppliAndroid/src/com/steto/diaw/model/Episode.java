@@ -14,6 +14,7 @@ public class Episode implements Serializable, Comparable<Episode> {
 
 	private static final long serialVersionUID = 8857517715427495822L;
 	public static final String SHOWNAME = "showname";
+	public static final String COLUMN_OBJECT_ID = "object_id";
 
 	@DatabaseField(columnName = SHOWNAME)
 	private String mShowName;
@@ -21,10 +22,6 @@ public class Episode implements Serializable, Comparable<Episode> {
 	private int mSeasonNumber;
 	@DatabaseField
 	private int mEpisodeNumber;
-	@DatabaseField
-	private String mLogin;
-	@DatabaseField
-	private String mMdp;
 	@JsonIgnore
 	private boolean mDoubleEpisode = false;
 	@DatabaseField
@@ -32,16 +29,16 @@ public class Episode implements Serializable, Comparable<Episode> {
     @DatabaseField(id = true, useGetSet = true)
     @JsonIgnore
     private String mCustomId;
+	@DatabaseField(columnName = COLUMN_OBJECT_ID)
+	private String mObjectId;
 
 	public Episode() {
 	}
 
-	public Episode(String name, int season, int episode, String login, String pass, Date updateAt) {
+	public Episode(String name, int season, int episode, Date updateAt) {
 		setShowName(name);
 		setSeasonNumber(season);
 		setEpisodeNumber(episode);
-		setLogin(login);
-		setMdp(pass);
 		setUpdatedAt(updateAt);
 	}
 
@@ -49,22 +46,6 @@ public class Episode implements Serializable, Comparable<Episode> {
 		setShowName(name);
 		setSeasonNumber(season);
 		setEpisodeNumber(episode);
-	}
-
-	public String getLogin() {
-		return mLogin;
-	}
-
-	public void setLogin(String user) {
-		this.mLogin = user;
-	}
-
-	public String getMdp() {
-		return mMdp;
-	}
-
-	public void setMdp(String pass) {
-		this.mMdp = pass;
 	}
 
 	public int getEpisodeNumber() {
@@ -111,13 +92,6 @@ public class Episode implements Serializable, Comparable<Episode> {
 		this.mUpdatedAt = updatedAt;
 	}
 
-
-	@Override
-	public int compareTo(Episode episode) {
-		return episode.getUpdatedAt().compareTo(this.getUpdatedAt());
-	}
-
-
     public String getId() {
         return getMCustomId();
     }
@@ -137,7 +111,29 @@ public class Episode implements Serializable, Comparable<Episode> {
         mCustomId = customId;
     }
 
-    public static class OrderShowComparator implements Comparator {
+	public String getObjectId() {
+		return mObjectId;
+	}
+
+	public void setObjectId(String objectId) {
+		this.mObjectId = objectId;
+	}
+
+	@Override
+	public String toString() {
+		return "Episode{" +
+				"mShowName='" + mShowName + '\'' +
+				", mSeasonNumber=" + mSeasonNumber +
+				", mEpisodeNumber=" + mEpisodeNumber +
+				'}';
+	}
+
+	@Override
+	public int compareTo(Episode episode) {
+		return episode.getUpdatedAt().compareTo(this.getUpdatedAt());
+	}
+
+	public static class OrderShowComparator implements Comparator {
 		public int compare(Object o1, Object o2) {
 			Episode episode1 = (Episode) o1;
 			Episode episode2 = (Episode) o2;

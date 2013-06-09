@@ -2,7 +2,6 @@ package com.steto.diaw.model;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -10,7 +9,6 @@ import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import com.steto.diaw.dao.ShowDao;
-
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 

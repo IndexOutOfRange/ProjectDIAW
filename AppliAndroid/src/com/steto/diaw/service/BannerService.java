@@ -6,12 +6,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.ResultReceiver;
-
 import com.steto.diaw.dao.DatabaseHelper;
 import com.steto.diaw.model.Show;
 import com.steto.diaw.web.BannerConnector;
 import com.steto.diaw.web.WebConnector;
-
 import org.apache.http.HttpStatus;
 
 import java.sql.SQLException;

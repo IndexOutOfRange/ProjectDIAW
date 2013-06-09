@@ -4,7 +4,6 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.ResultReceiver;
-import android.util.Log;
 import com.steto.diaw.dao.DatabaseHelper;
 import com.steto.diaw.dao.EpisodeDao;
 import com.steto.diaw.model.Episode;
@@ -14,7 +13,6 @@ import com.steto.diaw.web.ShowConnector;
 import org.apache.http.HttpStatus;
 
 import java.io.InputStream;
-import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.List;
 

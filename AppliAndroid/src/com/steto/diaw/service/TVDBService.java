@@ -1,32 +1,24 @@
 package com.steto.diaw.service;
 
-import android.app.Activity;
 import android.app.IntentService;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.ResultReceiver;
-import android.util.Log;
-
 import com.steto.diaw.dao.DatabaseHelper;
 import com.steto.diaw.dao.ShowDao;
 import com.steto.diaw.model.Show;
 import com.steto.diaw.parser.AbstractParser;
 import com.steto.diaw.parser.SeriesParser;
-import com.steto.diaw.tools.Tools;
 import com.steto.diaw.web.QueryString;
 import com.steto.diaw.web.SeriesIDConnector;
 import com.steto.diaw.web.SeriesNameConnector;
 import com.steto.diaw.web.WebConnector;
-
 import org.apache.http.HttpStatus;
 
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Stephane on 02/06/13.

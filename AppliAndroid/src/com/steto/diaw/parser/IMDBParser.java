@@ -3,10 +3,8 @@ package com.steto.diaw.parser;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.steto.diaw.model.IMDBContainerData;
-import com.steto.diaw.model.Results;
 import com.steto.diaw.model.Show;
 
 import java.io.IOException;

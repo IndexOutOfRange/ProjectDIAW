@@ -4,9 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
-import android.widget.ListView;
-
-import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.Window;
 import com.steto.diaw.adapter.ListShowAdapter;

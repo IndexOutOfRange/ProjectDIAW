@@ -14,7 +14,6 @@ import com.steto.diaw.model.Show;
 import com.steto.diaw.tools.Tools;
 
 import java.sql.SQLException;
-import java.util.Date;
 
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 

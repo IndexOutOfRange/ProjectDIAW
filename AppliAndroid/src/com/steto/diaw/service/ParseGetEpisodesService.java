@@ -22,7 +22,6 @@ import org.apache.http.HttpStatus;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.sql.SQLException;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;

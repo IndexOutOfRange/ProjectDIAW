@@ -2,7 +2,6 @@ package com.steto.diaw.parser;
 
 import com.steto.diaw.model.Show;
 import com.steto.diaw.model.TVDBContainerData;
-
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 

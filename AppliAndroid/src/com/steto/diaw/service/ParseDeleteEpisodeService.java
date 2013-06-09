@@ -7,13 +7,10 @@ import android.os.ResultReceiver;
 import com.steto.diaw.dao.DatabaseHelper;
 import com.steto.diaw.dao.EpisodeDao;
 import com.steto.diaw.model.Episode;
-import com.steto.diaw.parser.ShowParser;
 import com.steto.diaw.web.ParseConnector;
 import com.steto.diaw.web.ShowConnector;
-import com.steto.diaw.web.WebConnector;
 import org.apache.http.HttpStatus;
 
-import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.List;
 

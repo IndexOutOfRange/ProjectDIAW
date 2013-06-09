@@ -1,7 +1,6 @@
 package com.steto.diaw.actionbarcallback;
 
 import android.app.Activity;
-import android.util.Log;
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;

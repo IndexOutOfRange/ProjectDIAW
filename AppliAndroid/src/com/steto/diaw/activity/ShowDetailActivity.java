@@ -22,8 +22,8 @@ import com.steto.diaw.model.Episode;
 import com.steto.diaw.model.Season;
 import com.steto.diaw.model.Show;
 import com.steto.diaw.service.BannerService;
-import com.steto.diaw.service.TVDBService;
 import com.steto.diaw.service.ParseGetEpisodesService;
+import com.steto.diaw.service.TVDBService;
 import com.steto.projectdiaw.R;
 
 import java.sql.SQLException;

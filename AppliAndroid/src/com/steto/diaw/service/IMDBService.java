@@ -4,14 +4,12 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.ResultReceiver;
-
 import com.steto.diaw.model.Show;
 import com.steto.diaw.parser.AbstractParser;
 import com.steto.diaw.parser.IMDBParser;
 import com.steto.diaw.web.IMDBConnector;
 import com.steto.diaw.web.QueryString;
 import com.steto.diaw.web.WebConnector;
-
 import org.apache.http.HttpStatus;
 
 import java.io.Serializable;

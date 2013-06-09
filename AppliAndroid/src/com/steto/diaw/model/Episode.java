@@ -128,7 +128,7 @@ public class Episode implements Serializable, Comparable<Episode> {
 
     public String getMCustomId() {
         if( mCustomId == null ) {
-            setMCustomId(mShowName + mSeasonNumber + mEpisodeNumber);
+            setMCustomId(mShowName + mSeasonNumber + "x" + mEpisodeNumber);
         }
         return mCustomId;
     }

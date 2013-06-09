@@ -105,6 +105,7 @@ public class HomeActivity extends SherlockListActivity {
 		String login = mySP.getString(Tools.SHARED_PREF_LOGIN, "");
 		Intent in = new Intent(this, ShowService.class);
 		in.putExtra(ShowService.INTENT_LOGIN, login);
+		in.putExtra(ShowService.INTENT_FORCE_UPDATE, true);
 		in.putExtra(ShowService.INTENT_RESULT_RECEIVER, mShowResultReceiver);
 		startService(in);
 	}

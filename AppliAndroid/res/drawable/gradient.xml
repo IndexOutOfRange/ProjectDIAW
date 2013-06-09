@@ -2,7 +2,7 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
        android:shape="rectangle">
 
-	<size android:height="100dp"/>
+	<size android:height="@dimen/header_image_height"/>
 
 	<gradient
 			android:angle="270"

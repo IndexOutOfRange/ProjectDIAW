@@ -15,7 +15,6 @@ import com.steto.projectdiaw.R;
 
 public class SplashScreen extends SherlockActivity {
 
-
 	private static final String TAG = "SplashScreen";
 
 	private String mLogin = "";
@@ -26,18 +25,14 @@ public class SplashScreen extends SherlockActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splash_screen);
 
-
 		if (needToLogin()) {
 			Intent in = new Intent(this, LoginActivity.class);
 			startActivity(in);
 			finish();
 		} else {
-
             initShowResultReceiver();
             getBackShows();
-
 		}
-
 	}
 
 	private void getBackShows() {
@@ -45,7 +40,6 @@ public class SplashScreen extends SherlockActivity {
 		in.putExtra(ShowService.INTENT_LOGIN, mLogin);
 		in.putExtra(ShowService.INTENT_RESULT_RECEIVER, mShowResultReceiver);
 		startService(in);
-
 	}
 
 	private ResultReceiver initShowResultReceiver() {

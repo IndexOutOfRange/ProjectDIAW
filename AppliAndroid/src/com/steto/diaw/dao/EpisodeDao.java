@@ -1,6 +1,5 @@
 package com.steto.diaw.dao;
 
-import android.util.Log;
 import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.support.ConnectionSource;
 import com.steto.diaw.model.Episode;
@@ -69,7 +68,7 @@ public class EpisodeDao extends BaseDaoImpl<Episode, Integer> {
             if(ret.isCreated()) {
                 nbCreated++;
             } else {
-                Log.d("episodeDAO", "episode : " + episode.getShowName() + " " + episode.getSeasonNumber() + " " + episode.getEpisodeNumber() +" deja present en base");
+                return nbCreated;
             }
         }
         return nbCreated;

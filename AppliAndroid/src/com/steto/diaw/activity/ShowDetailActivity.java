@@ -2,7 +2,6 @@ package com.steto.diaw.activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
@@ -11,19 +10,17 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockExpandableListActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.Window;
 import com.steto.diaw.adapter.SeasonWithEpisodesExpandableAdapter;
+import com.steto.diaw.dao.DatabaseHelper;
 import com.steto.diaw.dao.ShowDao;
 import com.steto.diaw.helper.TranslucideActionBarHelper;
 import com.steto.diaw.model.Episode;
 import com.steto.diaw.model.Season;
 import com.steto.diaw.model.Show;
-import com.steto.diaw.dao.DatabaseHelper;
 import com.steto.diaw.service.BannerService;
 import com.steto.diaw.service.SeriesService;
 import com.steto.diaw.service.ShowService;
@@ -41,9 +38,6 @@ public class ShowDetailActivity extends SherlockExpandableListActivity {
 	private List<Season> mListSeasons;
 
 	private View mHeaderContainer;
-	private ActionBar mActionBar;
-
-	private Drawable mActionBarBackgroundDrawable;
 	private TranslucideActionBarHelper mActionBarTranslucideHelper;
     private ResultReceiver mShowResultReceiver;
     private ResultReceiver mBannerResultReceiver;
@@ -157,7 +151,6 @@ public class ShowDetailActivity extends SherlockExpandableListActivity {
 			e.printStackTrace();
 		}
 
-
         setSupportProgressBarIndeterminateVisibility(true);
         launchSerieService();
         launchBannerService();
@@ -195,6 +188,7 @@ public class ShowDetailActivity extends SherlockExpandableListActivity {
     private void refreshLayout() {
 
         if( mShow != null ) {
+	        findViewById(R.id.activity_show_detail_info_layout).setVisibility(View.VISIBLE);
             // TVDBContainerData
             TextView title = (TextView) mHeaderContainer.findViewById(R.id.activity_show_detail_title);
             title.setText(mShow.getShowName());

@@ -12,31 +12,32 @@
 		<ImageView
 				android:id="@+id/activity_show_detail_image"
 				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
+				android:layout_height="@dimen/header_image_height"
 				android:scaleType="centerCrop"
-                android:adjustViewBounds="true"
-				android:src="@drawable/banniere"/>
+				android:background="@color/gris_fonce"/>
 
 		<LinearLayout
+				android:id="@+id/activity_show_detail_info_layout"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_below="@id/activity_show_detail_image"
 				android:background="@drawable/rectangle_gradient"
 				android:orientation="vertical"
-				android:padding="@dimen/small">
+				android:padding="@dimen/small"
+				android:visibility="gone">
 
 			<TextView
 					android:id="@+id/activity_show_detail_title"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:text="Awake"
+					android:text=""
 					android:textSize="@dimen/text_big"/>
 
 			<TextView
 					android:id="@+id/activity_show_detail_on_air"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:text="Diffusé de Mars 2012 à Mai 2012 | NBC (US)"/>
+					android:text=""/>
 
 			<LinearLayout
 					android:layout_width="match_parent"
@@ -49,14 +50,14 @@
 						android:layout_width="0dp"
 						android:layout_weight="1"
 						android:layout_height="wrap_content"
-						android:text="1 saison"/>
+						android:text=""/>
 
 				<TextView
 						android:id="@+id/activity_show_nb_episodes"
 						android:layout_width="0dp"
 						android:layout_weight="1"
 						android:layout_height="wrap_content"
-						android:text="13 épisodes"
+						android:text=""
 						android:gravity="right"/>
 			</LinearLayout>
 
@@ -64,14 +65,14 @@
 					android:id="@+id/activity_show_detail_genre"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:text="Genre : Drama | Sci-Fi"/>
+					android:text=""/>
 
 			<TextView
 					android:id="@+id/activity_show_detail_statut"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:gravity="right"
-					android:text="Statut : Annulée/Finie"/>
+					android:text=""/>
 		</LinearLayout>
 	</RelativeLayout>
 

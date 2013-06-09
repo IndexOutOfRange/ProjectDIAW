@@ -3,7 +3,7 @@
               android:id="@+id/listitem_layout"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:background="@drawable/card_background_white"
+              android:background="@drawable/card_background"
               android:orientation="horizontal"
               android:padding="@dimen/normal">
 

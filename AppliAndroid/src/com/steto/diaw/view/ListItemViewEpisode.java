@@ -16,4 +16,8 @@ public class ListItemViewEpisode extends AbstractListItemView<Episode> {
 		if (mLeftTV != null) mLeftTV.setText(ep.getShowName());
 		if (mRightTV != null) mRightTV.setText(sub);
 	}
+
+	public void setLayoutBackgroundState(int[] state) {
+		mLinearLayout.getBackground().setState(state);
+	}
 }

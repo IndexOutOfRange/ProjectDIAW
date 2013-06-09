@@ -12,6 +12,7 @@ public abstract class AbstractListItemView<T> extends LinearLayout {
 	protected T mData;
 	protected TextView mLeftTV;
 	protected TextView mRightTV;
+	protected LinearLayout mLinearLayout;
 
 
 	public AbstractListItemView(Context context) {
@@ -21,6 +22,7 @@ public abstract class AbstractListItemView<T> extends LinearLayout {
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		inflater.inflate(R.layout.listitem_view, this);
 
+		mLinearLayout = (LinearLayout) findViewById(R.id.listitem_layout);
 		mLeftTV = (TextView) findViewById(R.id.listitem_left_tv);
 		mRightTV = (TextView) findViewById(R.id.listitem_right_tv);
 	}

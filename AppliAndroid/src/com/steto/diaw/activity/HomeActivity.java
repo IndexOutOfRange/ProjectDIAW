@@ -7,14 +7,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import com.actionbarsherlock.app.SherlockListActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
-import com.actionbarsherlock.view.Window;
+import com.actionbarsherlock.view.*;
 import com.steto.diaw.adapter.ListEpisodeHomeAdapter;
 import com.steto.diaw.model.Episode;
 import com.steto.diaw.service.ShowService;
@@ -23,27 +21,59 @@ import com.steto.projectdiaw.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class HomeActivity extends SherlockListActivity {
 
+	public static final String INTENT_LIST_EPISODE = "INTENT_LIST_EPISODE";
 	private static final String TAG = "HomeActivity";
 	private static final String INTENT_UPDATE = "IntentUpdate";
-    public static final String INTENT_LIST_EPISODE = "INTENT_LIST_EPISODE";
-
 	private static boolean sUpdateInProgress;
 	private List<Episode> mAllEp = new ArrayList<Episode>();
 	private ListView mList;
 	private ListEpisodeHomeAdapter mAdapter;
 	private ResultReceiver mShowResultReceiver;
+	private ActionMode actionMode;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.activity_home);
-        mAllEp = (List<Episode>)getIntent().getExtras().get(INTENT_LIST_EPISODE);
+		mAllEp = (List<Episode>) getIntent().getExtras().get(INTENT_LIST_EPISODE);
 
 		mList = getListView();
+
+		mList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+				if (actionMode != null) {
+					// if already in action mode - do nothing
+					return false;
+				}
+				// set checked selected item and enter multi selection mode
+				mAdapter.setChecked(arg2, true);
+				HomeActivity.this.startActionMode(new ActionModeCallback());
+				actionMode.invalidate();
+				return true;
+			}
+		});
+
+		mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3)
+			{
+				if (actionMode != null) {
+					// if action mode, toggle checked state of item
+					mAdapter.toggleChecked(arg2);
+					actionMode.invalidate();
+				} else {
+					// do whatever you should on item click
+				}
+			}
+		});
+
 		mAdapter = new ListEpisodeHomeAdapter(this, mAllEp);
 		mList.setAdapter(mAdapter);
 	}
@@ -52,15 +82,6 @@ public class HomeActivity extends SherlockListActivity {
 	protected void onResume() {
 		super.onResume();
 		invalidateOptionsMenu();
-	}
-
-	@Override
-	protected void onNewIntent(Intent intent) {
-		boolean update = intent.getExtras().containsKey(INTENT_UPDATE);
-		if (update) {
-			processUpdateListEpisodes();
-		}
-		super.onNewIntent(intent);
 	}
 
 	@Override
@@ -74,9 +95,6 @@ public class HomeActivity extends SherlockListActivity {
 		return super.onCreateOptionsMenu(menu);
 	}
 
-	/**
-	 * Gestion des clics sur la barre d'action
-	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -89,8 +107,6 @@ public class HomeActivity extends SherlockListActivity {
 				return super.onOptionsItemSelected(item);
 		}
 	}
-
-
 
 	/* Update TVDBContainerData */
 	private void startUpdateListEpisodes() {
@@ -120,9 +136,9 @@ public class HomeActivity extends SherlockListActivity {
 					super.onReceiveResult(resultCode, resultData);
 					Log.i(TAG, "onResult");
 					if (resultCode == ShowService.RESULT_CODE_OK) {
-                        mAllEp.clear();
-                        mAllEp.addAll((List<Episode>)resultData.get(ShowService.RESULT_DATA));
-                        processUpdateListEpisodes();
+						mAllEp.clear();
+						mAllEp.addAll((List<Episode>) resultData.get(ShowService.RESULT_DATA));
+						processUpdateListEpisodes();
 					} else {
 						Toast.makeText(HomeActivity.this, getString(R.string.msg_erreur_reseau), Toast.LENGTH_SHORT).show();
 					}
@@ -137,4 +153,65 @@ public class HomeActivity extends SherlockListActivity {
 		mAdapter.notifyDataSetChanged();
 	}
 
+	private final class ActionModeCallback implements ActionMode.Callback {
+
+		@Override
+		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+			mAdapter.enterMultiMode();
+			// save global action mode
+			actionMode = mode;
+			return true;
+		}
+
+		@Override
+		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+			// remove previous items
+			menu.clear();
+			final int checked = mAdapter.getCheckedItemCount();
+			// update title with number of checked items
+			mode.setTitle(checked + " " + getResources().getQuantityString(R.plurals.nb_items_selected, checked));
+			switch (checked) {
+				case 0:
+					// if nothing checked - exit action mode
+					mode.finish();
+					return true;
+				case 1:
+					// all items - rename + delete
+					HomeActivity.this.getSupportMenuInflater().inflate(R.menu.context_menu, menu);
+					return true;
+				default:
+					HomeActivity.this.getSupportMenuInflater().inflate(R.menu.context_menu, menu);
+					// remove rename option - because we have more than one selected
+					menu.removeItem(R.id.context_menu_rename);
+					return true;
+			}
+		}
+
+		@Override
+		public boolean onActionItemClicked(ActionMode mode, com.actionbarsherlock.view.MenuItem item) {
+			switch (item.getItemId()) {
+				case R.id.context_menu_rename:
+					// TODO proposer dialog pour renommer l'épisode
+					Log.d(TAG, "A renommer : " + mAdapter.getFirstCheckedItem().getMCustomId());
+					return true;
+
+				case R.id.context_menu_delete:
+					Set<Integer> checked = mAdapter.getCheckedItems();
+					// iterate through selected items and delete them
+					for (Integer ci : checked) {
+						// TODO appel WS pour supprimer les données
+						Log.d(TAG, "A supprimer : " + mAllEp.get(ci).getMCustomId());
+					}
+					return true;
+				default:
+					return false;
+			}
+		}
+
+		@Override
+		public void onDestroyActionMode(ActionMode mode) {
+			mAdapter.exitMultiMode();
+			actionMode = null;
+		}
+	}
 }

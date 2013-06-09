@@ -3,6 +3,9 @@ package com.steto.diaw.model;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -15,11 +18,9 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
-import java.util.List;
 
+@JsonIgnoreProperties(ignoreUnknown=true)
 @Root(name="Series", strict = false)
 @DatabaseTable(tableName = "Show", daoClass = ShowDao.class)
 public class Show implements Serializable, Comparable<Show> {
@@ -28,9 +29,12 @@ public class Show implements Serializable, Comparable<Show> {
 
     @DatabaseField(id = true, useGetSet = true)
     private String mCustomId;
+
+    @JsonProperty("title")
     @Element(name = "SeriesName")
 	@DatabaseField
 	private String mShowName;
+
 	@DatabaseField
 	private int mNumberSeasons;
 	@DatabaseField
@@ -38,6 +42,9 @@ public class Show implements Serializable, Comparable<Show> {
     @DatabaseField
     @Element(name = "id")
     private int mTVDBID;
+    @JsonProperty("imdb_id")
+    @DatabaseField
+    private String mIMDBID;
     @DatabaseField
     @Element(name = "FirstAired", required = false)
     private Date mDateDebut;
@@ -188,10 +195,12 @@ public class Show implements Serializable, Comparable<Show> {
         return bmp;
     }
 
+
     public void setBanner(byte[] banner) {
         mBanner = banner;
     }
 
+    @JsonIgnore
     public void setBanner(Bitmap banner) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         banner.compress(Bitmap.CompressFormat.PNG, 100, stream);
@@ -215,5 +224,13 @@ public class Show implements Serializable, Comparable<Show> {
 
     public void setMCustomId(String customId) {
         mCustomId = customId;
+    }
+
+    public String getIMDBID() {
+        return mIMDBID;
+    }
+
+    public void setIMDBID(String IMDBID) {
+        mIMDBID = IMDBID;
     }
 }

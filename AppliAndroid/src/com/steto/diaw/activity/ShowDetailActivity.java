@@ -22,8 +22,8 @@ import com.steto.diaw.model.Episode;
 import com.steto.diaw.model.Season;
 import com.steto.diaw.model.Show;
 import com.steto.diaw.service.BannerService;
-import com.steto.diaw.service.SeriesService;
-import com.steto.diaw.service.ShowService;
+import com.steto.diaw.service.TVDBService;
+import com.steto.diaw.service.ParseService;
 import com.steto.projectdiaw.R;
 
 import java.sql.SQLException;
@@ -93,8 +93,8 @@ public class ShowDetailActivity extends SherlockExpandableListActivity {
                     super.onReceiveResult(resultCode, resultData);
                     Log.i(TAG, "onResult");
                     setSupportProgressBarIndeterminateVisibility(false);
-                    if (resultCode == ShowService.RESULT_CODE_OK) {
-                        List<Show> response = (List<Show>)resultData.get(SeriesService.OUTPUT_DATA);
+                    if (resultCode == ParseService.RESULT_CODE_OK) {
+                        List<Show> response = (List<Show>)resultData.get(TVDBService.OUTPUT_DATA);
                         if( response != null && !response.isEmpty()) {
                             mShow = response.get(0);
                             refreshLayout();
@@ -120,7 +120,7 @@ public class ShowDetailActivity extends SherlockExpandableListActivity {
                     super.onReceiveResult(resultCode, resultData);
                     Log.i(TAG, "onResult");
                     setSupportProgressBarIndeterminateVisibility(false);
-                    if (resultCode == ShowService.RESULT_CODE_OK) {
+                    if (resultCode == ParseService.RESULT_CODE_OK) {
                         Bitmap banner = (Bitmap)resultData.getParcelable(BannerService.OUTPUT_BITMAP);
                         mShow.setBanner(banner);
                         refreshLayout();
@@ -157,9 +157,9 @@ public class ShowDetailActivity extends SherlockExpandableListActivity {
     }
 
     private void launchSerieService() {
-        Intent in = new Intent(this, SeriesService.class);
-        in.putExtra(SeriesService.INPUT_SERIE, mShow);
-        in.putExtra(SeriesService.INPUT_RESULTRECEIVER, mShowResultReceiver);
+        Intent in = new Intent(this, TVDBService.class);
+        in.putExtra(TVDBService.INPUT_SERIE, mShow);
+        in.putExtra(TVDBService.INPUT_RESULTRECEIVER, mShowResultReceiver);
         startService(in);
     }
 

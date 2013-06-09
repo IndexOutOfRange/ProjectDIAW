@@ -15,7 +15,7 @@ import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.*;
 import com.steto.diaw.adapter.ListEpisodeHomeAdapter;
 import com.steto.diaw.model.Episode;
-import com.steto.diaw.service.ShowService;
+import com.steto.diaw.service.ParseService;
 import com.steto.diaw.tools.Tools;
 import com.steto.projectdiaw.R;
 
@@ -119,10 +119,10 @@ public class HomeActivity extends SherlockListActivity {
 	private void getBackShows() {
 		SharedPreferences mySP = getSharedPreferences(Tools.SHARED_PREF_FILE, Activity.MODE_PRIVATE);
 		String login = mySP.getString(Tools.SHARED_PREF_LOGIN, "");
-		Intent in = new Intent(this, ShowService.class);
-		in.putExtra(ShowService.INTENT_LOGIN, login);
-		in.putExtra(ShowService.INTENT_FORCE_UPDATE, true);
-		in.putExtra(ShowService.INTENT_RESULT_RECEIVER, mShowResultReceiver);
+		Intent in = new Intent(this, ParseService.class);
+		in.putExtra(ParseService.INTENT_LOGIN, login);
+		in.putExtra(ParseService.INTENT_FORCE_UPDATE, true);
+		in.putExtra(ParseService.INTENT_RESULT_RECEIVER, mShowResultReceiver);
 		startService(in);
 	}
 
@@ -135,10 +135,10 @@ public class HomeActivity extends SherlockListActivity {
 				protected void onReceiveResult(int resultCode, Bundle resultData) {
 					super.onReceiveResult(resultCode, resultData);
 					Log.i(TAG, "onResult");
-					if (resultCode == ShowService.RESULT_CODE_OK) {
-						mAllEp.clear();
-						mAllEp.addAll((List<Episode>) resultData.get(ShowService.RESULT_DATA));
-						processUpdateListEpisodes();
+					if (resultCode == ParseService.RESULT_CODE_OK) {
+                        mAllEp.clear();
+                        mAllEp.addAll((List<Episode>)resultData.get(ParseService.RESULT_DATA));
+                        processUpdateListEpisodes();
 					} else {
 						Toast.makeText(HomeActivity.this, getString(R.string.msg_erreur_reseau), Toast.LENGTH_SHORT).show();
 					}
@@ -191,7 +191,7 @@ public class HomeActivity extends SherlockListActivity {
 		public boolean onActionItemClicked(ActionMode mode, com.actionbarsherlock.view.MenuItem item) {
 			switch (item.getItemId()) {
 				case R.id.context_menu_rename:
-					// TODO proposer dialog pour renommer l'épisode
+					// TODO proposer dialog pour renommer l'episode
 					Log.d(TAG, "A renommer : " + mAdapter.getFirstCheckedItem().getMCustomId());
 					return true;
 
@@ -199,7 +199,7 @@ public class HomeActivity extends SherlockListActivity {
 					Set<Integer> checked = mAdapter.getCheckedItems();
 					// iterate through selected items and delete them
 					for (Integer ci : checked) {
-						// TODO appel WS pour supprimer les données
+						// TODO appel WS pour supprimer les donnees
 						Log.d(TAG, "A supprimer : " + mAllEp.get(ci).getMCustomId());
 					}
 					return true;

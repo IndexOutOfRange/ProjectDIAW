@@ -27,7 +27,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class ShowService extends IntentService {
+public class ParseService extends IntentService {
 
 	public static final String INTENT_RESULT_RECEIVER = "INTENT_RESULT_RECEIVER";
 	public static final String INTENT_FORCE_UPDATE = "INTENT_FORCE_UPDATE";
@@ -37,11 +37,11 @@ public class ShowService extends IntentService {
 	public static final String RESULT_DATA = "RESULT_DATA";
 	private static String WS_QUERY_WHERE = "where";
 
-	public ShowService() {
-		super("ShowService");
+	public ParseService() {
+		super("ParseService");
 	}
 
-	public ShowService(String name) {
+	public ParseService(String name) {
 		super(name);
 	}
 
@@ -73,12 +73,12 @@ public class ShowService extends IntentService {
 			myWeb.requestFromNetwork(query, ParseConnector.HTTPMethod.GET, null);
 			if (myWeb.getStatusCode() == HttpStatus.SC_OK) {
 
-				//parsing des données JSON
-				InputStream response = myWeb.getResponseBody();
-				ShowParser myParser = new ShowParser();
-				allEp = myParser.parse(response);
-				Log.d("ShowService", "on a parse : " + allEp.size() + " episodes");
-				responseCode = myParser.getStatusCode();
+                //parsing des données JSON
+                InputStream response = myWeb.getResponseBody();
+                ShowParser myParser = new ShowParser();
+                allEp = myParser.parse(response);
+                Log.d("ParseService", "on a parse : " + allEp.size() + " episodes" );
+                responseCode = myParser.getStatusCode();
 
 				//enregistrement en BDD
 				try {
@@ -127,15 +127,15 @@ public class ShowService extends IntentService {
 		long now = new Date().getTime();
 		long oneDay = TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS);
 
-		if (now > lastUpdate + oneDay) {
-			Log.d("ShowService", "Update the show from Parse");
+        if (now > lastUpdate + oneDay) {
+            Log.d("ParseService", "Update the show from Parse");
 
-			return true;
-		} else {
-			Log.d("ShowService", "Use database");
-			return false;
-		}
-	}
+            return true;
+        } else {
+            Log.d("ParseService", "Use database");
+            return false;
+        }
+    }
 
 
 }

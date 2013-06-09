@@ -30,7 +30,7 @@
     <option name="TOOL_WINDOW_CUSTOM_FILTER" value="diaw" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fa1e8636-896c-4099-9074-13d609f075a1" name="Default" comment="Show force update (Home), &#10;Optimized shows added (ShowService),&#10;Header image fix (ShowDetail),&#10;Info layout visible when info are  loaded (ShowDetail)">
+    <list default="true" id="fa1e8636-896c-4099-9074-13d609f075a1" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="ProjectDIAW.iws" />
@@ -526,7 +526,11 @@
       <created>1370793421647</created>
       <updated>1370793421647</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Workspace for merging...">
+      <created>1370793652713</created>
+      <updated>1370793652713</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -627,7 +631,7 @@
     <option name="WRAP_WHEN_TYPING_REACHES_RIGHT_MARGIN" value="false" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="Contextual ActionBar for delete / rename (no treatment yet)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Workspace for merging..." />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="false" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -645,6 +649,7 @@
     <MESSAGE value="Show force update (Home), &#10;Optimized shows added (ShowService),&#10;Header image fix (ShowDetail),&#10;Info layout visible when info are  loaded (ShowDetail)" />
     <MESSAGE value="Revert optimisation dans EpisodeDao (pb doublon ds notre bdd)&#10;" />
     <MESSAGE value="Contextual ActionBar for delete / rename (no treatment yet)" />
+    <MESSAGE value="Workspace for merging..." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -779,6 +784,13 @@
             <element signature="e#2431#2432#0" expanded="true" />
             <element signature="e#4484#4521#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/workspace.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="15249">
+          <folding />
         </state>
       </provider>
     </entry>

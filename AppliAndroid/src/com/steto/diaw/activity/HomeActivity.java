@@ -17,7 +17,7 @@ import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.Window;
 import com.steto.diaw.adapter.ListEpisodeHomeAdapter;
 import com.steto.diaw.model.Episode;
-import com.steto.diaw.service.ShowService;
+import com.steto.diaw.service.ParseService;
 import com.steto.diaw.tools.Tools;
 import com.steto.projectdiaw.R;
 
@@ -103,9 +103,9 @@ public class HomeActivity extends SherlockListActivity {
 	private void getBackShows() {
 		SharedPreferences mySP = getSharedPreferences(Tools.SHARED_PREF_FILE, Activity.MODE_PRIVATE);
 		String login = mySP.getString(Tools.SHARED_PREF_LOGIN, "");
-		Intent in = new Intent(this, ShowService.class);
-		in.putExtra(ShowService.INTENT_LOGIN, login);
-		in.putExtra(ShowService.INTENT_RESULT_RECEIVER, mShowResultReceiver);
+		Intent in = new Intent(this, ParseService.class);
+		in.putExtra(ParseService.INTENT_LOGIN, login);
+		in.putExtra(ParseService.INTENT_RESULT_RECEIVER, mShowResultReceiver);
 		startService(in);
 	}
 
@@ -118,9 +118,9 @@ public class HomeActivity extends SherlockListActivity {
 				protected void onReceiveResult(int resultCode, Bundle resultData) {
 					super.onReceiveResult(resultCode, resultData);
 					Log.i(TAG, "onResult");
-					if (resultCode == ShowService.RESULT_CODE_OK) {
+					if (resultCode == ParseService.RESULT_CODE_OK) {
                         mAllEp.clear();
-                        mAllEp.addAll((List<Episode>)resultData.get(ShowService.RESULT_DATA));
+                        mAllEp.addAll((List<Episode>)resultData.get(ParseService.RESULT_DATA));
                         processUpdateListEpisodes();
 					} else {
 						Toast.makeText(HomeActivity.this, getString(R.string.msg_erreur_reseau), Toast.LENGTH_SHORT).show();

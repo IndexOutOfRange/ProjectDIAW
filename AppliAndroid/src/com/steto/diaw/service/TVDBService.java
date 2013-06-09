@@ -31,16 +31,16 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by Stephane on 02/06/13.
  */
-public class SeriesService extends IntentService {
+public class TVDBService extends IntentService {
 
-    private static final String NAME = "SeriesService";
+    private static final String NAME = "TVDBService";
     public static final String INPUT_SERIE = "INPUT_SERIE";
     private static final String SERIE_NAME_QUERY = "seriesname";
     public static final String OUTPUT_DATA = "OUTPUT_DATA";
     public static final String INPUT_RESULTRECEIVER = "INPUT_RESULTRECEIVER";
     public static final int RESULT_CODE_OK = 0;
 
-    public SeriesService() {
+    public TVDBService() {
         super(NAME);
     }
 
@@ -134,11 +134,11 @@ public class SeriesService extends IntentService {
         long oneDay = TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS);
 
         if (now > lastUpdate + oneDay) {
-            Log.d("ShowService", "Update the show from Parse");
+            Log.d("ParseService", "Update the show from Parse");
 
             return true;
         } else {
-            Log.d("ShowService", "Use database");
+            Log.d("ParseService", "Use database");
             return false;
         }
     }

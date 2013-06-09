@@ -28,7 +28,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class ShowService extends IntentService {
+public class ParseService extends IntentService {
 
 	public static final String INTENT_RESULT_RECEIVER = "INTENT_RESULT_RECEIVER";
 	public static final String INTENT_LOGIN = "INTENT_LOGIN";
@@ -37,11 +37,11 @@ public class ShowService extends IntentService {
 	public static final String RESULT_DATA = "RESULT_DATA";
     private static String WS_QUERY_WHERE = "where";
 
-	public ShowService() {
-		super("ShowService");
+	public ParseService() {
+		super("ParseService");
 	}
 
-	public ShowService(String name) {
+	public ParseService(String name) {
 		super(name);
 	}
 
@@ -76,7 +76,7 @@ public class ShowService extends IntentService {
                 InputStream response = myWeb.getResponseBody();
                 ShowParser myParser = new ShowParser();
                 allEp = myParser.parse(response);
-                Log.d("ShowService", "on a parse : " + allEp.size() + " episodes" );
+                Log.d("ParseService", "on a parse : " + allEp.size() + " episodes" );
                 responseCode = myParser.getStatusCode();
 
                 //enregistrement en BDD
@@ -84,7 +84,7 @@ public class ShowService extends IntentService {
                     EpisodeDao epDAO = DatabaseHelper.getInstance(this).getEpisodeDao();
                     ShowDao showDAO = DatabaseHelper.getInstance(this).getShowDao();
                     int nbCreated = epDAO.createOrUpdate(allEp);
-                    Log.d("ShowService", nbCreated + " episodes créés en base" );
+                    Log.d("ParseService", nbCreated + " episodes créés en base" );
                     for(Episode current : allEp) {
                         Show currentShow = new Show(current.getShowName());
                         showDAO.createIfNotExists(currentShow);
@@ -125,11 +125,11 @@ public class ShowService extends IntentService {
         long oneDay = TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS);
 
         if (now > lastUpdate + oneDay) {
-            Log.d("ShowService", "Update the show from Parse");
+            Log.d("ParseService", "Update the show from Parse");
 
             return true;
         } else {
-            Log.d("ShowService", "Use database");
+            Log.d("ParseService", "Use database");
             return false;
         }
     }

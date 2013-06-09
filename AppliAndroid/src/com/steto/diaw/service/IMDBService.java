@@ -23,6 +23,8 @@ import java.util.List;
  */
 public class IMDBService extends IntentService {
 
+    public static final int RESULT_CODE_OK = 0;
+
     private static String IMDB_SERVICE = "IMDB_SERVICE";
     public static String SERVICE_INPUT_TITLE = "SERVICE_INPUT_TITLE";
     public static String SERVICE_INPUT_RECEIVER = "SERVICE_INPUT_RECEIVER";

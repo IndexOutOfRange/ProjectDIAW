@@ -102,12 +102,20 @@ public class ShowDetailActivity extends SherlockExpandableListActivity {
                                 launchBannerService();
                             }
                         }
+                    } else if( resultCode == TVDBService.RESULT_CODE_AMBIGUITY) {
+                        resolveAmbiguity();
                     } else {
-                        Toast.makeText(ShowDetailActivity.this, getString(R.string.msg_erreur_reseau), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ShowDetailActivity.this, "Unable to get result from service", Toast.LENGTH_SHORT).show();
                     }
                 }
             };
         }
+    }
+
+    private void resolveAmbiguity() {
+        Intent in = new Intent(this, AmbiguityShow.class);
+        in.putExtra(AmbiguityShow.INPUT_SHOW, mShow);
+        startActivity(in);
     }
 
     private void initBannerResultReceiver() {

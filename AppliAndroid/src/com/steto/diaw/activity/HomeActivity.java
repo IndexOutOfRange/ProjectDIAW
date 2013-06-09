@@ -30,7 +30,7 @@ public class HomeActivity extends SherlockListActivity {
 
 	public static final String INTENT_LIST_EPISODE = "INTENT_LIST_EPISODE";
 	private static final String TAG = "HomeActivity";
-	private static boolean sUpdateInProgress;
+	private boolean sUpdateInProgress;
 	private List<Episode> mAllEp = new ArrayList<Episode>();
 	private ListView mList;
 	private ListEpisodeHomeAdapter mAdapter;
@@ -61,8 +61,8 @@ public class HomeActivity extends SherlockListActivity {
 		MenuInflater inflater = getSupportMenuInflater();
 		inflater.inflate(R.menu.episode_list, menu);
 
-		menu.getItem(0).setVisible(!HomeActivity.sUpdateInProgress);
-		setSupportProgressBarIndeterminateVisibility(HomeActivity.sUpdateInProgress);
+		menu.getItem(0).setVisible(!sUpdateInProgress);
+		setSupportProgressBarIndeterminateVisibility(sUpdateInProgress);
 
 		return super.onCreateOptionsMenu(menu);
 	}
@@ -82,7 +82,7 @@ public class HomeActivity extends SherlockListActivity {
 
 	/* Update TVDBContainerData */
 	private void startUpdateListEpisodes() {
-		HomeActivity.sUpdateInProgress = true;
+		sUpdateInProgress = true;
 		invalidateOptionsMenu();
 		initShowResultReceiver();
 		getBackShows();
@@ -120,7 +120,7 @@ public class HomeActivity extends SherlockListActivity {
 	}
 
 	private void processUpdateListEpisodes() {
-		HomeActivity.sUpdateInProgress = false;
+		sUpdateInProgress = false;
 		invalidateOptionsMenu();
 		mAdapter.notifyDataSetChanged();
 	}

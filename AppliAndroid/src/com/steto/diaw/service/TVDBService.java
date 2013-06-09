@@ -39,6 +39,7 @@ public class TVDBService extends IntentService {
     public static final String OUTPUT_DATA = "OUTPUT_DATA";
     public static final String INPUT_RESULTRECEIVER = "INPUT_RESULTRECEIVER";
     public static final int RESULT_CODE_OK = 0;
+    public static final int RESULT_CODE_AMBIGUITY = -20; //code d'erreur < a -20 sont des erreurs du service, < -10 des erreurs BDD, <0 des erreurs Parser, > 0 les codes retours HTTP
 
     public TVDBService() {
         super(NAME);
@@ -56,8 +57,11 @@ public class TVDBService extends IntentService {
         } else {
             ret = getShowsFromName(input, ret);
             sendBackResult(receiver, responseCode, (Serializable) ret);
-            if( ret != null && !ret.isEmpty() )
+            if( ret != null && !ret.isEmpty() && ret.size() == 1 )  { //si la "recherche" sur TVDB n'a donné qu'un seul resultat alors pas besoin de lancer une recherche sur IMDB
                 ret = getShowsFromId(input, ret.get(0).getTVDBID(), ret);
+            } else {
+                responseCode = RESULT_CODE_AMBIGUITY;
+            }
         }
         sendBackResult(receiver, responseCode, (Serializable) ret);
 

@@ -32,6 +32,7 @@ public class ParseGetEpisodesService extends IntentService {
 	public static final String INTENT_FORCE_UPDATE = "INTENT_FORCE_UPDATE";
 	public static final String INTENT_LOGIN = "INTENT_LOGIN";
 	public static final int RESULT_CODE_OK = 0;
+	public static final int RESULT_CODE_ERROR = -1;
 	public static final String RESULT_DATA = "RESULT_DATA";
 	private static String WS_QUERY_WHERE = "where";
 
@@ -60,7 +61,7 @@ public class ParseGetEpisodesService extends IntentService {
 		ResultReceiver sender = (ResultReceiver) intent.getExtras().get(INTENT_RESULT_RECEIVER);
 		String login = intent.getExtras().getString(INTENT_LOGIN);
 		boolean forceUpdate = intent.getExtras().getBoolean(INTENT_FORCE_UPDATE);
-		int responseCode = RESULT_CODE_OK;
+		int responseCode = RESULT_CODE_ERROR;
 		List<Episode> allEp = null;
 
 		if (forceUpdate || isDataExpired()) {
@@ -106,6 +107,7 @@ public class ParseGetEpisodesService extends IntentService {
 		} else {
 			try {
 				allEp = DatabaseHelper.getInstance(this).getEpisodeDao().queryForAll();
+				responseCode = RESULT_CODE_OK;
 			} catch (SQLException e) {
 				responseCode = DatabaseHelper.ERROR_BDD;
 				e.printStackTrace();

@@ -16,22 +16,22 @@ import java.util.List;
  * Created by Stephane on 09/06/13.
  */
 public class IMDBParser extends AbstractParser {
-    public List<Show> parse (InputStream in) {
-        ObjectMapper myMapper = new ObjectMapper();
-        myMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        IMDBContainerData current = null;
-        try {
-            current = myMapper.readValue(in, IMDBContainerData.class);
-        } catch (JsonParseException e) {
-            setStatusCode(PARSER_MALFORMED_JSON);
-            e.printStackTrace();
-        } catch (JsonMappingException e) {
-            setStatusCode(PARSER_OBJECT_MALFORMED);
-            e.printStackTrace();
-        } catch (IOException e) {
-            setStatusCode(PARSER_GENERAL_EXCEPTION);
-            e.printStackTrace();
-        }
-        return current == null ? null : Arrays.asList(current.mShow);
-    }
+	public List<Show> parse(InputStream in) {
+		ObjectMapper myMapper = new ObjectMapper();
+		myMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		IMDBContainerData current = null;
+		try {
+			current = myMapper.readValue(in, IMDBContainerData.class);
+		} catch (JsonParseException e) {
+			setStatusCode(PARSER_MALFORMED_JSON);
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			setStatusCode(PARSER_OBJECT_MALFORMED);
+			e.printStackTrace();
+		} catch (IOException e) {
+			setStatusCode(PARSER_GENERAL_EXCEPTION);
+			e.printStackTrace();
+		}
+		return current == null ? null : Arrays.asList(current.mShow);
+	}
 }

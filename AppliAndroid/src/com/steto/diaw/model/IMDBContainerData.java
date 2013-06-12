@@ -8,9 +8,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class IMDBContainerData {
 
-    @JsonProperty("result")
-    public Show[] mShow;
+	@JsonProperty("result")
+	public Show[] mShow;
 
-    @JsonProperty("total_found")
-    public int mTotalResult;
+	@JsonProperty("total_found")
+	public int mTotalResult;
 }

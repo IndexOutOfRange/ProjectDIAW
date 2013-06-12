@@ -6,9 +6,9 @@ import org.simpleframework.xml.Root;
 /**
  * Created by Stephane on 02/06/13.
  */
-@Root(name="Data",strict=false)
+@Root(name = "Data", strict = false)
 public class TVDBContainerData {
 
-    @Element(name = "Series")
-    public Show mShow;
+	@Element(name = "Series")
+	public Show mShow;
 }

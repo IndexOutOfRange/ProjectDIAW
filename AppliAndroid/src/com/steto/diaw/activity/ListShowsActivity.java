@@ -36,13 +36,13 @@ public class ListShowsActivity extends SherlockListActivity {
 		mList = getListView();
 	}
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        new LoadShowTask().execute();
-    }
+	@Override
+	protected void onResume() {
+		super.onResume();
+		new LoadShowTask().execute();
+	}
 
-    @Override
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		/*MenuInflater inflater = getSupportMenuInflater();
 		inflater.inflate(R.menu.episode_list, menu);*/
@@ -64,7 +64,7 @@ public class ListShowsActivity extends SherlockListActivity {
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		Intent goToDetail = new Intent(ListShowsActivity.this, ShowDetailActivity.class);
-		goToDetail.putExtra(ShowDetailActivity.SHOW_ID, (Show)mAdapter.getItem((int)position));
+		goToDetail.putExtra(ShowDetailActivity.SHOW_ID, (Show) mAdapter.getItem((int) position));
 
 		startActivity(goToDetail);
 	}
@@ -73,30 +73,30 @@ public class ListShowsActivity extends SherlockListActivity {
 
 	/* Traitement */
 
-    public class LoadShowTask extends AsyncTask<Void,Integer,Void> {
+	public class LoadShowTask extends AsyncTask<Void, Integer, Void> {
 
 
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            if( mAdapter == null ) {
+		@Override
+		protected void onPostExecute(Void aVoid) {
+			super.onPostExecute(aVoid);
+			if (mAdapter == null) {
 
-                mAdapter = new ListShowAdapter(ListShowsActivity.this, mAllShows);
-                mList.setAdapter(mAdapter);
-            } else {
-                mAdapter.notifyDataSetChanged();
-            }
-        }
+				mAdapter = new ListShowAdapter(ListShowsActivity.this, mAllShows);
+				mList.setAdapter(mAdapter);
+			} else {
+				mAdapter.notifyDataSetChanged();
+			}
+		}
 
-        @Override
-        protected Void doInBackground(Void... voids) {
-            try {
-                mAllShows.clear();
-                mAllShows.addAll(DatabaseHelper.getInstance(ListShowsActivity.this).getShowDao().queryForAll());
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-    }
+		@Override
+		protected Void doInBackground(Void... voids) {
+			try {
+				mAllShows.clear();
+				mAllShows.addAll(DatabaseHelper.getInstance(ListShowsActivity.this).getShowDao().queryForAll());
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+	}
 }

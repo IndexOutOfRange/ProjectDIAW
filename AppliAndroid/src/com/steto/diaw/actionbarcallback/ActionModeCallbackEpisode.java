@@ -9,8 +9,6 @@ import com.steto.diaw.adapter.ListEpisodeHomeAdapter;
 import com.steto.diaw.model.Episode;
 import com.steto.projectdiaw.R;
 
-import java.util.Set;
-
 /**
  * Created by Benjamin on 09/06/13.
  */
@@ -67,11 +65,7 @@ public class ActionModeCallbackEpisode implements ActionMode.Callback {
 				return true;
 
 			case R.id.context_menu_delete:
-				Set<Integer> checked = mAdapter.getCheckedItems();
-				// iterate through selected items and delete them
-				for (Integer ci : checked) {
-					((HomeActivity) activity).deleteEpisode((Episode) mAdapter.getItem(ci));
-				}
+				((HomeActivity) activity).deleteEpisodes();
 				mode.finish();
 				return true;
 			default:

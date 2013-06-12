@@ -18,67 +18,67 @@ import java.util.List;
  */
 public class AmbiguityShow extends SherlockListActivity {
 
-    public static String INPUT_SHOW = "INPUT_SHOW";
+	public static String INPUT_SHOW = "INPUT_SHOW";
 
-    private Show mShow;
-    private List<Show> mAllSuggestedShow;
-    private ResultReceiver mIMDBReceiver = null;
-    private ListShowAdapter mAdapter;
+	private Show mShow;
+	private List<Show> mAllSuggestedShow;
+	private ResultReceiver mIMDBReceiver = null;
+	private ListShowAdapter mAdapter;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-        setContentView(R.layout.activity_ambiguity_show);
+		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+		setContentView(R.layout.activity_ambiguity_show);
 
-        initIMDBReceiver();
-        mShow = (Show) getIntent().getExtras().get(INPUT_SHOW);
-        getIMDBSuggestion();
+		initIMDBReceiver();
+		mShow = (Show) getIntent().getExtras().get(INPUT_SHOW);
+		getIMDBSuggestion();
 
 
-    }
+	}
 
-    private void getIMDBSuggestion() {
-        setSupportProgressBarIndeterminateVisibility(true);
-        Intent in = new Intent(this, IMDBService.class);
-        in.putExtra(IMDBService.SERVICE_INPUT_TITLE, mShow.getShowName());
-        in.putExtra(IMDBService.SERVICE_INPUT_RECEIVER, mIMDBReceiver);
-        startService(in);
-    }
+	private void getIMDBSuggestion() {
+		setSupportProgressBarIndeterminateVisibility(true);
+		Intent in = new Intent(this, IMDBService.class);
+		in.putExtra(IMDBService.SERVICE_INPUT_TITLE, mShow.getShowName());
+		in.putExtra(IMDBService.SERVICE_INPUT_RECEIVER, mIMDBReceiver);
+		startService(in);
+	}
 
-    private void initIMDBReceiver() {
-        if (mIMDBReceiver == null) {
-            mIMDBReceiver = new ResultReceiver(new Handler()) {
+	private void initIMDBReceiver() {
+		if (mIMDBReceiver == null) {
+			mIMDBReceiver = new ResultReceiver(new Handler()) {
 
-                @Override
-                protected void onReceiveResult(int resultCode, Bundle resultData) {
-                    super.onReceiveResult(resultCode, resultData);
-                    if (resultCode == IMDBService.RESULT_CODE_OK) {
+				@Override
+				protected void onReceiveResult(int resultCode, Bundle resultData) {
+					super.onReceiveResult(resultCode, resultData);
+					if (resultCode == IMDBService.RESULT_CODE_OK) {
 
-                        setAllSuggestedShow((List<Show>) resultData.get(IMDBService.SERVICE_OUTPUT_DATA));
+						setAllSuggestedShow((List<Show>) resultData.get(IMDBService.SERVICE_OUTPUT_DATA));
 
-                        setSupportProgressBarIndeterminateVisibility(false);
-                    }
-                }
-            };
-        }
-    }
+						setSupportProgressBarIndeterminateVisibility(false);
+					}
+				}
+			};
+		}
+	}
 
-    public List<Show> getAllSuggestedShow() {
-        return mAllSuggestedShow;
-    }
+	public List<Show> getAllSuggestedShow() {
+		return mAllSuggestedShow;
+	}
 
-    public void setAllSuggestedShow(List<Show> allSuggestedShow) {
-        if (mAllSuggestedShow == null) {
-            mAllSuggestedShow = allSuggestedShow;
-            mAdapter = new ListShowAdapter(this, mAllSuggestedShow);
-            getListView().setAdapter(mAdapter);
-        } else {
-            mAllSuggestedShow.clear();
-            mAllSuggestedShow.addAll(allSuggestedShow);
-            mAdapter.notifyDataSetChanged();
-        }
+	public void setAllSuggestedShow(List<Show> allSuggestedShow) {
+		if (mAllSuggestedShow == null) {
+			mAllSuggestedShow = allSuggestedShow;
+			mAdapter = new ListShowAdapter(this, mAllSuggestedShow);
+			getListView().setAdapter(mAdapter);
+		} else {
+			mAllSuggestedShow.clear();
+			mAllSuggestedShow.addAll(allSuggestedShow);
+			mAdapter.notifyDataSetChanged();
+		}
 
-    }
+	}
 }

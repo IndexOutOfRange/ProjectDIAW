@@ -14,19 +14,19 @@ import java.util.List;
  */
 public class SeriesParser extends AbstractParser {
 
-    public List<Show> parse(InputStream in) {
-        TVDBContainerData current = null;
-        Serializer serializer = new Persister();
-        List<Show> ret = new ArrayList<Show>();
+	public List<Show> parse(InputStream in) {
+		TVDBContainerData current = null;
+		Serializer serializer = new Persister();
+		List<Show> ret = new ArrayList<Show>();
 
-        try {
-            current = serializer.read(TVDBContainerData.class, in);
-            ret.add(current.mShow);
-        } catch (Exception e) {
-            setStatusCode(PARSER_GENERAL_EXCEPTION);
-            e.printStackTrace();
-        }
-        return current == null ? null : ret;
+		try {
+			current = serializer.read(TVDBContainerData.class, in);
+			ret.add(current.mShow);
+		} catch (Exception e) {
+			setStatusCode(PARSER_GENERAL_EXCEPTION);
+			e.printStackTrace();
+		}
+		return current == null ? null : ret;
 
-    }
+	}
 }

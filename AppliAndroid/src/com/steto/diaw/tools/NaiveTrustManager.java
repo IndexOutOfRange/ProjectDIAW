@@ -24,34 +24,34 @@ import java.security.cert.X509Certificate;
  * source : http://code.google.com/p/acra/source/browse/trunk/acra/src/main/java/org/acra/util/NaiveTrustManager.java?r=733
  */
 class NaiveTrustManager implements X509TrustManager {
-    /*
-     * (non-Javadoc)
-     * 
-     * @see javax.net.ssl.X509TrustManager#getAcceptedIssuers()
-     */
-    public X509Certificate[] getAcceptedIssuers() {
-        return new X509Certificate[0];
-    }
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see javax.net.ssl.X509TrustManager#getAcceptedIssuers()
+	 */
+	public X509Certificate[] getAcceptedIssuers() {
+		return new X509Certificate[0];
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * javax.net.ssl.X509TrustManager#checkClientTrusted(java.security.cert.
-     * X509Certificate[], java.lang.String)
-     */
-    public void checkClientTrusted(X509Certificate[] x509CertificateArray,
-            String string) throws CertificateException {
-    }
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * javax.net.ssl.X509TrustManager#checkClientTrusted(java.security.cert.
+	 * X509Certificate[], java.lang.String)
+	 */
+	public void checkClientTrusted(X509Certificate[] x509CertificateArray,
+	                               String string) throws CertificateException {
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * javax.net.ssl.X509TrustManager#checkServerTrusted(java.security.cert.
-     * X509Certificate[], java.lang.String)
-     */
-    public void checkServerTrusted(X509Certificate[] x509CertificateArray,
-            String string) throws CertificateException {
-    }
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see
+	 * javax.net.ssl.X509TrustManager#checkServerTrusted(java.security.cert.
+	 * X509Certificate[], java.lang.String)
+	 */
+	public void checkServerTrusted(X509Certificate[] x509CertificateArray,
+	                               String string) throws CertificateException {
+	}
 }

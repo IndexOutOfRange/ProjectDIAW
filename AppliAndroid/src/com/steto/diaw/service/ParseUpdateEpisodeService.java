@@ -22,7 +22,7 @@ import java.util.List;
 public class ParseUpdateEpisodeService extends IntentService {
 
 	public static final String INTENT_RESULT_RECEIVER = "INTENT_RESULT_RECEIVER";
-	public static final String INTENT_OBJECT_ID = "INTENT_OBJECT_ID";
+	public static final String INTENT_OBJECT_ID = "INTENT_OBJECTS_TO_DELETE";
 	public static final String INTENT_KEY = "INTENT_KEY";
 	public static final String INTENT_VALUE = "INTENT_VALUE";
 	public static final int RESULT_CODE_OK = 0;

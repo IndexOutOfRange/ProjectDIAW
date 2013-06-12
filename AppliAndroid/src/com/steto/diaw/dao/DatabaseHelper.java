@@ -17,8 +17,8 @@ import java.sql.SQLException;
 
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
-    //les erreurs d'ecritures en BDD commencent a -10 et sont de plus en plus petit
-    public static final int ERROR_BDD = -10;
+	//les erreurs d'ecritures en BDD commencent a -10 et sont de plus en plus petit
+	public static final int ERROR_BDD = -10;
 
 	private static final String TAG = "DatabaseHelper";
 	private static final String DATABASE_NAME = "diaw.db";
@@ -28,11 +28,11 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
 	private EpisodeDao mEpisodeDao = null;
 	private ShowDao mShowDao = null;
-    private Context mContext;
+	private Context mContext;
 
 	private DatabaseHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        mContext = context;
+		mContext = context;
 	}
 
 	public static DatabaseHelper getInstance(Context context) {
@@ -62,20 +62,20 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
 			onCreate(sqliteDatabase, connectionSource);
 
-            reinitDateMAJ();
+			reinitDateMAJ();
 
 		} catch (SQLException e) {
 			Log.e(TAG, "Unable to upgrade database from version " + oldVersion + " to new " + newVersion, e);
 		}
 	}
 
-    private void reinitDateMAJ() {
-        //reboot de la date de MJ de la base
-        SharedPreferences settings = mContext.getSharedPreferences(Tools.SHARED_PREF_FILE, Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putLong(Tools.SHARED_PREF_LAST_UPDATE, 0);
-        editor.commit();
-    }
+	private void reinitDateMAJ() {
+		//reboot de la date de MJ de la base
+		SharedPreferences settings = mContext.getSharedPreferences(Tools.SHARED_PREF_FILE, Activity.MODE_PRIVATE);
+		SharedPreferences.Editor editor = settings.edit();
+		editor.putLong(Tools.SHARED_PREF_LAST_UPDATE, 0);
+		editor.commit();
+	}
 
 	public EpisodeDao getEpisodeDao() throws SQLException {
 		if (mEpisodeDao == null) {

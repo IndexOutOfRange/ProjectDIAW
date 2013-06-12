@@ -27,125 +27,126 @@ import java.security.KeyStore;
  * Created by Stephane on 02/06/13.
  */
 public abstract class WebConnector {
-    private HttpClient mHttpClient;
-    private int mStatusCode = 0;
-    protected InputStream mResponseBody = null;
+	private HttpClient mHttpClient;
+	private int mStatusCode = 0;
+	protected InputStream mResponseBody = null;
 
-    public enum HTTPMethod {
-        GET, POST, PUT, DELETE
-    }
+	public enum HTTPMethod {
+		GET, POST, PUT, DELETE
+	}
 
-    public WebConnector() {
-        initHttpClient();
-    }
+	public WebConnector() {
+		initHttpClient();
+	}
 
-    protected abstract String getDNS();
-    protected abstract String getURL();
+	protected abstract String getDNS();
 
-    protected void initHttpClient() {
-        try {
-            // Self signed HTTPS server support
-            KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
-            trustStore.load(null, null);
-            SSLSocketFactory stocketFactory = new MySSLSocketFactory(trustStore);
-            stocketFactory.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+	protected abstract String getURL();
 
-            //
-            HttpParams params = new BasicHttpParams();
-            HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
-            HttpProtocolParams.setContentCharset(params, HTTP.UTF_8);
-            int timeoutConnection = 0;
-            HttpConnectionParams.setConnectionTimeout(params, timeoutConnection);
-            int timeoutSocket = 0;
-            HttpConnectionParams.setSoTimeout(params, timeoutSocket);
+	protected void initHttpClient() {
+		try {
+			// Self signed HTTPS server support
+			KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
+			trustStore.load(null, null);
+			SSLSocketFactory stocketFactory = new MySSLSocketFactory(trustStore);
+			stocketFactory.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
 
-            SchemeRegistry registry = new SchemeRegistry();
-            registry.register(new Scheme("http", new PlainSocketFactory(), 80));
-            registry.register(new Scheme("https", new FakeSocketFactory(), 443));
+			//
+			HttpParams params = new BasicHttpParams();
+			HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
+			HttpProtocolParams.setContentCharset(params, HTTP.UTF_8);
+			int timeoutConnection = 0;
+			HttpConnectionParams.setConnectionTimeout(params, timeoutConnection);
+			int timeoutSocket = 0;
+			HttpConnectionParams.setSoTimeout(params, timeoutSocket);
 
-            ClientConnectionManager ccm = new ThreadSafeClientConnManager(params, registry);
+			SchemeRegistry registry = new SchemeRegistry();
+			registry.register(new Scheme("http", new PlainSocketFactory(), 80));
+			registry.register(new Scheme("https", new FakeSocketFactory(), 443));
+
+			ClientConnectionManager ccm = new ThreadSafeClientConnManager(params, registry);
 
 
-            mHttpClient = new DefaultHttpClient(ccm, params);
+			mHttpClient = new DefaultHttpClient(ccm, params);
 
-        } catch (Exception e) {
-            mHttpClient = new DefaultHttpClient();
-        }
+		} catch (Exception e) {
+			mHttpClient = new DefaultHttpClient();
+		}
 
-    }
+	}
 
-    public void requestFromNetwork(String query, HTTPMethod verb, String body) {
+	public void requestFromNetwork(String query, HTTPMethod verb, String body) {
 
-        HttpResponse response = null;
-        HttpRequestBase call = null;
-        switch (verb) {
-            case GET:
-                call = buildGetRequest(query);
-                break;
-            case PUT:
-                call = buildPutRequest(query, body);
-                break;
-            case POST:
-                call = buildPostRequest(query, body);
-                break;
-	        case DELETE:
-		        call = buildDeleteRequest();
-		        break;
-            default:
-                call = buildGetRequest(query);
-                break;
+		HttpResponse response = null;
+		HttpRequestBase call = null;
+		switch (verb) {
+			case GET:
+				call = buildGetRequest(query);
+				break;
+			case PUT:
+				call = buildPutRequest(query, body);
+				break;
+			case POST:
+				call = buildPostRequest(query, body);
+				break;
+			case DELETE:
+				call = buildDeleteRequest();
+				break;
+			default:
+				call = buildGetRequest(query);
+				break;
 
-        }
+		}
 
-        System.out.println("Will call URI " + call.getURI());
+		System.out.println("Will call URI " + call.getURI());
 
-        try {
-            response = mHttpClient.execute(call);
-            setResponseBody(response.getEntity().getContent());
-            setStatusCode(response.getStatusLine().getStatusCode());
-            System.out.println("http call to " + call.getURI() + " status code : " + mStatusCode + " body response : " + mResponseBody);
-        } catch (IOException e) {
-            System.out.println("http call to " + call.getURI() + " generating exception : " + e);
-        }
-    }
+		try {
+			response = mHttpClient.execute(call);
+			setResponseBody(response.getEntity().getContent());
+			setStatusCode(response.getStatusLine().getStatusCode());
+			System.out.println("http call to " + call.getURI() + " status code : " + mStatusCode + " body response : " + mResponseBody);
+		} catch (IOException e) {
+			System.out.println("http call to " + call.getURI() + " generating exception : " + e);
+		}
+	}
 
-    public String streamToString ( InputStream in) {
-        InputStreamReader is = new InputStreamReader(in);
-        StringBuilder sb=new StringBuilder();
-        BufferedReader br = new BufferedReader(is);
-        String read;
-        try {
-            read = br.readLine();
+	public String streamToString(InputStream in) {
+		InputStreamReader is = new InputStreamReader(in);
+		StringBuilder sb = new StringBuilder();
+		BufferedReader br = new BufferedReader(is);
+		String read;
+		try {
+			read = br.readLine();
 
-            while(read != null) {
-                //System.out.println(read);
-                sb.append(read);
-                read =br.readLine();
+			while (read != null) {
+				//System.out.println(read);
+				sb.append(read);
+				read = br.readLine();
 
-            }
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-        return sb.toString();
-    }
+		return sb.toString();
+	}
 
-    protected void addHeader(HttpRequestBase request) {
-        request.setHeader("Accept-Encoding", "gzip");
-    }
+	protected void addHeader(HttpRequestBase request) {
+		request.setHeader("Accept-Encoding", "gzip");
+	}
 
-    /**
-     * @param query
-     * @return httpResponse
-     */
-    private HttpGet buildGetRequest(String query) {
+	/**
+	 * @param query
+	 * @return httpResponse
+	 */
+	private HttpGet buildGetRequest(String query) {
 
-        HttpGet get = new HttpGet(getDNS() +  getURL() + query);
-        addHeader(get);
+		HttpGet get = new HttpGet(getDNS() + getURL() + query);
+		addHeader(get);
 
-        return get;
-    }
+		return get;
+	}
 
 	private HttpDelete buildDeleteRequest() {
 		HttpDelete delete = new HttpDelete(getDNS() + getURL());
@@ -154,56 +155,56 @@ public abstract class WebConnector {
 		return delete;
 	}
 
-    public HttpPut buildPutRequest(String query, String content) {
+	public HttpPut buildPutRequest(String query, String content) {
 
-        HttpPut put = new HttpPut(getDNS() +  getURL() + query);
+		HttpPut put = new HttpPut(getDNS() + getURL() + query);
 
-        StringEntity input = null;
-        try {
-            input = new StringEntity(content);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        input.setContentType("application/json");
+		StringEntity input = null;
+		try {
+			input = new StringEntity(content);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		input.setContentType("application/json");
 
-        put.setEntity(input);
+		put.setEntity(input);
 
-        addHeader(put);
+		addHeader(put);
 
-        return put;
-    }
+		return put;
+	}
 
-    public HttpPost buildPostRequest(String query, String content) {
-        HttpPost post = new HttpPost(getDNS() +  getURL() + query);
+	public HttpPost buildPostRequest(String query, String content) {
+		HttpPost post = new HttpPost(getDNS() + getURL() + query);
 
-        StringEntity input = null;
-        try {
-            input = new StringEntity(content);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        input.setContentType("application/json");
+		StringEntity input = null;
+		try {
+			input = new StringEntity(content);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		input.setContentType("application/json");
 
-        post.setEntity(input);
+		post.setEntity(input);
 
-        addHeader(post);
+		addHeader(post);
 
-        return post;
-    }
+		return post;
+	}
 
-    public int getStatusCode() {
-        return mStatusCode;
-    }
+	public int getStatusCode() {
+		return mStatusCode;
+	}
 
-    public void setStatusCode(int mStatusCode) {
-        this.mStatusCode = mStatusCode;
-    }
+	public void setStatusCode(int mStatusCode) {
+		this.mStatusCode = mStatusCode;
+	}
 
-    public InputStream getResponseBody() {
-        return mResponseBody;
-    }
+	public InputStream getResponseBody() {
+		return mResponseBody;
+	}
 
-    public void setResponseBody(InputStream mResponseBody) {
-        this.mResponseBody = mResponseBody;
-    }
+	public void setResponseBody(InputStream mResponseBody) {
+		this.mResponseBody = mResponseBody;
+	}
 }

@@ -28,8 +28,8 @@ public class SplashScreen extends SherlockActivity {
 			startActivity(in);
 			finish();
 		} else {
-            initShowResultReceiver();
-            getBackShows();
+			initShowResultReceiver();
+			getBackShows();
 		}
 	}
 
@@ -48,9 +48,9 @@ public class SplashScreen extends SherlockActivity {
 				protected void onReceiveResult(int resultCode, Bundle resultData) {
 					super.onReceiveResult(resultCode, resultData);
 					if (resultCode == ParseGetEpisodesService.RESULT_CODE_OK) {
-                        Intent in = new Intent(SplashScreen.this, HomeActivity.class);
-                        in.putExtra(HomeActivity.INTENT_LIST_EPISODE, resultData.getSerializable(ParseGetEpisodesService.RESULT_DATA));
-                        startActivity(in);
+						Intent in = new Intent(SplashScreen.this, HomeActivity.class);
+						in.putExtra(HomeActivity.INTENT_LIST_EPISODE, resultData.getSerializable(ParseGetEpisodesService.RESULT_DATA));
+						startActivity(in);
 						finish();
 					} else {
 						Toast.makeText(SplashScreen.this, getString(R.string.msg_erreur_reseau), Toast.LENGTH_SHORT).show();

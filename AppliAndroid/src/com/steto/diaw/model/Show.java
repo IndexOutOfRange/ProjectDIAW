@@ -18,18 +18,18 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.util.Date;
 
-@JsonIgnoreProperties(ignoreUnknown=true)
-@Root(name="Series", strict = false)
+@JsonIgnoreProperties(ignoreUnknown = true)
+@Root(name = "Series", strict = false)
 @DatabaseTable(tableName = "Show", daoClass = ShowDao.class)
 public class Show implements Serializable, Comparable<Show> {
 
 	private static final long serialVersionUID = 2402273750582116603L;
 
-    @DatabaseField(id = true, useGetSet = true)
-    private String mCustomId;
+	@DatabaseField(id = true, useGetSet = true)
+	private String mCustomId;
 
-    @JsonProperty("title")
-    @Element(name = "SeriesName")
+	@JsonProperty("title")
+	@Element(name = "SeriesName")
 	@DatabaseField
 	private String mShowName;
 
@@ -39,43 +39,43 @@ public class Show implements Serializable, Comparable<Show> {
 	@DatabaseField
 	private int mNumberEpisodes;
 
-    @DatabaseField
-    @Element(name = "id")
-    private int mTVDBID;
+	@DatabaseField
+	@Element(name = "id")
+	private int mTVDBID;
 
-    @JsonProperty("imdb_id")
-    @DatabaseField
-    private String mIMDBID;
+	@JsonProperty("imdb_id")
+	@DatabaseField
+	private String mIMDBID;
 
-    @DatabaseField
-    @Element(name = "FirstAired", required = false)
-    private Date mDateDebut;
+	@DatabaseField
+	@Element(name = "FirstAired", required = false)
+	private Date mDateDebut;
 
-    @DatabaseField
-    @Element(name = "Genre", required = false )
-    private String mGenre;
+	@DatabaseField
+	@Element(name = "Genre", required = false)
+	private String mGenre;
 
-    @DatabaseField
-    @Element(name = "Network", required = false )
-    private String mChaine;
+	@DatabaseField
+	@Element(name = "Network", required = false)
+	private String mChaine;
 
-    @DatabaseField
-    @Element(name = "Overview", required = false )
-    private String mResume;
+	@DatabaseField
+	@Element(name = "Overview", required = false)
+	private String mResume;
 
-    @DatabaseField
-    @Element(name = "Status", required = false )
-    private String mStatus;
+	@DatabaseField
+	@Element(name = "Status", required = false)
+	private String mStatus;
 
-    @DatabaseField
-    @Element(name = "banner", required = false )
-    private String mBannerURL;
+	@DatabaseField
+	@Element(name = "banner", required = false)
+	private String mBannerURL;
 
-    @DatabaseField( dataType=DataType.BYTE_ARRAY )
-    private byte[] mBanner;
+	@DatabaseField(dataType = DataType.BYTE_ARRAY)
+	private byte[] mBanner;
 
-    @DatabaseField
-    private boolean mTVDBConnected;
+	@DatabaseField
+	private boolean mTVDBConnected;
 
 	public Show() {
 	}
@@ -84,28 +84,28 @@ public class Show implements Serializable, Comparable<Show> {
 		setShowName(name);
 	}
 
-    public Show(String name, int numberSeasons, int numberEpisodes) {
-        setShowName(name);
-        setNumberSeasons(numberSeasons);
-        setNumberEpisodes(numberEpisodes);
-    }
+	public Show(String name, int numberSeasons, int numberEpisodes) {
+		setShowName(name);
+		setNumberSeasons(numberSeasons);
+		setNumberEpisodes(numberEpisodes);
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
 
-        Show show = (Show) o;
+		Show show = (Show) o;
 
-        if (mShowName != null ? !mShowName.equals(show.mShowName) : show.mShowName != null) return false;
+		if (mShowName != null ? !mShowName.equals(show.mShowName) : show.mShowName != null) return false;
 
-        return true;
-    }
+		return true;
+	}
 
-    @Override
-    public int compareTo(Show show) {
-        return this.getShowName().compareTo(show.getShowName());
-    }
+	@Override
+	public int compareTo(Show show) {
+		return this.getShowName().compareTo(show.getShowName());
+	}
 
 	public String getShowName() {
 		return mShowName;
@@ -134,112 +134,113 @@ public class Show implements Serializable, Comparable<Show> {
 	public String getId() {
 		return getMCustomId();
 	}
-    public void setId(String id) {
-        setMCustomId(id);
-    }
 
-    public int getTVDBID() {
-        return mTVDBID;
-    }
+	public void setId(String id) {
+		setMCustomId(id);
+	}
 
-    public void setTVDBID(int TVDBID) {
-        mTVDBID = TVDBID;
-    }
+	public int getTVDBID() {
+		return mTVDBID;
+	}
 
-    public String getStatus() {
-        return mStatus;
-    }
+	public void setTVDBID(int TVDBID) {
+		mTVDBID = TVDBID;
+	}
 
-    public void setStatus(String status) {
-        mStatus = status;
-    }
+	public String getStatus() {
+		return mStatus;
+	}
 
-    public String getResume() {
-        return mResume;
-    }
+	public void setStatus(String status) {
+		mStatus = status;
+	}
 
-    public void setResume(String resume) {
-        mResume = resume;
-    }
+	public String getResume() {
+		return mResume;
+	}
 
-    public String getChaine() {
-        return mChaine;
-    }
+	public void setResume(String resume) {
+		mResume = resume;
+	}
 
-    public void setChaine(String chaine) {
-        mChaine = chaine;
-    }
+	public String getChaine() {
+		return mChaine;
+	}
 
-    public String getGenre() {
-        return mGenre;
-    }
+	public void setChaine(String chaine) {
+		mChaine = chaine;
+	}
 
-    public void setGenre(String genre) {
-        mGenre = genre;
-    }
+	public String getGenre() {
+		return mGenre;
+	}
 
-    public Date getDateDebut() {
-        return mDateDebut;
-    }
+	public void setGenre(String genre) {
+		mGenre = genre;
+	}
 
-    public void setDateDebut(Date dateDebut) {
-        mDateDebut = dateDebut;
-    }
+	public Date getDateDebut() {
+		return mDateDebut;
+	}
 
-    public String getBannerURL() {
-        return mBannerURL;
-    }
+	public void setDateDebut(Date dateDebut) {
+		mDateDebut = dateDebut;
+	}
 
-    public void setBannerURL(String bannerURL) {
-        mBannerURL = bannerURL;
-    }
+	public String getBannerURL() {
+		return mBannerURL;
+	}
 
-    public byte[] getBanner() {
-        return mBanner;
-    }
+	public void setBannerURL(String bannerURL) {
+		mBannerURL = bannerURL;
+	}
 
-    public Bitmap getBannerAsBitmap() {
-        InputStream is = new ByteArrayInputStream(mBanner);
-        Bitmap bmp = BitmapFactory.decodeStream(is);
-        return bmp;
-    }
+	public byte[] getBanner() {
+		return mBanner;
+	}
+
+	public Bitmap getBannerAsBitmap() {
+		InputStream is = new ByteArrayInputStream(mBanner);
+		Bitmap bmp = BitmapFactory.decodeStream(is);
+		return bmp;
+	}
 
 
-    public void setBanner(byte[] banner) {
-        mBanner = banner;
-    }
+	public void setBanner(byte[] banner) {
+		mBanner = banner;
+	}
 
-    @JsonIgnore
-    public void setBanner(Bitmap banner) {
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        banner.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        mBanner = stream.toByteArray();
-    }
+	@JsonIgnore
+	public void setBanner(Bitmap banner) {
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		banner.compress(Bitmap.CompressFormat.PNG, 100, stream);
+		mBanner = stream.toByteArray();
+	}
 
-    public boolean isTVDBConnected() {
-        return mTVDBConnected;
-    }
+	public boolean isTVDBConnected() {
+		return mTVDBConnected;
+	}
 
-    public void setTVDBConnected(boolean TVDBConnected) {
-        mTVDBConnected = TVDBConnected;
-    }
+	public void setTVDBConnected(boolean TVDBConnected) {
+		mTVDBConnected = TVDBConnected;
+	}
 
-    public String getMCustomId() {
-        if( mCustomId == null) {
-            setMCustomId(mShowName);
-        }
-        return mCustomId;
-    }
+	public String getMCustomId() {
+		if (mCustomId == null) {
+			setMCustomId(mShowName);
+		}
+		return mCustomId;
+	}
 
-    public void setMCustomId(String customId) {
-        mCustomId = customId;
-    }
+	public void setMCustomId(String customId) {
+		mCustomId = customId;
+	}
 
-    public String getIMDBID() {
-        return mIMDBID;
-    }
+	public String getIMDBID() {
+		return mIMDBID;
+	}
 
-    public void setIMDBID(String IMDBID) {
-        mIMDBID = IMDBID;
-    }
+	public void setIMDBID(String IMDBID) {
+		mIMDBID = IMDBID;
+	}
 }

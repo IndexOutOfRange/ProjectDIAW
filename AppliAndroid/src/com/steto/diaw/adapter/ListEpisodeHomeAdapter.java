@@ -6,9 +6,9 @@ import android.view.ViewGroup;
 import com.steto.diaw.model.Episode;
 import com.steto.diaw.view.ListItemViewEpisode;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class ListEpisodeHomeAdapter extends AbstractListDataAdapter<Episode> {
 
@@ -32,10 +32,10 @@ public class ListEpisodeHomeAdapter extends AbstractListDataAdapter<Episode> {
 
 		if (checkedItems.contains(Integer.valueOf(i))) {
 			// if this item is checked - set checked state
-			current.setLayoutBackgroundState(new int[] { android.R.attr.state_checked });
+			current.setLayoutBackgroundState(new int[]{android.R.attr.state_checked});
 		} else {
 			// if this item is unchecked - set unchecked state (notice the minus)
-			current.setLayoutBackgroundState(new int[] { -android.R.attr.state_checked });
+			current.setLayoutBackgroundState(new int[]{-android.R.attr.state_checked});
 		}
 
 		return current;
@@ -88,7 +88,11 @@ public class ListEpisodeHomeAdapter extends AbstractListDataAdapter<Episode> {
 		return null;
 	}
 
-	public Set<Integer> getCheckedItems() {
-		return checkedItems;
+	public List<Episode> getCheckedItems() {
+		List<Episode> checkedEpisodes = new ArrayList<Episode>();
+		for (int index : checkedItems) {
+			checkedEpisodes.add((Episode) getItem(index));
+		}
+		return checkedEpisodes;
 	}
 }

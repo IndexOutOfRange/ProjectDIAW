@@ -12,7 +12,7 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 
-public class ShowParser extends AbstractParser{
+public class ShowParser extends AbstractParser {
 
 	public List<Episode> parse(InputStream in) {
 		ObjectMapper myMapper = new ObjectMapper();

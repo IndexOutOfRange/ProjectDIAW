@@ -26,9 +26,9 @@ public class Episode implements Serializable, Comparable<Episode> {
 	private boolean mDoubleEpisode = false;
 	@DatabaseField
 	private Date mUpdatedAt;
-    @DatabaseField(id = true, useGetSet = true)
-    @JsonIgnore
-    private String mCustomId;
+	@DatabaseField(id = true, useGetSet = true)
+	@JsonIgnore
+	private String mCustomId;
 	@DatabaseField(columnName = COLUMN_OBJECT_ID)
 	private String mObjectId;
 
@@ -92,24 +92,24 @@ public class Episode implements Serializable, Comparable<Episode> {
 		this.mUpdatedAt = updatedAt;
 	}
 
-    public String getId() {
-        return getMCustomId();
-    }
+	public String getId() {
+		return getMCustomId();
+	}
 
-    public void setId(String id) {
-        setMCustomId(id);
-    }
+	public void setId(String id) {
+		setMCustomId(id);
+	}
 
-    public String getMCustomId() {
-        if( mCustomId == null ) {
-            setMCustomId(mShowName + mSeasonNumber + "x" + mEpisodeNumber);
-        }
-        return mCustomId;
-    }
+	public String getMCustomId() {
+		if (mCustomId == null) {
+			setMCustomId(mShowName + mSeasonNumber + "x" + mEpisodeNumber);
+		}
+		return mCustomId;
+	}
 
-    public void setMCustomId(String customId) {
-        mCustomId = customId;
-    }
+	public void setMCustomId(String customId) {
+		mCustomId = customId;
+	}
 
 	public String getObjectId() {
 		return mObjectId;

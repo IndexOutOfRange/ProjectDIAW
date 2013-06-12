@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <dimen name="very_small">12dp</dimen>
-    <dimen name="small">20dp</dimen>
-    <dimen name="normal">32dp</dimen>
-    <dimen name="big">50dp</dimen>
-    <dimen name="enormous">72dp</dimen>
+	<dimen name="very_small">12dp</dimen>
+	<dimen name="small">20dp</dimen>
+	<dimen name="normal">32dp</dimen>
+	<dimen name="big">50dp</dimen>
+	<dimen name="enormous">72dp</dimen>
 
 </resources>

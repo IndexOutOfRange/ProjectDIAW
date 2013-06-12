@@ -24,6 +24,7 @@ import com.steto.diaw.service.ParseGetEpisodesService;
 import com.steto.diaw.tools.Tools;
 import com.steto.projectdiaw.R;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -162,12 +163,14 @@ public class HomeActivity extends SherlockListActivity {
 		});
 	}
 
-	public void deleteEpisode(Episode episode) {
+	public void deleteEpisodes() {
+		List<Episode> episodesToDelete = mAdapter.getCheckedItems();
+
 		sUpdateInProgress = true;
 		invalidateOptionsMenu();
 
 		Intent intent = new Intent(this, ParseDeleteEpisodeService.class);
-		intent.putExtra(ParseDeleteEpisodeService.INTENT_OBJECT_ID, episode.getObjectId());
+		intent.putExtra(ParseDeleteEpisodeService.INTENT_OBJECTS_TO_DELETE, (Serializable) episodesToDelete);
 		intent.putExtra(ParseDeleteEpisodeService.INTENT_RESULT_RECEIVER, mDeleteEpisodeResultReceiver);
 		startService(intent);
 	}
@@ -177,7 +180,7 @@ public class HomeActivity extends SherlockListActivity {
 		// TODO pop up
 
 //		Intent intent = new Intent(this, ParseUpdateEpisodeService.class);
-//		intent.putExtra(ParseUpdateEpisodeService.INTENT_OBJECT_ID, episode.getObjectId());
+//		intent.putExtra(ParseUpdateEpisodeService.INTENT_OBJECTS_TO_DELETE, episode.getObjectId());
 //		intent.putExtra(ParseUpdateEpisodeService.INTENT_RESULT_RECEIVER, mDeleteEpisodeResultReceiver);
 //		intent.putExtra(ParseUpdateEpisodeService.INTENT_KEY, "showName");
 //		intent.putExtra(ParseUpdateEpisodeService.INTENT_VALUE, episode.getShowName());
@@ -211,13 +214,32 @@ public class HomeActivity extends SherlockListActivity {
 				@Override
 				protected void onReceiveResult(int resultCode, Bundle resultData) {
 					super.onReceiveResult(resultCode, resultData);
-					Log.i(TAG, "onResult");
-					if (resultCode == ParseGetEpisodesService.RESULT_CODE_OK) {
-						String objectId = resultData.getString(ParseDeleteEpisodeService.INTENT_OBJECT_ID);
-						sUpdateInProgress = false;
-						invalidateOptionsMenu();
+					sUpdateInProgress = false;
+					invalidateOptionsMenu();
 
+					if (resultCode == ParseGetEpisodesService.RESULT_CODE_OK) {
+						List<Episode> episodesNotDeleted = (List<Episode>) resultData.getSerializable(ParseDeleteEpisodeService.INTENT_OBJECTS_NOT_DELETED);
+
+						mAllEp.clear();
+						mAllEp.addAll((List<Episode>) resultData.get(ParseDeleteEpisodeService.RESULT_DATA));
 						mAdapter.notifyDataSetChanged();
+
+						if (episodesNotDeleted != null && !episodesNotDeleted.isEmpty()) {
+							StringBuilder sb = new StringBuilder();
+							sb.append("Erreur durant la suppression pour ");
+							if (episodesNotDeleted.size() == 1) {
+								sb.append("l'épisode :");
+							} else {
+								sb.append("les épisodes :");
+							}
+							for (Episode episode : episodesNotDeleted) {
+								sb.append("\n").append(episode.getShowName()).append(" ")
+										.append(episode.getSeasonNumber()).append("x").append(episode.getEpisodeNumber());
+							}
+							Toast.makeText(HomeActivity.this, sb.toString(), Toast.LENGTH_LONG).show();
+						} else {
+							Toast.makeText(HomeActivity.this, "Suppression réalisée", Toast.LENGTH_LONG).show();
+						}
 					} else {
 						Toast.makeText(HomeActivity.this, "Unable to get result from service", Toast.LENGTH_SHORT).show();
 					}

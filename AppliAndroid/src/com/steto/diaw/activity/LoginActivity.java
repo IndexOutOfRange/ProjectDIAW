@@ -77,8 +77,8 @@ public class LoginActivity extends SherlockActivity {
 				protected void onReceiveResult(int resultCode, Bundle resultData) {
 					super.onReceiveResult(resultCode, resultData);
 					if (resultCode == ParseGetEpisodesService.RESULT_CODE_OK) {
-                        Intent in = new Intent(LoginActivity.this, HomeActivity.class);
-                        in.putExtra(HomeActivity.INTENT_LIST_EPISODE, resultData.getSerializable(ParseGetEpisodesService.RESULT_DATA));
+						Intent in = new Intent(LoginActivity.this, HomeActivity.class);
+						in.putExtra(HomeActivity.INTENT_LIST_EPISODE, resultData.getSerializable(ParseGetEpisodesService.RESULT_DATA));
 						startActivity(in);
 						finish();
 

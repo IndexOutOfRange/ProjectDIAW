@@ -13,10 +13,10 @@ import java.util.Date;
 public class Episode implements Serializable, Comparable<Episode> {
 
 	private static final long serialVersionUID = 8857517715427495822L;
-	public static final String SHOWNAME = "showname";
-	public static final String COLUMN_OBJECT_ID = "object_id";
+	public static final String COLUMN_SHOWNAME = "showName";
+	public static final String COLUMN_OBJECT_ID = "objectId";
 
-	@DatabaseField(columnName = SHOWNAME)
+	@DatabaseField(columnName = COLUMN_SHOWNAME)
 	private String mShowName;
 	@DatabaseField
 	private int mSeasonNumber;

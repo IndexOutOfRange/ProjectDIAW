@@ -30,7 +30,6 @@ public class ShowParser extends AbstractParser {
 			setStatusCode(PARSER_GENERAL_EXCEPTION);
 			e.printStackTrace();
 		}
-		return current == null ? null : Arrays.asList(current.results);
-
+		return current == null || current.results == null ? null : Arrays.asList(current.results);
 	}
 }

@@ -1,14 +1,18 @@
 package com.steto.diaw.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockListActivity;
@@ -21,6 +25,7 @@ import com.steto.diaw.adapter.ListEpisodeHomeAdapter;
 import com.steto.diaw.model.Episode;
 import com.steto.diaw.service.ParseDeleteEpisodeService;
 import com.steto.diaw.service.ParseGetEpisodesService;
+import com.steto.diaw.service.ParseUpdateEpisodeService;
 import com.steto.diaw.tools.Tools;
 import com.steto.projectdiaw.R;
 
@@ -176,15 +181,39 @@ public class HomeActivity extends SherlockListActivity {
 	}
 
 
-	public void renameEpisode(Episode episode) {
-		// TODO pop up
+	public void renameEpisode(final Episode episode) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		LayoutInflater inflater = getLayoutInflater();
+		View viewInDialog = inflater.inflate(R.layout.dialog_rename, null);
+		final EditText nameShowET = (EditText) viewInDialog.findViewById(R.id.dialog_rename_episode_name);
+		nameShowET.setText(episode.getShowName());
 
-//		Intent intent = new Intent(this, ParseUpdateEpisodeService.class);
-//		intent.putExtra(ParseUpdateEpisodeService.INTENT_OBJECTS_TO_DELETE, episode.getObjectId());
-//		intent.putExtra(ParseUpdateEpisodeService.INTENT_RESULT_RECEIVER, mDeleteEpisodeResultReceiver);
-//		intent.putExtra(ParseUpdateEpisodeService.INTENT_KEY, "showName");
-//		intent.putExtra(ParseUpdateEpisodeService.INTENT_VALUE, episode.getShowName());
-//		startService(intent);
+		builder.setView(viewInDialog)
+				// Add action buttons
+				.setPositiveButton(R.string.btn_ok, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+						sUpdateInProgress = true;
+						invalidateOptionsMenu();
+
+						// service
+						String newName = nameShowET.getText().toString();
+						Intent intent = new Intent(HomeActivity.this, ParseUpdateEpisodeService.class);
+						intent.putExtra(ParseUpdateEpisodeService.INTENT_OBJECT_TO_RENAME, episode.getObjectId());
+						intent.putExtra(ParseUpdateEpisodeService.INTENT_KEY, Episode.COLUMN_SHOWNAME);
+						intent.putExtra(ParseUpdateEpisodeService.INTENT_VALUE, newName);
+						intent.putExtra(ParseUpdateEpisodeService.INTENT_RESULT_RECEIVER, mRenameEpisodeResultReceiver);
+						startService(intent);
+					}
+				})
+				.setNegativeButton(R.string.btn_annuler, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.dismiss();
+					}
+				})
+				.setTitle(R.string.rename);
+		AlertDialog dialog = builder.create();
+		dialog.show();
 	}
 
 	private void initRenameEpisodeResultReceiver() {
@@ -195,11 +224,16 @@ public class HomeActivity extends SherlockListActivity {
 				@Override
 				protected void onReceiveResult(int resultCode, Bundle resultData) {
 					super.onReceiveResult(resultCode, resultData);
-					Log.i(TAG, "onResult");
-					if (resultCode == ParseGetEpisodesService.RESULT_CODE_OK) {
+					sUpdateInProgress = false;
+					invalidateOptionsMenu();
+
+					if (resultCode == ParseUpdateEpisodeService.RESULT_CODE_OK) {
+						mAllEp.clear();
+						mAllEp.addAll((List<Episode>) resultData.get(ParseUpdateEpisodeService.RESULT_DATA));
 						mAdapter.notifyDataSetChanged();
+						Toast.makeText(HomeActivity.this, "Renommage réalisée", Toast.LENGTH_LONG).show();
 					} else {
-						Toast.makeText(HomeActivity.this, "Unable to get result from service", Toast.LENGTH_SHORT).show();
+						Toast.makeText(HomeActivity.this, "Unable to get result from service " + resultCode, Toast.LENGTH_SHORT).show();
 					}
 				}
 			};
@@ -217,7 +251,7 @@ public class HomeActivity extends SherlockListActivity {
 					sUpdateInProgress = false;
 					invalidateOptionsMenu();
 
-					if (resultCode == ParseGetEpisodesService.RESULT_CODE_OK) {
+					if (resultCode == ParseDeleteEpisodeService.RESULT_CODE_OK) {
 						List<Episode> episodesNotDeleted = (List<Episode>) resultData.getSerializable(ParseDeleteEpisodeService.INTENT_OBJECTS_NOT_DELETED);
 
 						mAllEp.clear();
@@ -241,7 +275,7 @@ public class HomeActivity extends SherlockListActivity {
 							Toast.makeText(HomeActivity.this, "Suppression réalisée", Toast.LENGTH_LONG).show();
 						}
 					} else {
-						Toast.makeText(HomeActivity.this, "Unable to get result from service", Toast.LENGTH_SHORT).show();
+						Toast.makeText(HomeActivity.this, "Unable to get result from service " + resultCode, Toast.LENGTH_SHORT).show();
 					}
 				}
 			};

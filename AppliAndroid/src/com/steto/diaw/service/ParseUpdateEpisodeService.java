@@ -13,7 +13,10 @@ import com.steto.diaw.web.ShowConnector;
 import org.apache.http.HttpStatus;
 
 import java.io.InputStream;
+import java.io.Serializable;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,9 +25,10 @@ import java.util.List;
 public class ParseUpdateEpisodeService extends IntentService {
 
 	public static final String INTENT_RESULT_RECEIVER = "INTENT_RESULT_RECEIVER";
-	public static final String INTENT_OBJECT_ID = "INTENT_OBJECTS_TO_DELETE";
+	public static final String INTENT_OBJECT_TO_RENAME = "INTENT_OBJECT_TO_RENAME";
 	public static final String INTENT_KEY = "INTENT_KEY";
 	public static final String INTENT_VALUE = "INTENT_VALUE";
+	public static final String RESULT_DATA = "RESULT_DATA";
 	public static final int RESULT_CODE_OK = 0;
 
 	public ParseUpdateEpisodeService() {
@@ -42,7 +46,7 @@ public class ParseUpdateEpisodeService extends IntentService {
 	@Override
 	protected void onHandleIntent(Intent intent) {
 		ResultReceiver sender = (ResultReceiver) intent.getExtras().get(INTENT_RESULT_RECEIVER);
-		String objectId = intent.getExtras().getString(INTENT_OBJECT_ID);
+		String objectId = intent.getExtras().getString(INTENT_OBJECT_TO_RENAME);
 		String key = intent.getExtras().getString(INTENT_KEY);
 		String value = intent.getExtras().getString(INTENT_VALUE);
 		int responseCode = RESULT_CODE_OK;
@@ -52,28 +56,43 @@ public class ParseUpdateEpisodeService extends IntentService {
 		ShowConnector myWeb = new ShowConnector(objectId);
 		myWeb.requestFromNetwork("", ParseConnector.HTTPMethod.PUT, body);
 		if (myWeb.getStatusCode() == HttpStatus.SC_OK) {
-			//parsing des données JSON
-			InputStream response = myWeb.getResponseBody();
-			ShowParser myParser = new ShowParser();
-			result = myParser.parse(response);
-			responseCode = myParser.getStatusCode();
+			// la maj ne donne que la updateDate, on refait donc un appel au serveur pour avoir
+			// exactement les mêmes données
+			myWeb.requestFromNetwork("", ParseConnector.HTTPMethod.GET, "");
+			if(myWeb.getStatusCode() == HttpStatus.SC_OK) {
+				//pas de parsing des données JSON car le JSON donne que la updateDate
 
-			try {
-				EpisodeDao epDao = DatabaseHelper.getInstance(this).getEpisodeDao();
-				Episode episodeUpdated = epDao.queryForEq(Episode.COLUMN_OBJECT_ID, objectId).get(0);
-				episodeUpdated.setUpdatedAt(result.get(0).getUpdatedAt());
-				epDao.update(episodeUpdated);
-			} catch (SQLException e) {
-				responseCode = DatabaseHelper.ERROR_BDD;
-				e.printStackTrace();
+				try {
+					EpisodeDao epDao = DatabaseHelper.getInstance(this).getEpisodeDao();
+					Episode episodeUpdated = epDao.queryForEq(Episode.COLUMN_OBJECT_ID, objectId).get(0);
+					episodeUpdated.setUpdatedAt(new Date());
+					if(Episode.COLUMN_SHOWNAME.equals(key)) {
+						episodeUpdated.setShowName(value);
+					}
+					// TODO
+					//episodeUpdated.setEpisodeNumber(result.get(0).getEpisodeNumber());
+					//episodeUpdated.setSeasonNumber(result.get(0).getSeasonNumber());
+					epDao.update(episodeUpdated);
+				} catch (SQLException e) {
+					responseCode = DatabaseHelper.ERROR_BDD;
+					e.printStackTrace();
+				}
 			}
 		} else {
 			responseCode = myWeb.getStatusCode();
 		}
 
+		List<Episode> allEp = new ArrayList<Episode>();
+		try {
+			allEp = DatabaseHelper.getInstance(this).getEpisodeDao().queryForAll();
+		} catch (SQLException e) {
+			responseCode = DatabaseHelper.ERROR_BDD;
+			e.printStackTrace();
+		}
+
 		//retour à l'appelant
 		Bundle ret = new Bundle();
-		ret.putSerializable(INTENT_OBJECT_ID, objectId);
+		ret.putSerializable(RESULT_DATA, (Serializable) allEp);
 		sender.send(responseCode, ret);
 	}
 }

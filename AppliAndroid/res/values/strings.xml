@@ -9,7 +9,7 @@
 	<string name="loading">Chargement</string>
 	<string name="update">Mettre à jour</string>
 	<string name="delete">Supprimer</string>
-	<string name="rename">Renommer la série</string>
+	<string name="rename">Renommer l\'épisode</string>
 
 	<string name="activity_title_list_show">Mes séries</string>
 	<string name="activity_title_home">Derniers Episodes</string>
@@ -35,8 +35,14 @@
 	<string name="email_error">Veuillez indiquer votre email</string>
 	<string name="list_no_data">Pas de données</string>
 
+	<!-- Dialog -->
+	<string name="dialog_rename_episode_name">nom de l\'épisode</string>
+	<string name="btn_ok">Ok</string>
+	<string name="btn_annuler">Annuler</string>
+
 
 	<!-- Action Bar Contextual -->
+
 	<plurals name="nb_items_selected">
 		<item quantity="one">selectionné</item>
 		<item quantity="other">selectionnés</item>

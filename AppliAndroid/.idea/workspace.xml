@@ -33,15 +33,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fa1e8636-896c-4099-9074-13d609f075a1" name="Default" comment="clean imports">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/res/layout/dialog_rename.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/AndroidManifest.xml" afterPath="$PROJECT_DIR$/AndroidManifest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/steto/diaw/dao/DatabaseHelper.java" afterPath="$PROJECT_DIR$/src/com/steto/diaw/dao/DatabaseHelper.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/steto/diaw/model/Episode.java" afterPath="$PROJECT_DIR$/src/com/steto/diaw/model/Episode.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/steto/diaw/activity/HomeActivity.java" afterPath="$PROJECT_DIR$/src/com/steto/diaw/activity/HomeActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/steto/diaw/service/ParseUpdateEpisodeService.java" afterPath="$PROJECT_DIR$/src/com/steto/diaw/service/ParseUpdateEpisodeService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/steto/diaw/dao/ShowDao.java" afterPath="$PROJECT_DIR$/src/com/steto/diaw/dao/ShowDao.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/steto/diaw/parser/ShowParser.java" afterPath="$PROJECT_DIR$/src/com/steto/diaw/parser/ShowParser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/values/strings.xml" afterPath="$PROJECT_DIR$/res/values/strings.xml" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/res/drawable-hdpi/ic_launcher.png" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/drawable-ldpi/ic_launcher.png" afterPath="$PROJECT_DIR$/res/drawable-ldpi/ic_launcher.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/drawable-mdpi/ic_launcher.png" afterPath="$PROJECT_DIR$/res/drawable-mdpi/ic_launcher.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/res/drawable-xhdpi/ic_launcher.png" afterPath="$PROJECT_DIR$/res/drawable-xhdpi/ic_launcher.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../.gitignore" afterPath="$PROJECT_DIR$/../.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="ProjectDIAW.iws" />
@@ -134,14 +130,8 @@
       <file leaf-file-name="HomeActivity.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/activity/HomeActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="199" column="72" selection-start="6774" selection-end="6774" vertical-scroll-proportion="0.5147826" vertical-offset="2441" max-vertical-offset="4267">
-              <folding>
-                <element signature="e#4208#4245#0" expanded="true" />
-                <element signature="e#6525#7260#0" expanded="true" />
-                <element signature="e#7253#7254#0" expanded="true" />
-                <element signature="e#7307#7442#0" expanded="true" />
-                <element signature="e#7435#7436#0" expanded="true" />
-              </folding>
+            <state line="48" column="0" selection-start="1723" selection-end="1723" vertical-scroll-proportion="0.5026087" vertical-offset="0" max-vertical-offset="4148">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -149,7 +139,7 @@
       <file leaf-file-name="ShowParser.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/parser/ShowParser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="35" column="0" selection-start="1150" selection-end="1150" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="527">
+            <state line="35" column="0" selection-start="1150" selection-end="1150" vertical-scroll-proportion="0.0" vertical-offset="578" max-vertical-offset="697">
               <folding />
             </state>
           </provider>
@@ -158,7 +148,7 @@
       <file leaf-file-name="ParseDeleteEpisodeService.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/service/ParseDeleteEpisodeService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="45" column="15" selection-start="1530" selection-end="1580" vertical-scroll-proportion="0.0" vertical-offset="418" max-vertical-offset="1258">
+            <state line="45" column="15" selection-start="1530" selection-end="1580" vertical-scroll-proportion="0.0" vertical-offset="748" max-vertical-offset="1513">
               <folding />
             </state>
           </provider>
@@ -167,7 +157,7 @@
       <file leaf-file-name="ParseUpdateEpisodeService.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/service/ParseUpdateEpisodeService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="65" column="36" selection-start="2314" selection-end="2314" vertical-scroll-proportion="0.0" vertical-offset="655" max-vertical-offset="1479">
+            <state line="65" column="36" selection-start="2314" selection-end="2314" vertical-scroll-proportion="0.0" vertical-offset="1088" max-vertical-offset="1768">
               <folding />
             </state>
           </provider>
@@ -176,7 +166,7 @@
       <file leaf-file-name="DatabaseHelper.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/dao/DatabaseHelper.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="24" column="50" selection-start="883" selection-end="883" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1632">
+            <state line="24" column="50" selection-start="883" selection-end="883" vertical-scroll-proportion="0.0" vertical-offset="391" max-vertical-offset="1853">
               <folding />
             </state>
           </provider>
@@ -185,7 +175,7 @@
       <file leaf-file-name="strings.xml" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/res/values/strings.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="12" column="0" selection-start="461" selection-end="461" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="952">
+            <state line="12" column="0" selection-start="461" selection-end="461" vertical-scroll-proportion="0.0" vertical-offset="187" max-vertical-offset="952">
               <folding />
             </state>
           </provider>
@@ -193,31 +183,20 @@
       </file>
       <file leaf-file-name="dialog_rename.xml" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/res/layout/dialog_rename.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="17" column="15" selection-start="686" selection-end="686" vertical-scroll-proportion="0.0" vertical-offset="272" max-vertical-offset="391">
+              <folding />
+            </state>
+          </provider>
           <provider editor-type-id="android-designer">
             <state />
-          </provider>
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="17" column="15" selection-start="686" selection-end="686" vertical-scroll-proportion="-11.56" vertical-offset="0" max-vertical-offset="391">
-              <folding>
-                <element signature="e#630#666#0" expanded="true" />
-              </folding>
-            </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="dimens.xml" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/res/values/dimens.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="5" column="22" selection-start="136" selection-end="141" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="374">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ListShowsActivity.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/activity/ListShowsActivity.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="19" column="13" selection-start="568" selection-end="568" vertical-scroll-proportion="0.0" vertical-offset="68" max-vertical-offset="1564">
+            <state line="5" column="22" selection-start="136" selection-end="141" vertical-scroll-proportion="0.0" vertical-offset="68" max-vertical-offset="374">
               <folding />
             </state>
           </provider>
@@ -333,8 +312,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -509,7 +486,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="values" />
+              <option name="myItemId" value="drawable-xhdpi" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -527,25 +504,63 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="layout" />
+              <option name="myItemId" value="drawable-mdpi" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DIAW" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="AppliAndroid" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="drawable-ldpi" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="DIAW" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="AppliAndroid" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="drawable-hdpi" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="project.structure.last.edited" value="Modules" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth0" value="204" />
-    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth1" value="203" />
-    <property name="project.structure.proportion" value="0.15" />
     <property name="OverrideImplement.combined" value="true" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth1" value="203" />
     <property name="options.splitter.main.proportions" value="0.3" />
-    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder1" value="1" />
-    <property name="MemberChooser.sorted" value="false" />
-    <property name="recentsLimit" value="5" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth0" value="211" />
+    <property name="recentsLimit" value="5" />
+    <property name="MemberChooser.sorted" value="false" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder1" value="1" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder0" value="0" />
     <property name="last_opened_file_path" value="C:/Program Files (x86)/Git/bin/git.exe" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth2" value="204" />
@@ -562,8 +577,8 @@
     <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
     <property name="options.splitter.details.proportions" value="0.2" />
-    <property name="GoToFile.includeJavaFiles" value="false" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder0" value="0" />
+    <property name="GoToFile.includeJavaFiles" value="false" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder3" value="3" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder1" value="1" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder2" value="2" />
@@ -584,8 +599,33 @@
       <recent name="C:\Users\Benjamin\workspace\Projet\DIAW\ProjectDIAW2\ProjectDIAW\AppliAndroid\res\values-portrait" />
       <recent name="C:\Users\Benjamin\workspace\Projet\DIAW\ProjectDIAW2\ProjectDIAW\AppliAndroid\res\values-landscape" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Benjamin\workspace\Projet\DIAW\ProjectDIAW2\ProjectDIAW\AppliAndroid\res\drawable-ldpi" />
+      <recent name="C:\Users\Benjamin\workspace\Projet\DIAW\ProjectDIAW2\ProjectDIAW\AppliAndroid\res\drawable-mdpi" />
+      <recent name="C:\Users\Benjamin\workspace\Projet\DIAW\ProjectDIAW2\ProjectDIAW\AppliAndroid\res\drawable-hdpi" />
+      <recent name="C:\Users\Benjamin\workspace\Projet\DIAW\ProjectDIAW2\ProjectDIAW\AppliAndroid\res\drawable-xhdpi" />
+      <recent name="C:\Users\Benjamin\workspace\Projet\DIAW\ProjectDIAW2\ProjectDIAW\AppliAndroid\res\drawable" />
+    </key>
   </component>
   <component name="RunManager" selected="Android Application.DIAW">
+    <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Tests">
+      <module name="" />
+      <option name="TESTING_TYPE" value="0" />
+      <option name="INSTRUMENTATION_RUNNER_CLASS" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TARGET_SELECTION_MODE" value="EMULATOR" />
+      <option name="PREFERRED_AVD" value="" />
+      <option name="USE_COMMAND_LINE" value="true" />
+      <option name="COMMAND_LINE" value="" />
+      <option name="WIPE_USER_DATA" value="false" />
+      <option name="DISABLE_BOOT_ANIMATION" value="false" />
+      <option name="NETWORK_SPEED" value="full" />
+      <option name="NETWORK_LATENCY" value="none" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <method />
+    </configuration>
     <configuration default="true" type="MavenRunConfiguration" factoryName="Maven">
       <MavenSettings>
         <option name="myGeneralSettings" />
@@ -606,24 +646,6 @@
           </MavenRunnerParameters>
         </option>
       </MavenSettings>
-      <method />
-    </configuration>
-    <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Tests">
-      <module name="" />
-      <option name="TESTING_TYPE" value="0" />
-      <option name="INSTRUMENTATION_RUNNER_CLASS" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="CLASS_NAME" value="" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="TARGET_SELECTION_MODE" value="EMULATOR" />
-      <option name="PREFERRED_AVD" value="" />
-      <option name="USE_COMMAND_LINE" value="true" />
-      <option name="COMMAND_LINE" value="" />
-      <option name="WIPE_USER_DATA" value="false" />
-      <option name="DISABLE_BOOT_ANIMATION" value="false" />
-      <option name="NETWORK_SPEED" value="full" />
-      <option name="NETWORK_LATENCY" value="none" />
-      <option name="CLEAR_LOGCAT" value="false" />
       <method />
     </configuration>
     <configuration default="true" type="GriffonRunConfigurationType" factoryName="Griffon">
@@ -850,9 +872,7 @@
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.21504803" sideWeight="0.62656075" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.30542988" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.21504803" sideWeight="0.62656075" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.38565022" sideWeight="0.6950113" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32739422" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.47216037" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.30725622" sideWeight="0.50044763" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -867,8 +887,10 @@
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.12326574" sideWeight="0.66926503" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33073497" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.38565022" sideWeight="0.6950113" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32739422" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
@@ -885,18 +907,18 @@
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3986637" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.30725622" sideWeight="0.50044763" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32962137" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32962137" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3040089" sideWeight="0.49955237" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.43095767" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32850778" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24946581" sideWeight="0.60045403" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32977587" sideWeight="0.6013363" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32977587" sideWeight="0.6013363" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20704375" sideWeight="0.66146994" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.33853006" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout-to-restore>
   </component>
   <component name="UpdateCopyrightCheckinHandler">
@@ -971,32 +993,9 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/activity/AmbiguityShow.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="36" column="16" selection-start="1035" selection-end="1035" vertical-scroll-proportion="-0.3469388" vertical-offset="629" max-vertical-offset="1343">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/activity/ListShowsActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="13" selection-start="568" selection-end="568" vertical-scroll-proportion="0.0" vertical-offset="68" max-vertical-offset="1564">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/res/values/dimens.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="22" selection-start="136" selection-end="141" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="374">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$ANDROID_SDK$/platforms/android-17/android.jar!/java/lang/Override.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="18" selection-start="306" selection-end="306" vertical-scroll-proportion="0.20238096" vertical-offset="0" max-vertical-offset="588">
-          <folding />
-        </state>
+        <state line="8" column="18" selection-start="306" selection-end="306" vertical-scroll-proportion="0.20238096" vertical-offset="0" max-vertical-offset="588" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/res/menu/context_menu.xml">
@@ -1014,22 +1013,18 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/res/layout/dialog_rename.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="17" column="15" selection-start="686" selection-end="686" vertical-scroll-proportion="0.0" vertical-offset="272" max-vertical-offset="391">
+          <folding />
+        </state>
+      </provider>
       <provider editor-type-id="android-designer">
         <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="15" selection-start="686" selection-end="686" vertical-scroll-proportion="-11.56" vertical-offset="0" max-vertical-offset="391">
-          <folding>
-            <element signature="e#630#666#0" expanded="true" />
-          </folding>
-        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/model/Show.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="71" column="29" selection-start="1858" selection-end="1868" vertical-scroll-proportion="1.0722477" vertical-offset="0" max-vertical-offset="4012">
-          <folding />
-        </state>
+        <state line="71" column="29" selection-start="1858" selection-end="1868" vertical-scroll-proportion="1.0722477" vertical-offset="0" max-vertical-offset="4012" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/dao/DatabaseHelper.java">
@@ -1041,9 +1036,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/model/Results.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="16" selection-start="221" selection-end="221" vertical-scroll-proportion="0.43287036" vertical-offset="0" max-vertical-offset="432">
-          <folding />
-        </state>
+        <state line="11" column="16" selection-start="221" selection-end="221" vertical-scroll-proportion="0.43287036" vertical-offset="0" max-vertical-offset="432" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/model/Episode.java">
@@ -1083,14 +1076,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/steto/diaw/activity/HomeActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="199" column="72" selection-start="6774" selection-end="6774" vertical-scroll-proportion="0.5147826" vertical-offset="2441" max-vertical-offset="4267">
-          <folding>
-            <element signature="e#4208#4245#0" expanded="true" />
-            <element signature="e#6525#7260#0" expanded="true" />
-            <element signature="e#7253#7254#0" expanded="true" />
-            <element signature="e#7307#7442#0" expanded="true" />
-            <element signature="e#7435#7436#0" expanded="true" />
-          </folding>
+        <state line="48" column="0" selection-start="1723" selection-end="1723" vertical-scroll-proportion="0.5026087" vertical-offset="0" max-vertical-offset="4148">
+          <folding />
         </state>
       </provider>
     </entry>

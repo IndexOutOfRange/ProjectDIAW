@@ -1,11 +1,11 @@
 package com.steto.diaw.helper;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.view.View;
 import android.widget.AbsListView;
-import com.actionbarsherlock.app.ActionBar;
 
 public class TranslucideActionBarHelper {
 	private ActionBar mActionBar;

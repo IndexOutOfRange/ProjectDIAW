@@ -15,6 +15,7 @@ public class Episode implements Serializable, Comparable<Episode> {
 	private static final long serialVersionUID = 8857517715427495822L;
 	public static final String COLUMN_SHOWNAME = "showName";
 	public static final String COLUMN_OBJECT_ID = "objectId";
+	public static final String COLUMN_UPDATED_AT = "updatedAt";
 
 	@DatabaseField(columnName = COLUMN_SHOWNAME)
 	private String mShowName;
@@ -24,7 +25,7 @@ public class Episode implements Serializable, Comparable<Episode> {
 	private int mEpisodeNumber;
 	@JsonIgnore
 	private boolean mDoubleEpisode = false;
-	@DatabaseField
+	@DatabaseField(columnName =  COLUMN_UPDATED_AT)
 	private Date mUpdatedAt;
 	@DatabaseField(id = true, useGetSet = true)
 	@JsonIgnore
@@ -133,10 +134,8 @@ public class Episode implements Serializable, Comparable<Episode> {
 		return episode.getUpdatedAt().compareTo(this.getUpdatedAt());
 	}
 
-	public static class OrderShowComparator implements Comparator {
-		public int compare(Object o1, Object o2) {
-			Episode episode1 = (Episode) o1;
-			Episode episode2 = (Episode) o2;
+	public static class OrderShowComparator implements Comparator<Episode> {
+		public int compare(Episode episode1, Episode episode2) {
 
 			int seasonComp = episode1.getSeasonNumber() - episode2.getSeasonNumber();
 

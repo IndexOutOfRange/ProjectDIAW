@@ -1,25 +1,24 @@
 package com.steto.diaw.activity;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import roboguice.activity.RoboListActivity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
-import com.actionbarsherlock.app.SherlockListActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
+
 import com.steto.diaw.adapter.ListShowAdapter;
 import com.steto.diaw.dao.DatabaseHelper;
 import com.steto.diaw.model.Show;
 import com.steto.projectdiaw.R;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
-public class ListShowsActivity extends SherlockListActivity {
-
-	private static final String TAG = "ListShowsActivity";
+public class ListShowsActivity extends RoboListActivity {
 
 	private List<Show> mAllShows = new ArrayList<Show>();
 	private ListView mList;
@@ -30,8 +29,8 @@ public class ListShowsActivity extends SherlockListActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_list_shows);
 
-		getSupportActionBar().setTitle(R.string.activity_title_list_show);
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getActionBar().setTitle(R.string.activity_title_list_show);
+		getActionBar().setDisplayHomeAsUpEnabled(true);
 
 		mList = getListView();
 	}
@@ -64,7 +63,7 @@ public class ListShowsActivity extends SherlockListActivity {
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		Intent goToDetail = new Intent(ListShowsActivity.this, ShowDetailActivity.class);
-		goToDetail.putExtra(ShowDetailActivity.SHOW_ID, (Show) mAdapter.getItem((int) position));
+		goToDetail.putExtra(ShowDetailActivity.EXTRA_SHOW, (Show) mAdapter.getItem((int) position));
 
 		startActivity(goToDetail);
 	}

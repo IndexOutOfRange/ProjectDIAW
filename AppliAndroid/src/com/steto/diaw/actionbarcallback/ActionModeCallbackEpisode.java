@@ -1,11 +1,12 @@
 package com.steto.diaw.actionbarcallback;
 
 import android.app.Activity;
-import com.actionbarsherlock.app.SherlockListActivity;
-import com.actionbarsherlock.view.ActionMode;
-import com.actionbarsherlock.view.Menu;
-import com.steto.diaw.activity.HomeActivity;
-import com.steto.diaw.adapter.ListEpisodeHomeAdapter;
+import android.view.ActionMode;
+import android.view.Menu;
+import android.view.MenuItem;
+
+import com.steto.diaw.activity.EpisodesSeenActivity;
+import com.steto.diaw.adapter.ListEpisodeAdapter;
 import com.steto.diaw.model.Episode;
 import com.steto.projectdiaw.R;
 
@@ -14,21 +15,28 @@ import com.steto.projectdiaw.R;
  */
 public class ActionModeCallbackEpisode implements ActionMode.Callback {
 
-	private final String TAG = "ActionModeCallbackEpisode";
-	private Activity activity;
-	private ActionMode actionMode;
-	private ListEpisodeHomeAdapter mAdapter;
+	private Activity mActivity;
+	private ActionMode mActionMode;
+	private ListEpisodeAdapter mAdapter;
 
-	public ActionModeCallbackEpisode(Activity activity, ListEpisodeHomeAdapter mAdapter) {
-		this.activity = activity;
-		this.mAdapter = mAdapter;
+	private ActionModeCallbackEpisode(Activity activity, ListEpisodeAdapter adapter) {
+		this.mActivity = activity;
+		this.mAdapter = adapter;
+	}
+
+	private static ActionModeCallbackEpisode instance;
+
+	public static ActionModeCallbackEpisode getInstance(Activity act, ListEpisodeAdapter adap) {
+		if(instance == null || instance.mActivity != act ||instance.mAdapter != adap ) {
+			instance = new ActionModeCallbackEpisode(act, adap);
+		} return instance;
 	}
 
 	@Override
 	public boolean onCreateActionMode(ActionMode mode, Menu menu) {
 		mAdapter.enterMultiMode();
 		// save global action mode
-		actionMode = mode;
+		mActionMode = mode;
 		return true;
 	}
 
@@ -38,7 +46,7 @@ public class ActionModeCallbackEpisode implements ActionMode.Callback {
 		menu.clear();
 		final int checked = mAdapter.getCheckedItemCount();
 		// update title with number of checked items
-		mode.setTitle(checked + " " + activity.getResources().getQuantityString(R.plurals.nb_items_selected, checked));
+		mode.setTitle(checked + " " + mActivity.getResources().getQuantityString(R.plurals.nb_items_selected, checked));
 		switch (checked) {
 			case 0:
 				// if nothing checked - exit action mode
@@ -46,10 +54,10 @@ public class ActionModeCallbackEpisode implements ActionMode.Callback {
 				return true;
 			case 1:
 				// all items - rename + delete
-				((SherlockListActivity) activity).getSupportMenuInflater().inflate(R.menu.context_menu, menu);
+				mActivity.getMenuInflater().inflate(R.menu.context_menu, menu);
 				return true;
 			default:
-				((SherlockListActivity) activity).getSupportMenuInflater().inflate(R.menu.context_menu, menu);
+				mActivity.getMenuInflater().inflate(R.menu.context_menu, menu);
 				// remove rename option - because we have more than one selected
 				menu.removeItem(R.id.context_menu_rename);
 				return true;
@@ -57,15 +65,15 @@ public class ActionModeCallbackEpisode implements ActionMode.Callback {
 	}
 
 	@Override
-	public boolean onActionItemClicked(ActionMode mode, com.actionbarsherlock.view.MenuItem item) {
+	public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.context_menu_rename:
-				((HomeActivity) activity).renameEpisode((Episode) mAdapter.getFirstCheckedItem());
+				((EpisodesSeenActivity) mActivity).renameEpisode((Episode) mAdapter.getFirstCheckedItem());
 				mode.finish();
 				return true;
 
 			case R.id.context_menu_delete:
-				((HomeActivity) activity).deleteEpisodes();
+				((EpisodesSeenActivity) mActivity).deleteEpisodes();
 				mode.finish();
 				return true;
 			default:
@@ -76,10 +84,10 @@ public class ActionModeCallbackEpisode implements ActionMode.Callback {
 	@Override
 	public void onDestroyActionMode(ActionMode mode) {
 		mAdapter.exitMultiMode();
-		actionMode = null;
+		mActionMode = null;
 	}
 
 	public ActionMode getActionMode() {
-		return actionMode;
+		return mActionMode;
 	}
 }

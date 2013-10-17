@@ -24,13 +24,14 @@ import java.util.Date;
 public class Show implements Serializable, Comparable<Show> {
 
 	private static final long serialVersionUID = 2402273750582116603L;
+	public static final String COLUMN_SHOWNAME = "showName";
 
 	@DatabaseField(id = true, useGetSet = true)
 	private String mCustomId;
 
 	@JsonProperty("title")
 	@Element(name = "SeriesName")
-	@DatabaseField
+	@DatabaseField(columnName = COLUMN_SHOWNAME)
 	private String mShowName;
 
 	@DatabaseField

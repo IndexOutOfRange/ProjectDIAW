@@ -1,23 +1,23 @@
 package com.steto.diaw.service;
 
-import android.app.IntentService;
-import android.content.Intent;
-import android.os.Bundle;
-import android.os.ResultReceiver;
-import com.steto.diaw.dao.DatabaseHelper;
-import com.steto.diaw.dao.EpisodeDao;
-import com.steto.diaw.model.Episode;
-import com.steto.diaw.parser.ShowParser;
-import com.steto.diaw.web.ParseConnector;
-import com.steto.diaw.web.ShowConnector;
-import org.apache.http.HttpStatus;
-
-import java.io.InputStream;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import org.apache.http.HttpStatus;
+
+import android.app.IntentService;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.ResultReceiver;
+
+import com.steto.diaw.dao.DatabaseHelper;
+import com.steto.diaw.dao.EpisodeDao;
+import com.steto.diaw.model.Episode;
+import com.steto.diaw.web.ParseConnector;
+import com.steto.diaw.web.ShowConnector;
 
 /**
  * Created by Benjamin on 09/06/13.
@@ -50,7 +50,6 @@ public class ParseUpdateEpisodeService extends IntentService {
 		String key = intent.getExtras().getString(INTENT_KEY);
 		String value = intent.getExtras().getString(INTENT_VALUE);
 		int responseCode = RESULT_CODE_OK;
-		List<Episode> result = null;
 
 		String body = createUpdate(key, value);
 		ShowConnector myWeb = new ShowConnector(objectId);

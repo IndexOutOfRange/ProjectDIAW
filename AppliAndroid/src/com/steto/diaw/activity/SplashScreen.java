@@ -1,19 +1,18 @@
 package com.steto.diaw.activity;
 
+import roboguice.activity.RoboActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.ResultReceiver;
 import android.widget.Toast;
-import com.actionbarsherlock.app.SherlockActivity;
+
 import com.steto.diaw.service.ParseGetEpisodesService;
 import com.steto.diaw.tools.Tools;
 import com.steto.projectdiaw.R;
 
-public class SplashScreen extends SherlockActivity {
-
-	private static final String TAG = "SplashScreen";
+public class SplashScreen extends RoboActivity {
 
 	private String mLogin = "";
 	private ResultReceiver mShowResultReceiver;
@@ -48,8 +47,7 @@ public class SplashScreen extends SherlockActivity {
 				protected void onReceiveResult(int resultCode, Bundle resultData) {
 					super.onReceiveResult(resultCode, resultData);
 					if (resultCode == ParseGetEpisodesService.RESULT_CODE_OK) {
-						Intent in = new Intent(SplashScreen.this, HomeActivity.class);
-						in.putExtra(HomeActivity.INTENT_LIST_EPISODE, resultData.getSerializable(ParseGetEpisodesService.RESULT_DATA));
+						Intent in = new Intent(SplashScreen.this, EpisodesSeenActivity.class);
 						startActivity(in);
 						finish();
 					} else {

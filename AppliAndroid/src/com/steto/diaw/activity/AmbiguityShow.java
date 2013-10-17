@@ -1,22 +1,23 @@
 package com.steto.diaw.activity;
 
+import java.util.List;
+
+import roboguice.activity.RoboListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
-import com.actionbarsherlock.app.SherlockListActivity;
-import com.actionbarsherlock.view.Window;
+import android.view.Window;
+
 import com.steto.diaw.adapter.ListShowAdapter;
 import com.steto.diaw.model.Show;
 import com.steto.diaw.service.IMDBService;
 import com.steto.projectdiaw.R;
 
-import java.util.List;
-
 /**
  * Created by Stephane on 09/06/13.
  */
-public class AmbiguityShow extends SherlockListActivity {
+public class AmbiguityShow extends RoboListActivity {
 
 	public static String INPUT_SHOW = "INPUT_SHOW";
 
@@ -40,7 +41,7 @@ public class AmbiguityShow extends SherlockListActivity {
 	}
 
 	private void getIMDBSuggestion() {
-		setSupportProgressBarIndeterminateVisibility(true);
+		setProgressBarIndeterminateVisibility(true);
 		Intent in = new Intent(this, IMDBService.class);
 		in.putExtra(IMDBService.SERVICE_INPUT_TITLE, mShow.getShowName());
 		in.putExtra(IMDBService.SERVICE_INPUT_RECEIVER, mIMDBReceiver);
@@ -51,6 +52,7 @@ public class AmbiguityShow extends SherlockListActivity {
 		if (mIMDBReceiver == null) {
 			mIMDBReceiver = new ResultReceiver(new Handler()) {
 
+				@SuppressWarnings("unchecked")
 				@Override
 				protected void onReceiveResult(int resultCode, Bundle resultData) {
 					super.onReceiveResult(resultCode, resultData);
@@ -58,7 +60,7 @@ public class AmbiguityShow extends SherlockListActivity {
 
 						setAllSuggestedShow((List<Show>) resultData.get(IMDBService.SERVICE_OUTPUT_DATA));
 
-						setSupportProgressBarIndeterminateVisibility(false);
+						setProgressBarIndeterminateVisibility(false);
 					}
 				}
 			};

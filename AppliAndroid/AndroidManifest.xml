@@ -1,55 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.steto.projectdiaw"
-          android:versionCode="1"
-          android:versionName="1.0">
+    package="com.steto.projectdiaw"
+    android:versionCode="1"
+    android:versionName="1.0" >
 
-	<uses-sdk
-			android:minSdkVersion="7"
-			android:targetSdkVersion="17"/>
+    <uses-sdk
+        android:minSdkVersion="14"
+        android:targetSdkVersion="18" />
 
-	<uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
-	<application
-			android:allowBackup="true"
-			android:icon="@drawable/ic_launcher"
-			android:label="@string/app_name"
-			android:theme="@style/AppTheme">
-		<activity
-				android:name="com.steto.diaw.activity.SplashScreen"
-				android:label="@string/app_name"
-				android:launchMode="singleTop">
-			<intent-filter>
-				<action android:name="android.intent.action.MAIN"/>
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="com.steto.diaw.activity.SplashScreen"
+            android:label="@string/app_name"
+            android:launchMode="singleTop" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-				<category android:name="android.intent.category.LAUNCHER"/>
-			</intent-filter>
-		</activity>
-		<activity
-				android:name="com.steto.diaw.activity.LoginActivity"
-				android:label="@string/activity_title_login"
-				android:launchMode="singleTop">
-		</activity>
-		<activity
-				android:name="com.steto.diaw.activity.HomeActivity"
-				android:label="@string/activity_title_home"
-				android:launchMode="singleTop"/>
-		<activity
-				android:name="com.steto.diaw.activity.ListShowsActivity"
-				android:label="@string/activity_title_list_show"
-				android:launchMode="singleTop"/>
-		<activity
-				android:name="com.steto.diaw.activity.ShowDetailActivity"
-				android:theme="@style/AppTheme.TranslucentActionBar"/>
-		<activity
-				android:name="com.steto.diaw.activity.AmbiguityShow" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.steto.diaw.activity.LoginActivity"
+            android:label="@string/activity_title_login"
+            android:launchMode="singleTop" />
+        <activity
+            android:name="com.steto.diaw.activity.EpisodesSeenActivity"
+            android:label="@string/activity_title_home"
+            android:launchMode="singleTop" />
+        <activity
+            android:name="com.steto.diaw.activity.ListShowsActivity"
+            android:label="@string/activity_title_list_show"
+            android:launchMode="singleTop" />
+        <activity
+            android:name="com.steto.diaw.activity.ShowDetailActivity"
+            android:theme="@style/AppTheme.TranslucentActionBar" />
+        <activity android:name="com.steto.diaw.activity.AmbiguityShow" />
 
-		<service android:name="com.steto.diaw.service.ParseGetEpisodesService"/>
-		<service android:name="com.steto.diaw.service.ParseUpdateEpisodeService"/>
-		<service android:name="com.steto.diaw.service.ParseDeleteEpisodeService"/>
-		<service android:name="com.steto.diaw.service.TVDBService"/>
-		<service android:name="com.steto.diaw.service.BannerService"/>
-		<service android:name="com.steto.diaw.service.IMDBService"/>
-	</application>
+        <service android:name="com.steto.diaw.service.ParseGetEpisodesService" />
+        <service android:name="com.steto.diaw.service.ParseUpdateEpisodeService" />
+        <service android:name="com.steto.diaw.service.ParseDeleteEpisodeService" />
+        <service android:name="com.steto.diaw.service.TVDBService" />
+        <service android:name="com.steto.diaw.service.BannerService" />
+        <service android:name="com.steto.diaw.service.IMDBService" />
+    </application>
 
 </manifest>

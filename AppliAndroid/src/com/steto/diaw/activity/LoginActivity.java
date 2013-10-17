@@ -1,5 +1,6 @@
 package com.steto.diaw.activity;
 
+import roboguice.activity.RoboActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,12 +11,12 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
-import com.actionbarsherlock.app.SherlockActivity;
+
 import com.steto.diaw.service.ParseGetEpisodesService;
 import com.steto.diaw.tools.Tools;
 import com.steto.projectdiaw.R;
 
-public class LoginActivity extends SherlockActivity {
+public class LoginActivity extends RoboActivity {
 
 	private Button mValidateButton;
 	private EditText mMailText;
@@ -38,7 +39,7 @@ public class LoginActivity extends SherlockActivity {
 
 				if (!"".equals(mMailText.getText().toString())) {
 					findViewById(R.id.login_form_layout).setVisibility(View.GONE);
-					getSupportActionBar().setTitle(R.string.loading);
+					getActionBar().setTitle(R.string.loading);
 
 					initShowResultReceiver();
 					String mail = mMailText.getText().toString();
@@ -77,8 +78,8 @@ public class LoginActivity extends SherlockActivity {
 				protected void onReceiveResult(int resultCode, Bundle resultData) {
 					super.onReceiveResult(resultCode, resultData);
 					if (resultCode == ParseGetEpisodesService.RESULT_CODE_OK) {
-						Intent in = new Intent(LoginActivity.this, HomeActivity.class);
-						in.putExtra(HomeActivity.INTENT_LIST_EPISODE, resultData.getSerializable(ParseGetEpisodesService.RESULT_DATA));
+						Intent in = new Intent(LoginActivity.this, EpisodesSeenActivity.class);
+						in.putExtra(EpisodesSeenActivity.INTENT_LIST_EPISODE, resultData.getSerializable(ParseGetEpisodesService.RESULT_DATA));
 						startActivity(in);
 						finish();
 

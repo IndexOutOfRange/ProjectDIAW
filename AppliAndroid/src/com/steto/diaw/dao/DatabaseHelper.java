@@ -37,7 +37,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
 	public static DatabaseHelper getInstance(Context context) {
 		if (instance == null) {
-			instance = new DatabaseHelper(context);
+			instance = new DatabaseHelper(context.getApplicationContext());
 		}
 		return instance;
 	}

@@ -1,6 +1,7 @@
 package com.steto.diaw.view;
 
 import android.content.Context;
+
 import com.steto.diaw.model.Episode;
 
 public class ListItemViewEpisode extends AbstractListItemView<Episode> {

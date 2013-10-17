@@ -38,6 +38,7 @@ public class ParseDeleteEpisodeService extends IntentService {
 		super(name);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void onHandleIntent(Intent intent) {
 		ResultReceiver sender = (ResultReceiver) intent.getExtras().get(INTENT_RESULT_RECEIVER);

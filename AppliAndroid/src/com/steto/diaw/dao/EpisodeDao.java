@@ -1,18 +1,19 @@
 package com.steto.diaw.dao;
 
-import android.util.Log;
-import com.j256.ormlite.dao.BaseDaoImpl;
-import com.j256.ormlite.support.ConnectionSource;
-import com.steto.diaw.model.Episode;
-import com.steto.diaw.model.Show;
-
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 
+import android.util.Log;
+
+import com.j256.ormlite.dao.BaseDaoImpl;
+import com.j256.ormlite.stmt.QueryBuilder;
+import com.j256.ormlite.support.ConnectionSource;
+import com.steto.diaw.model.Episode;
+import com.steto.diaw.model.Show;
+
 public class EpisodeDao extends BaseDaoImpl<Episode, Integer> {
 
-	private static final String TAG = "EpisodeDao";
 	private ConnectionSource mSource;
 
 	public EpisodeDao(ConnectionSource connectionSource) throws SQLException {
@@ -56,6 +57,14 @@ public class EpisodeDao extends BaseDaoImpl<Episode, Integer> {
 		return episodeList;
 	}
 
+	public List<Episode> queryWithLimit(int number) throws SQLException {
+		QueryBuilder<Episode, Integer> queryBuilder = queryBuilder();
+		queryBuilder.orderBy(Episode.COLUMN_UPDATED_AT, false);
+		queryBuilder.limit(Long.valueOf(number));
+		queryBuilder.prepare();
+		return queryBuilder.query();
+	}
+
 
 	/**
 	 * @param allEp la liste des episodes à ajouter
@@ -80,7 +89,7 @@ public class EpisodeDao extends BaseDaoImpl<Episode, Integer> {
 		ShowDao myDAO = null;
 		Show associated = new Show(ep.getShowName());
 		try {
-			myDAO = new ShowDao(mSource);
+			myDAO = new ShowDao(mSource); // FIXME
 			List<Show> allShow = myDAO.queryForAll();
 			for (Show show : allShow) {
 				if (show.equals(associated)) {

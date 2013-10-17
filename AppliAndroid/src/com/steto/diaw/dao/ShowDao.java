@@ -1,19 +1,19 @@
 package com.steto.diaw.dao;
 
-import com.j256.ormlite.dao.BaseDaoImpl;
-import com.j256.ormlite.support.ConnectionSource;
-import com.steto.diaw.model.Episode;
-import com.steto.diaw.model.Season;
-import com.steto.diaw.model.Show;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.j256.ormlite.dao.BaseDaoImpl;
+import com.j256.ormlite.stmt.QueryBuilder;
+import com.j256.ormlite.support.ConnectionSource;
+import com.steto.diaw.model.Episode;
+import com.steto.diaw.model.Season;
+import com.steto.diaw.model.Show;
+
 public class ShowDao extends BaseDaoImpl<Show, Integer> {
 
-	private static final String TAG = "ShowDao";
 	private ConnectionSource mConnection;
 
 	public ShowDao(ConnectionSource connectionSource) throws SQLException {
@@ -26,6 +26,13 @@ public class ShowDao extends BaseDaoImpl<Show, Integer> {
 		List<Show> showList = super.queryForAll();
 		Collections.sort(showList);
 		return showList;
+	}
+
+	public Show queryFromName(String name) throws  SQLException {
+		QueryBuilder<Show, Integer> queryBuilder = queryBuilder();
+		queryBuilder.where().eq(Show.COLUMN_SHOWNAME, name);
+		queryBuilder.prepare();
+		return queryBuilder.queryForFirst();
 	}
 
 	public List<Episode> getEpisodeFromShow(Show show) throws SQLException {

@@ -1,24 +1,27 @@
 package com.steto.diaw.activity;
 
+import java.sql.SQLException;
+import java.util.List;
+
+import roboguice.activity.RoboExpandableListActivity;
+import roboguice.util.Ln;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
-import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.actionbarsherlock.app.SherlockExpandableListActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
-import com.actionbarsherlock.view.Window;
+
 import com.steto.diaw.adapter.SeasonWithEpisodesExpandableAdapter;
 import com.steto.diaw.dao.DatabaseHelper;
 import com.steto.diaw.dao.ShowDao;
 import com.steto.diaw.helper.TranslucideActionBarHelper;
-import com.steto.diaw.model.Episode;
 import com.steto.diaw.model.Season;
 import com.steto.diaw.model.Show;
 import com.steto.diaw.service.BannerService;
@@ -26,13 +29,9 @@ import com.steto.diaw.service.ParseGetEpisodesService;
 import com.steto.diaw.service.TVDBService;
 import com.steto.projectdiaw.R;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
-public class ShowDetailActivity extends SherlockExpandableListActivity {
-	public static final String SHOW_ID = "SHOW_ID";
-	private static final String TAG = "ShowDetailActivity";
+public class ShowDetailActivity extends RoboExpandableListActivity {
+	public static final String EXTRA_SHOW = "EXTRA_SHOW";
+	public static final String EXTRA_SHOW_NAME = "EXTRA_SHOW_NAME";
 
 	private Show mShow;
 	private List<Season> mListSeasons;
@@ -46,7 +45,7 @@ public class ShowDetailActivity extends SherlockExpandableListActivity {
 		super.onCreate(savedInstanceState);
 
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-		mActionBarTranslucideHelper = new TranslucideActionBarHelper(getSupportActionBar());
+		mActionBarTranslucideHelper = new TranslucideActionBarHelper(getActionBar());
 		setContentView(R.layout.activity_show_detail);
 
 		initShowResultReceiver();
@@ -56,7 +55,7 @@ public class ShowDetailActivity extends SherlockExpandableListActivity {
 			finish();
 		}
 		readDatabase();
-		mActionBarTranslucideHelper.initActionBar(this, mShow.getShowName(), "", true, com.actionbarsherlock.R.drawable.abs__ab_solid_dark_holo);
+		mActionBarTranslucideHelper.initActionBar(this, mShow.getShowName(), "", true, R.drawable.ab_solid_dark_holo);
 
 		processDataInLayout();
 		mActionBarTranslucideHelper.setOnScrollChangedListener(getExpandableListView());
@@ -64,7 +63,7 @@ public class ShowDetailActivity extends SherlockExpandableListActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		/*MenuInflater inflater = getSupportMenuInflater();
+		/*MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.episode_list, menu);*/
 
 		return super.onCreateOptionsMenu(menu);
@@ -88,11 +87,12 @@ public class ShowDetailActivity extends SherlockExpandableListActivity {
 
 			mShowResultReceiver = new ResultReceiver(new Handler()) {
 
+				@SuppressWarnings("unchecked")
 				@Override
 				protected void onReceiveResult(int resultCode, Bundle resultData) {
 					super.onReceiveResult(resultCode, resultData);
-					Log.i(TAG, "onResult");
-					setSupportProgressBarIndeterminateVisibility(false);
+					Ln.i("onResult");
+					setProgressBarIndeterminateVisibility(false);
 					if (resultCode == ParseGetEpisodesService.RESULT_CODE_OK) {
 						List<Show> response = (List<Show>) resultData.get(TVDBService.OUTPUT_DATA);
 						if (response != null && !response.isEmpty()) {
@@ -126,8 +126,8 @@ public class ShowDetailActivity extends SherlockExpandableListActivity {
 				@Override
 				protected void onReceiveResult(int resultCode, Bundle resultData) {
 					super.onReceiveResult(resultCode, resultData);
-					Log.i(TAG, "onResult");
-					setSupportProgressBarIndeterminateVisibility(false);
+					Ln.i("onResult");
+					setProgressBarIndeterminateVisibility(false);
 					if (resultCode == ParseGetEpisodesService.RESULT_CODE_OK) {
 						Bitmap banner = (Bitmap) resultData.getParcelable(BannerService.OUTPUT_BITMAP);
 						mShow.setBanner(banner);
@@ -142,7 +142,17 @@ public class ShowDetailActivity extends SherlockExpandableListActivity {
 
 	private int processExtras() {
 		if (getIntent().getExtras() != null) {
-			mShow = (Show) (getIntent().getExtras().get(SHOW_ID));
+			mShow = (Show) (getIntent().getExtras().get(EXTRA_SHOW));
+			if(mShow == null) {
+				String showName = getIntent().getExtras().getString(EXTRA_SHOW_NAME);
+				try {
+					mShow = DatabaseHelper.getInstance(this).getShowDao().queryFromName(showName);
+					return 0;
+				} catch (SQLException e) {
+					Ln.e(e, "SQLException récupération du show à partir des extras");
+					return -1;
+				}
+			}
 			return 0;
 		} else {
 			return -1;
@@ -150,16 +160,15 @@ public class ShowDetailActivity extends SherlockExpandableListActivity {
 	}
 
 	private void readDatabase() {
-		List<Episode> episodes = new ArrayList<Episode>();
 		try {
 			ShowDao myBDD = DatabaseHelper.getInstance(this).getShowDao();
 			mListSeasons = myBDD.getSeasonsFromShow(mShow);
 		} catch (SQLException e) {
-			Toast.makeText(this, "erreur lors de la recupération des episodes de la serie", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "Erreur lors de la recupération des episodes de la serie", Toast.LENGTH_SHORT).show();
 			e.printStackTrace();
 		}
 
-		setSupportProgressBarIndeterminateVisibility(true);
+		setProgressBarIndeterminateVisibility(true);
 		launchSerieService();
 		launchBannerService();
 	}

@@ -22,6 +22,7 @@ import org.apache.http.HttpStatus;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -62,7 +63,7 @@ public class ParseGetEpisodesService extends IntentService {
 		String login = intent.getExtras().getString(INTENT_LOGIN);
 		boolean forceUpdate = intent.getExtras().getBoolean(INTENT_FORCE_UPDATE);
 		int responseCode = RESULT_CODE_ERROR;
-		List<Episode> allEp = null;
+		List<Episode> allEp = new ArrayList<Episode>();
 
 		if (forceUpdate || isDataExpired()) {
 

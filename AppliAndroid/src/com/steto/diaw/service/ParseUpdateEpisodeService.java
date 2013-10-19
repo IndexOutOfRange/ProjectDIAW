@@ -8,11 +8,12 @@ import java.util.List;
 
 import org.apache.http.HttpStatus;
 
-import android.app.IntentService;
+import roboguice.service.RoboIntentService;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.ResultReceiver;
 
+import com.google.inject.Inject;
 import com.steto.diaw.dao.DatabaseHelper;
 import com.steto.diaw.dao.EpisodeDao;
 import com.steto.diaw.model.Episode;
@@ -22,7 +23,7 @@ import com.steto.diaw.web.ShowConnector;
 /**
  * Created by Benjamin on 09/06/13.
  */
-public class ParseUpdateEpisodeService extends IntentService {
+public class ParseUpdateEpisodeService extends RoboIntentService {
 
 	public static final String INTENT_RESULT_RECEIVER = "INTENT_RESULT_RECEIVER";
 	public static final String INTENT_OBJECT_TO_RENAME = "INTENT_OBJECT_TO_RENAME";
@@ -31,6 +32,9 @@ public class ParseUpdateEpisodeService extends IntentService {
 	public static final String RESULT_DATA = "RESULT_DATA";
 	public static final int RESULT_CODE_OK = 0;
 
+	@Inject
+	private DatabaseHelper mDatabaseHelper;
+	
 	public ParseUpdateEpisodeService() {
 		super("ParseUpdateEpisodeService");
 	}
@@ -62,7 +66,7 @@ public class ParseUpdateEpisodeService extends IntentService {
 				//pas de parsing des données JSON car le JSON donne que la updateDate
 
 				try {
-					EpisodeDao epDao = DatabaseHelper.getInstance(this).getEpisodeDao();
+					EpisodeDao epDao = mDatabaseHelper.getDao(Episode.class);
 					Episode episodeUpdated = epDao.queryForEq(Episode.COLUMN_OBJECT_ID, objectId).get(0);
 					episodeUpdated.setUpdatedAt(new Date());
 					if(Episode.COLUMN_SHOWNAME.equals(key)) {
@@ -83,7 +87,8 @@ public class ParseUpdateEpisodeService extends IntentService {
 
 		List<Episode> allEp = new ArrayList<Episode>();
 		try {
-			allEp = DatabaseHelper.getInstance(this).getEpisodeDao().queryForAll();
+			EpisodeDao epDao = mDatabaseHelper.getDao(Episode.class);
+			allEp = epDao.queryForAll();
 		} catch (SQLException e) {
 			responseCode = DatabaseHelper.ERROR_BDD;
 			e.printStackTrace();

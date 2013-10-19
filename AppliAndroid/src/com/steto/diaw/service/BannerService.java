@@ -1,29 +1,35 @@
 package com.steto.diaw.service;
 
-import android.app.IntentService;
+import java.sql.SQLException;
+
+import org.apache.http.HttpStatus;
+
+import roboguice.service.RoboIntentService;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.ResultReceiver;
+
+import com.google.inject.Inject;
 import com.steto.diaw.dao.DatabaseHelper;
 import com.steto.diaw.model.Show;
 import com.steto.diaw.web.BannerConnector;
 import com.steto.diaw.web.WebConnector;
-import org.apache.http.HttpStatus;
-
-import java.sql.SQLException;
 
 /**
  * Created by Stephane on 02/06/13.
  */
-public class BannerService extends IntentService {
+public class BannerService extends RoboIntentService {
 
 	private static final String NAME = "BannerService";
 	public static final String INPUT_SERIE = "INPUT_SERIE";
 	public static final String INPUT_RECEIVER = "INPUT_RECEIVER";
 	public static final String OUTPUT_BITMAP = "OUTPUT_BITMAP";
 	public static final int RESULT_CODE_OK = 0;
+	
+	@Inject
+	private DatabaseHelper mDatabaseHelper;
 
 	public BannerService() {
 		super(NAME);
@@ -42,7 +48,7 @@ public class BannerService extends IntentService {
 				bmp = BitmapFactory.decodeStream(myWeb.getResponseBody());
 				show.setBanner(bmp);
 				try {
-					DatabaseHelper.getInstance(this).getShowDao().update(show);
+					mDatabaseHelper.getDao(Show.class).update(show);
 				} catch (SQLException e) {
 					resultCode = DatabaseHelper.ERROR_BDD;
 					e.printStackTrace();

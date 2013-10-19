@@ -7,20 +7,18 @@ import java.util.List;
 import android.util.Log;
 
 import com.j256.ormlite.dao.BaseDaoImpl;
+import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.support.ConnectionSource;
 import com.steto.diaw.model.Episode;
 import com.steto.diaw.model.Show;
 
 public class EpisodeDao extends BaseDaoImpl<Episode, Integer> {
-
-	private ConnectionSource mSource;
-
-	public EpisodeDao(ConnectionSource connectionSource) throws SQLException {
-		super(connectionSource, Episode.class);
-		mSource = connectionSource;
+	
+	public EpisodeDao(ConnectionSource connection) throws SQLException {
+		super(connection, Episode.class);
 	}
-
+	
 	/*
 		@Override
 		public CreateOrUpdateStatus createOrUpdate(Episode data) throws SQLException {
@@ -89,7 +87,7 @@ public class EpisodeDao extends BaseDaoImpl<Episode, Integer> {
 		ShowDao myDAO = null;
 		Show associated = new Show(ep.getShowName());
 		try {
-			myDAO = new ShowDao(mSource); // FIXME
+			myDAO = DaoManager.createDao(getConnectionSource(), Show.class);
 			List<Show> allShow = myDAO.queryForAll();
 			for (Show show : allShow) {
 				if (show.equals(associated)) {

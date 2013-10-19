@@ -6,7 +6,10 @@ import java.util.Collections;
 import java.util.List;
 
 import com.j256.ormlite.dao.BaseDaoImpl;
+import com.j256.ormlite.dao.DaoManager;
+import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
+import com.j256.ormlite.stmt.SelectArg;
 import com.j256.ormlite.support.ConnectionSource;
 import com.steto.diaw.model.Episode;
 import com.steto.diaw.model.Season;
@@ -14,11 +17,10 @@ import com.steto.diaw.model.Show;
 
 public class ShowDao extends BaseDaoImpl<Show, Integer> {
 
-	private ConnectionSource mConnection;
+	
 
 	public ShowDao(ConnectionSource connectionSource) throws SQLException {
 		super(connectionSource, Show.class);
-		mConnection = connectionSource;
 	}
 
 	@Override
@@ -28,15 +30,17 @@ public class ShowDao extends BaseDaoImpl<Show, Integer> {
 		return showList;
 	}
 
-	public Show queryFromName(String name) throws  SQLException {
+	public Show queryFromName(String name) throws SQLException {
+		SelectArg nameArg = new SelectArg();
 		QueryBuilder<Show, Integer> queryBuilder = queryBuilder();
-		queryBuilder.where().eq(Show.COLUMN_SHOWNAME, name);
-		queryBuilder.prepare();
-		return queryBuilder.queryForFirst();
+		queryBuilder.where().eq(Show.COLUMN_SHOWNAME, nameArg);
+		PreparedQuery<Show> preparedQuery = queryBuilder.prepare();
+		nameArg.setValue(name);
+		return queryForFirst(preparedQuery);
 	}
 
 	public List<Episode> getEpisodeFromShow(Show show) throws SQLException {
-		EpisodeDao episodesDao = new EpisodeDao(mConnection);
+		EpisodeDao episodesDao = DaoManager.createDao(getConnectionSource(), Episode.class);
 		return episodesDao.queryForEq(Episode.COLUMN_SHOWNAME, show.getShowName());
 
 	}

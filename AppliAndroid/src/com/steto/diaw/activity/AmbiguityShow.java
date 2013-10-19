@@ -3,6 +3,7 @@ package com.steto.diaw.activity;
 import java.util.List;
 
 import roboguice.activity.RoboListActivity;
+import roboguice.inject.ContentView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,9 +15,7 @@ import com.steto.diaw.model.Show;
 import com.steto.diaw.service.IMDBService;
 import com.steto.projectdiaw.R;
 
-/**
- * Created by Stephane on 09/06/13.
- */
+@ContentView(R.layout.activity_ambiguity_show)
 public class AmbiguityShow extends RoboListActivity {
 
 	public static String INPUT_SHOW = "INPUT_SHOW";
@@ -28,10 +27,9 @@ public class AmbiguityShow extends RoboListActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		super.onCreate(savedInstanceState);
 
-		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-		setContentView(R.layout.activity_ambiguity_show);
 
 		initIMDBReceiver();
 		mShow = (Show) getIntent().getExtras().get(INPUT_SHOW);

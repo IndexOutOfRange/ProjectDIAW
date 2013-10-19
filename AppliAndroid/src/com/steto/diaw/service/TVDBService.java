@@ -1,9 +1,18 @@
 package com.steto.diaw.service;
 
-import android.app.IntentService;
+import java.io.Serializable;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.HttpStatus;
+
+import roboguice.service.RoboIntentService;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.ResultReceiver;
+
+import com.google.inject.Inject;
 import com.steto.diaw.dao.DatabaseHelper;
 import com.steto.diaw.dao.ShowDao;
 import com.steto.diaw.model.Show;
@@ -13,17 +22,11 @@ import com.steto.diaw.web.QueryString;
 import com.steto.diaw.web.SeriesIDConnector;
 import com.steto.diaw.web.SeriesNameConnector;
 import com.steto.diaw.web.WebConnector;
-import org.apache.http.HttpStatus;
-
-import java.io.Serializable;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Stephane on 02/06/13.
  */
-public class TVDBService extends IntentService {
+public class TVDBService extends RoboIntentService {
 
 	private static final String NAME = "TVDBService";
 	public static final String INPUT_SERIE = "INPUT_SERIE";
@@ -33,6 +36,9 @@ public class TVDBService extends IntentService {
 	public static final int RESULT_CODE_OK = 0;
 	public static final int RESULT_CODE_AMBIGUITY = -20; //code d'erreur < a -20 sont des erreurs du service, < -10 des erreurs BDD, <0 des erreurs Parser, > 0 les codes retours HTTP
 
+	@Inject
+	private DatabaseHelper mDatabaseHelper;
+	
 	public TVDBService() {
 		super(NAME);
 	}
@@ -85,7 +91,7 @@ public class TVDBService extends IntentService {
 				ret.get(0).setShowName(input.getShowName());
 				try {
 					ShowDao myDAO = null;
-					myDAO = DatabaseHelper.getInstance(this).getShowDao();
+					myDAO = mDatabaseHelper.getDao(Show.class);
 					myDAO.createOrUpdate(ret != null ? ret.get(0) : null);
 				} catch (SQLException e) {
 					e.printStackTrace();
@@ -109,7 +115,7 @@ public class TVDBService extends IntentService {
 					ret.get(0).setShowName(input.getShowName());
 					try {
 						ShowDao myDAO = null;
-						myDAO = DatabaseHelper.getInstance(this).getShowDao();
+						myDAO = mDatabaseHelper.getDao(Show.class);
 						myDAO.createOrUpdate(ret != null ? ret.get(0) : null);
 					} catch (SQLException e) {
 						e.printStackTrace();

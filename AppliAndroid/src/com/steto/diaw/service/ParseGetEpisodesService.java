@@ -1,12 +1,26 @@
 package com.steto.diaw.service;
 
+import java.io.InputStream;
+import java.io.Serializable;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import org.apache.http.HttpStatus;
+
+import roboguice.service.RoboIntentService;
+import roboguice.util.Ln;
 import android.app.Activity;
-import android.app.IntentService;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.ResultReceiver;
 import android.util.Log;
+
+import com.google.inject.Inject;
+import com.j256.ormlite.dao.DaoManager;
 import com.steto.diaw.dao.DatabaseHelper;
 import com.steto.diaw.dao.EpisodeDao;
 import com.steto.diaw.dao.ShowDao;
@@ -17,17 +31,8 @@ import com.steto.diaw.tools.Tools;
 import com.steto.diaw.web.ParseConnector;
 import com.steto.diaw.web.QueryString;
 import com.steto.diaw.web.ShowConnector;
-import org.apache.http.HttpStatus;
 
-import java.io.InputStream;
-import java.io.Serializable;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-public class ParseGetEpisodesService extends IntentService {
+public class ParseGetEpisodesService extends RoboIntentService {
 
 	public static final String INTENT_RESULT_RECEIVER = "INTENT_RESULT_RECEIVER";
 	public static final String INTENT_FORCE_UPDATE = "INTENT_FORCE_UPDATE";
@@ -36,7 +41,10 @@ public class ParseGetEpisodesService extends IntentService {
 	public static final int RESULT_CODE_ERROR = -1;
 	public static final String RESULT_DATA = "RESULT_DATA";
 	private static String WS_QUERY_WHERE = "where";
-
+	
+	@Inject
+	private DatabaseHelper mDatabaseHelper;
+	
 	public ParseGetEpisodesService() {
 		super("ParseGetEpisodesService");
 	}
@@ -47,7 +55,7 @@ public class ParseGetEpisodesService extends IntentService {
 
 	public String createQueryString(String mail) {
 		QueryString myQuery = new QueryString();
-		myQuery.add("limit", "500");
+		myQuery.add("limit", "1000");
 		myQuery.add(WS_QUERY_WHERE, createWhereClause(mail));
 		return myQuery.toString();
 	}
@@ -77,13 +85,13 @@ public class ParseGetEpisodesService extends IntentService {
 				InputStream response = myWeb.getResponseBody();
 				ShowParser myParser = new ShowParser();
 				allEp = myParser.parse(response);
-				Log.d("ParseGetEpisodesService", "on a parse : " + allEp.size() + " episodes");
+				Ln.d("on a parse : " + allEp.size() + " episodes");
 				responseCode = myParser.getStatusCode();
 
 				//enregistrement en BDD
 				try {
-					EpisodeDao epDAO = DatabaseHelper.getInstance(this).getEpisodeDao();
-					ShowDao showDAO = DatabaseHelper.getInstance(this).getShowDao();
+					EpisodeDao epDAO = mDatabaseHelper.getDao(Episode.class);
+					ShowDao showDAO = mDatabaseHelper.getDao(Show.class);
 					int nbCreated = epDAO.createOrUpdate(allEp);
 					Log.d("ShowService", nbCreated + " episodes créés en base");
 					for (Episode current : allEp) {
@@ -91,7 +99,7 @@ public class ParseGetEpisodesService extends IntentService {
 						showDAO.createIfNotExists(currentShow);
 					}
 
-					allEp = DatabaseHelper.getInstance(this).getEpisodeDao().queryForAll();
+					allEp = epDAO.queryForAll();
 
 					//mise à jour de la date de MAJ
 					SharedPreferences settings = getSharedPreferences(Tools.SHARED_PREF_FILE, Activity.MODE_PRIVATE);
@@ -100,18 +108,19 @@ public class ParseGetEpisodesService extends IntentService {
 					editor.commit();
 				} catch (SQLException e) {
 					responseCode = DatabaseHelper.ERROR_BDD;
-					e.printStackTrace();
+					Ln.e(e);
 				}
 			} else {
 				responseCode = myWeb.getStatusCode();
 			}
 		} else {
 			try {
-				allEp = DatabaseHelper.getInstance(this).getEpisodeDao().queryForAll();
+				EpisodeDao episodeDao = DaoManager.createDao(mDatabaseHelper.getConnectionSource(), Episode.class);
+				allEp = episodeDao.queryForAll();
 				responseCode = RESULT_CODE_OK;
 			} catch (SQLException e) {
 				responseCode = DatabaseHelper.ERROR_BDD;
-				e.printStackTrace();
+				Ln.e(e);
 			}
 		}
 
@@ -128,11 +137,11 @@ public class ParseGetEpisodesService extends IntentService {
 		long oneDay = TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS);
 
 		if (now > lastUpdate + oneDay) {
-			Log.d("ParseGetEpisodesService", "Update the show from Parse");
+			Ln.d("Update the show from Parse");
 
 			return true;
 		} else {
-			Log.d("ParseGetEpisodesService", "Use database");
+			Ln.d("Use database");
 			return false;
 		}
 	}

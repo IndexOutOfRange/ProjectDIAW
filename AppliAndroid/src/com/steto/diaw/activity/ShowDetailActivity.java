@@ -4,13 +4,13 @@ import java.sql.SQLException;
 import java.util.List;
 
 import roboguice.activity.RoboExpandableListActivity;
+import roboguice.inject.ContentView;
 import roboguice.util.Ln;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.inject.Inject;
 import com.steto.diaw.adapter.SeasonWithEpisodesExpandableAdapter;
 import com.steto.diaw.dao.DatabaseHelper;
 import com.steto.diaw.dao.ShowDao;
@@ -29,31 +30,32 @@ import com.steto.diaw.service.ParseGetEpisodesService;
 import com.steto.diaw.service.TVDBService;
 import com.steto.projectdiaw.R;
 
+@ContentView(R.layout.activity_show_detail)
 public class ShowDetailActivity extends RoboExpandableListActivity {
+
 	public static final String EXTRA_SHOW = "EXTRA_SHOW";
 	public static final String EXTRA_SHOW_NAME = "EXTRA_SHOW_NAME";
 
 	private Show mShow;
 	private List<Season> mListSeasons;
 
+	@Inject
+	private DatabaseHelper mDatabaseHelper;
+
 	private View mHeaderContainer;
 	private TranslucideActionBarHelper mActionBarTranslucideHelper;
-	private ResultReceiver mShowResultReceiver;
-	private ResultReceiver mBannerResultReceiver;
+	private ResultReceiver mShowResultReceiver = new ShowResultReceiver();
+	private ResultReceiver mBannerResultReceiver = new BannerReceiverExtension();
 
 	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+		super.onCreate(savedInstanceState);
 		mActionBarTranslucideHelper = new TranslucideActionBarHelper(getActionBar());
-		setContentView(R.layout.activity_show_detail);
 
-		initShowResultReceiver();
-		initBannerResultReceiver();
-		int id = processExtras();
-		if (id == -1) {
+		if (!processExtras()) {
 			finish();
 		}
+
 		readDatabase();
 		mActionBarTranslucideHelper.initActionBar(this, mShow.getShowName(), "", true, R.drawable.ab_solid_dark_holo);
 
@@ -62,110 +64,48 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		/*MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.episode_list, menu);*/
-
-		return super.onCreateOptionsMenu(menu);
-	}
-
-	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case android.R.id.home:
-				onBackPressed(); // TODO
+				onBackPressed();
 				return true;
 			default:
 				return super.onOptionsItemSelected(item);
 		}
 	}
 
-	/* Traitement */
-
-	private void initShowResultReceiver() {
-		if (mShowResultReceiver == null) {
-
-			mShowResultReceiver = new ResultReceiver(new Handler()) {
-
-				@SuppressWarnings("unchecked")
-				@Override
-				protected void onReceiveResult(int resultCode, Bundle resultData) {
-					super.onReceiveResult(resultCode, resultData);
-					Ln.i("onResult");
-					setProgressBarIndeterminateVisibility(false);
-					if (resultCode == ParseGetEpisodesService.RESULT_CODE_OK) {
-						List<Show> response = (List<Show>) resultData.get(TVDBService.OUTPUT_DATA);
-						if (response != null && !response.isEmpty()) {
-							mShow = response.get(0);
-							refreshLayout();
-							if (mShow.getBanner() == null) {
-								launchBannerService();
-							}
-						}
-					} else if (resultCode == TVDBService.RESULT_CODE_AMBIGUITY) {
-						resolveAmbiguity();
-					} else {
-						Toast.makeText(ShowDetailActivity.this, "Unable to get result from service", Toast.LENGTH_SHORT).show();
-					}
-				}
-			};
-		}
-	}
-
 	private void resolveAmbiguity() {
-		Intent in = new Intent(this, AmbiguityShow.class);
-		in.putExtra(AmbiguityShow.INPUT_SHOW, mShow);
-		startActivity(in);
+		Intent intent = new Intent(this, AmbiguityShow.class);
+		intent.putExtra(AmbiguityShow.INPUT_SHOW, mShow);
+		startActivity(intent);
 	}
 
-	private void initBannerResultReceiver() {
-		if (mBannerResultReceiver == null) {
-
-			mBannerResultReceiver = new ResultReceiver(new Handler()) {
-
-				@Override
-				protected void onReceiveResult(int resultCode, Bundle resultData) {
-					super.onReceiveResult(resultCode, resultData);
-					Ln.i("onResult");
-					setProgressBarIndeterminateVisibility(false);
-					if (resultCode == ParseGetEpisodesService.RESULT_CODE_OK) {
-						Bitmap banner = (Bitmap) resultData.getParcelable(BannerService.OUTPUT_BITMAP);
-						mShow.setBanner(banner);
-						refreshLayout();
-					} else {
-						Toast.makeText(ShowDetailActivity.this, getString(R.string.msg_erreur_reseau), Toast.LENGTH_SHORT).show();
-					}
-				}
-			};
-		}
-	}
-
-	private int processExtras() {
+	private boolean processExtras() {
 		if (getIntent().getExtras() != null) {
 			mShow = (Show) (getIntent().getExtras().get(EXTRA_SHOW));
-			if(mShow == null) {
+			if (mShow == null) {
 				String showName = getIntent().getExtras().getString(EXTRA_SHOW_NAME);
 				try {
-					mShow = DatabaseHelper.getInstance(this).getShowDao().queryFromName(showName);
-					return 0;
+					mShow = ((ShowDao) mDatabaseHelper.getDao(Show.class)).queryFromName(showName);
+					return true;
 				} catch (SQLException e) {
-					Ln.e(e, "SQLException récupération du show à partir des extras");
-					return -1;
+					Ln.e(e);
+					return false;
 				}
 			}
-			return 0;
+			return true;
 		} else {
-			return -1;
+			return false;
 		}
 	}
 
 	private void readDatabase() {
 		try {
-			ShowDao myBDD = DatabaseHelper.getInstance(this).getShowDao();
-			mListSeasons = myBDD.getSeasonsFromShow(mShow);
+			ShowDao showDao = mDatabaseHelper.getDao(Show.class);
+			mListSeasons = showDao.getSeasonsFromShow(mShow);
 		} catch (SQLException e) {
-			Toast.makeText(this, "Erreur lors de la recupération des episodes de la serie", Toast.LENGTH_SHORT).show();
-			e.printStackTrace();
+			Ln.e(e);
+			Toast.makeText(this, "Erreur lors de la récupération des episodes de la serie", Toast.LENGTH_SHORT).show();
 		}
 
 		setProgressBarIndeterminateVisibility(true);
@@ -174,18 +114,18 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 	}
 
 	private void launchSerieService() {
-		Intent in = new Intent(this, TVDBService.class);
-		in.putExtra(TVDBService.INPUT_SERIE, mShow);
-		in.putExtra(TVDBService.INPUT_RESULTRECEIVER, mShowResultReceiver);
-		startService(in);
+		Intent intent = new Intent(this, TVDBService.class);
+		intent.putExtra(TVDBService.INPUT_SERIE, mShow);
+		intent.putExtra(TVDBService.INPUT_RESULTRECEIVER, mShowResultReceiver);
+		startService(intent);
 	}
 
 	private void launchBannerService() {
 		if (mShow.getBannerURL() != null) {
-			Intent ban = new Intent(this, BannerService.class);
-			ban.putExtra(BannerService.INPUT_SERIE, mShow);
-			ban.putExtra(BannerService.INPUT_RECEIVER, mBannerResultReceiver);
-			startService(ban);
+			Intent intent = new Intent(this, BannerService.class);
+			intent.putExtra(BannerService.INPUT_SERIE, mShow);
+			intent.putExtra(BannerService.INPUT_RECEIVER, mBannerResultReceiver);
+			startService(intent);
 		}
 	}
 
@@ -198,7 +138,6 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 
 		// ActionBar
 		mActionBarTranslucideHelper.setHeaderContainer(mHeaderContainer);
-
 
 	}
 
@@ -224,6 +163,56 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 				// TVDBContainerData
 				ImageView bannerView = (ImageView) mHeaderContainer.findViewById(R.id.activity_show_detail_image);
 				bannerView.setImageBitmap(mShow.getBannerAsBitmap());
+			}
+		}
+	}
+
+	private final class BannerReceiverExtension extends ResultReceiver {
+
+		private BannerReceiverExtension() {
+			super(new Handler());
+		}
+
+		@Override
+		protected void onReceiveResult(int resultCode, Bundle resultData) {
+			super.onReceiveResult(resultCode, resultData);
+			Ln.i("onResult");
+			setProgressBarIndeterminateVisibility(false);
+			if (resultCode == ParseGetEpisodesService.RESULT_CODE_OK) {
+				Bitmap banner = (Bitmap) resultData.getParcelable(BannerService.OUTPUT_BITMAP);
+				mShow.setBanner(banner);
+				refreshLayout();
+			} else {
+				Toast.makeText(ShowDetailActivity.this, getString(R.string.msg_erreur_reseau), Toast.LENGTH_SHORT).show();
+			}
+		}
+	}
+
+	private final class ShowResultReceiver extends ResultReceiver {
+
+		private ShowResultReceiver() {
+			super(new Handler());
+		}
+
+		@SuppressWarnings("unchecked")
+		@Override
+		protected void onReceiveResult(int resultCode, Bundle resultData) {
+			super.onReceiveResult(resultCode, resultData);
+			Ln.i("onResult");
+			setProgressBarIndeterminateVisibility(false);
+			if (resultCode == ParseGetEpisodesService.RESULT_CODE_OK) {
+				List<Show> response = (List<Show>) resultData.get(TVDBService.OUTPUT_DATA);
+				if (response != null && !response.isEmpty()) {
+					mShow = response.get(0);
+					refreshLayout();
+					if (mShow.getBanner() == null) {
+						launchBannerService();
+					}
+				}
+			} else if (resultCode == TVDBService.RESULT_CODE_AMBIGUITY) {
+				resolveAmbiguity();
+			} else {
+				Toast.makeText(ShowDetailActivity.this, "Unable to get result from service", Toast.LENGTH_SHORT).show();
 			}
 		}
 	}

@@ -4,7 +4,7 @@ import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 
-import android.util.Log;
+import roboguice.util.Ln;
 
 import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.dao.DaoManager;
@@ -19,35 +19,6 @@ public class EpisodeDao extends BaseDaoImpl<Episode, Integer> {
 		super(connection, Episode.class);
 	}
 	
-	/*
-		@Override
-		public CreateOrUpdateStatus createOrUpdate(Episode data) throws SQLException {
-			List<Episode> listEpisodes = queryForAll();
-			if (listEpisodes.isEmpty()) {
-				Log.d(TAG, "createOrUpdate liste vide");
-				create(data);
-				return new CreateOrUpdateStatus(true, false, 0);
-			}
-
-			boolean create = true;
-			for (int i = 0; i < listEpisodes.size() && create; i++) {
-				Episode episode = listEpisodes.get(i);
-				if (episode.getShowName().equalsIgnoreCase(data.getShowName())
-						&& episode.getSeasonNumber() == data.getSeasonNumber()
-						&& episode.getEpisodeNumber() == data.getEpisodeNumber()) {
-					Log.d(TAG, "createOrUpdate episode already in base");
-					create = false;
-				}
-			}
-
-			if (create) {
-				create(data);
-				return new CreateOrUpdateStatus(true, false, 0);
-			} else {
-				return new CreateOrUpdateStatus(false, false, 0);
-			}
-		}
-	*/
 	@Override
 	public List<Episode> queryForAll() throws SQLException {
 		List<Episode> episodeList = super.queryForAll();
@@ -76,8 +47,7 @@ public class EpisodeDao extends BaseDaoImpl<Episode, Integer> {
 			if (ret.isCreated()) {
 				nbCreated++;
 			} else {
-				Log.d("episodeDAO", "Episode : " + episode.getShowName() + " " + episode.getSeasonNumber() + " " + episode.getEpisodeNumber() + " déjà present en base");
-				//return nbCreated; // non possible car on a des doublons ds la bdd :(
+				Ln.d("episodeDAO", "Episode : " + episode.getShowName() + " " + episode.getSeasonNumber() + " " + episode.getEpisodeNumber() + " déjà present en base");
 			}
 		}
 		return nbCreated;
@@ -97,7 +67,6 @@ public class EpisodeDao extends BaseDaoImpl<Episode, Integer> {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 		return associated;
 	}
 }

@@ -8,7 +8,9 @@ import roboguice.util.Ln;
 
 import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.dao.DaoManager;
+import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
+import com.j256.ormlite.stmt.SelectArg;
 import com.j256.ormlite.support.ConnectionSource;
 import com.steto.diaw.model.Episode;
 import com.steto.diaw.model.Show;
@@ -32,6 +34,15 @@ public class EpisodeDao extends BaseDaoImpl<Episode, Integer> {
 		queryBuilder.limit(Long.valueOf(number));
 		queryBuilder.prepare();
 		return queryBuilder.query();
+	}
+	
+	public List<Episode> queryForName(String name) throws SQLException {
+		SelectArg nameArg = new SelectArg();
+		QueryBuilder<Episode, Integer> queryBuilder = queryBuilder();
+		queryBuilder.where().eq(Episode.COLUMN_SHOWNAME, nameArg);
+		PreparedQuery<Episode> prepare = queryBuilder.prepare();
+		nameArg.setValue(name);
+		return query(prepare);
 	}
 
 

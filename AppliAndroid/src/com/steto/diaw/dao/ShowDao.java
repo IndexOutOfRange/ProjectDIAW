@@ -39,8 +39,7 @@ public class ShowDao extends BaseDaoImpl<Show, Integer> {
 
 	public List<Episode> getEpisodeFromShow(Show show) throws SQLException {
 		EpisodeDao episodesDao = DaoManager.createDao(getConnectionSource(), Episode.class);
-		return episodesDao.queryForEq(Episode.COLUMN_SHOWNAME, show.getShowName());
-
+		return episodesDao.queryForName(show.getShowName());
 	}
 
 	public List<Season> getSeasonsFromShow(Show show) throws SQLException {

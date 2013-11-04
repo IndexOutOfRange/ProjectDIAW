@@ -15,17 +15,6 @@
  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
 --]]
 
-
--- Global variables
-dlg = nil     -- Dialog
-title = nil   -- Text input widget
-message = nil -- Label
-list = nil    -- List widget
-okay = nil    -- Okay button
-html = nil    -- HTML box
-spin = nil    -- spinning icon
-films = {}
-
 -- Extension description
 function descriptor()
     return { title = "DIAW" ;
@@ -37,10 +26,10 @@ function descriptor()
              capabilities = { "input-listener", "meta-listener" }}
 end
 
-function read_meta()
-	local command = "\"C:\\Program Files\\Java\\jre7\\bin\\java\" -jar E:\\Code\\DIAWRelease\\Diaw.jar -episode " .. get_URI()
-	vlc.msg.dbg("[DIAW] executing " .. command .. "...")
-	os.execute( command )
+function fetch_meta()
+        local command = "\"C:\\Program Files\\Java\\jre7\\bin\\java\" -jar E:\\Code\\DIAWRelease\\Diaw.jar -episode " .. get_URI()
+        vlc.msg.dbg("[DIAW] executing " .. command .. "...")
+        os.execute( command )
 end
 
 function get_URI()
@@ -50,21 +39,6 @@ function get_URI()
     end
     local filename = string.gsub(item:uri(), "^(.+)%.%w+$", "%1")
     return trim(filename or item:uri())
-end
-
--- Get clean title from filename
-function get_title()
-    local item = vlc.item or vlc.input.item()
-    if not item then
-        return ""
-    end
-    local metas = item:metas()
-    if metas["title"] then
-        return metas["title"]
-    else
-        local filename = string.gsub(item:name(), "^(.+)%.%w+$", "%1")
-        return trim(filename or item:name())
-    end
 end
 
 -- Remove leading and trailing spaces

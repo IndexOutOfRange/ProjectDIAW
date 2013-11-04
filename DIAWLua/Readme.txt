@@ -1,1 +1,1 @@
-A placer dans {VLC}/lua/meta/reader
+A placer dans {VLC}/lua/meta/fetcher

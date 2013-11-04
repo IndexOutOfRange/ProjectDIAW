@@ -1,18 +1,21 @@
 package com.steto.diaw.service;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpStatus;
 
 import roboguice.service.RoboIntentService;
 import roboguice.util.Ln;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -41,10 +44,12 @@ public class ParseGetEpisodesService extends RoboIntentService {
 	public static final int RESULT_CODE_ERROR = -1;
 	public static final String RESULT_DATA = "RESULT_DATA";
 	private static String WS_QUERY_WHERE = "where";
-	
+
 	@Inject
 	private DatabaseHelper mDatabaseHelper;
-	
+	@Inject
+	private SharedPreferences mPreferences;
+
 	public ParseGetEpisodesService() {
 		super("ParseGetEpisodesService");
 	}
@@ -53,20 +58,9 @@ public class ParseGetEpisodesService extends RoboIntentService {
 		super(name);
 	}
 
-	public String createQueryString(String mail) {
-		QueryString myQuery = new QueryString();
-		myQuery.add("limit", "1000");
-		myQuery.add(WS_QUERY_WHERE, createWhereClause(mail));
-		return myQuery.toString();
-	}
-
-	public String createWhereClause(String mail) {
-		return "{\"login\": \"" + mail + "\" }";
-	}
-
 	@Override
 	protected void onHandleIntent(Intent intent) {
-		//récupération des input de recherche
+		// récupération des input de recherche
 		ResultReceiver sender = (ResultReceiver) intent.getExtras().get(INTENT_RESULT_RECEIVER);
 		String login = intent.getExtras().getString(INTENT_LOGIN);
 		boolean forceUpdate = intent.getExtras().getBoolean(INTENT_FORCE_UPDATE);
@@ -74,21 +68,21 @@ public class ParseGetEpisodesService extends RoboIntentService {
 		List<Episode> allEp = new ArrayList<Episode>();
 
 		if (forceUpdate || isDataExpired()) {
-
-			//recupération des données sur le web
-			String query = createQueryString(login);
+			// recupération des données sur le web
+			String date = getDateLastUpdate();
+			String query = createQueryString(login, date);
 			ShowConnector myWeb = new ShowConnector();
 			myWeb.requestFromNetwork(query, ParseConnector.HTTPMethod.GET, null);
 			if (myWeb.getStatusCode() == HttpStatus.SC_OK) {
 
-				//parsing des données JSON
+				// parsing des données JSON
 				InputStream response = myWeb.getResponseBody();
 				ShowParser myParser = new ShowParser();
 				allEp = myParser.parse(response);
 				Ln.d("on a parse : " + allEp.size() + " episodes");
 				responseCode = myParser.getStatusCode();
 
-				//enregistrement en BDD
+				// enregistrement en BDD
 				try {
 					EpisodeDao epDAO = mDatabaseHelper.getDao(Episode.class);
 					ShowDao showDAO = mDatabaseHelper.getDao(Show.class);
@@ -101,16 +95,18 @@ public class ParseGetEpisodesService extends RoboIntentService {
 
 					allEp = epDAO.queryForAll();
 
-					//mise à jour de la date de MAJ
-					SharedPreferences settings = getSharedPreferences(Tools.SHARED_PREF_FILE, Activity.MODE_PRIVATE);
-					SharedPreferences.Editor editor = settings.edit();
-					editor.putLong(Tools.SHARED_PREF_LAST_UPDATE, (new Date()).getTime());
-					editor.commit();
+					// mise à jour de la date de MAJ
+					mPreferences.edit().putLong(Tools.SHARED_PREF_LAST_UPDATE, (new Date()).getTime()).commit();
 				} catch (SQLException e) {
 					responseCode = DatabaseHelper.ERROR_BDD;
 					Ln.e(e);
 				}
 			} else {
+				try {
+					Ln.d(IOUtils.toString(myWeb.getResponseBody()));
+				} catch (IOException e) {
+					Ln.e(e);
+				}
 				responseCode = myWeb.getStatusCode();
 			}
 		} else {
@@ -124,27 +120,60 @@ public class ParseGetEpisodesService extends RoboIntentService {
 			}
 		}
 
-		//retour à l'appelant
+		// retour à l'appelant
 		Bundle ret = new Bundle();
 		ret.putSerializable(RESULT_DATA, (Serializable) allEp);
 		sender.send(responseCode, ret);
 	}
 
+	private String createQueryString(String mail, String date) {
+		QueryString myQuery = new QueryString();
+		myQuery.add("limit", "1000");
+		myQuery.add(WS_QUERY_WHERE, createWhereClause(mail, date));
+		return myQuery.toString();
+	}
+
+	private String createWhereClause(String mail, String date) {
+		if (date != null) {
+			return "{\"login\": \"" + mail + "\", \"updatedAt\":{\"$gte\":{\"__type\":\"Date\",\"iso\":\"" + date + "\"}}}";
+		} else {
+			return "{\"login\": \"" + mail + "\"}";
+
+		}
+	}
+
+	private String getDateLastUpdate() {
+		long lastUpdate = mPreferences.getLong(Tools.SHARED_PREF_LAST_UPDATE, 0);
+		if (lastUpdate == 0) {
+			return null;
+		}
+		Calendar calendar = Calendar.getInstance(Locale.getDefault());
+		calendar.setTimeInMillis(lastUpdate);
+		String year = String.valueOf(calendar.get(Calendar.YEAR));
+		String month = String.valueOf(calendar.get(Calendar.MONTH) + 1);
+		String day = String.valueOf(calendar.get(Calendar.DATE));
+		if (month.length() == 1) {
+			month = "0" + month;
+		}
+		if (day.length() == 1) {
+			day = "0" + day;
+		}
+		String date = year + "-" + month + "-" + day + "T00:00:00.000Z";
+		return date;
+	}
+
 	private boolean isDataExpired() {
-		SharedPreferences settings = getSharedPreferences(Tools.SHARED_PREF_FILE, Activity.MODE_PRIVATE);
-		long lastUpdate = settings.getLong(Tools.SHARED_PREF_LAST_UPDATE, 0);
+		long lastUpdate = mPreferences.getLong(Tools.SHARED_PREF_LAST_UPDATE, 0);
 		long now = new Date().getTime();
 		long oneDay = TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS);
 
 		if (now > lastUpdate + oneDay) {
 			Ln.d("Update the show from Parse");
-
 			return true;
 		} else {
 			Ln.d("Use database");
 			return false;
 		}
 	}
-
 
 }

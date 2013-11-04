@@ -23,7 +23,7 @@ public class SeasonWithEpisodesExpandableAdapter extends BaseExpandableListAdapt
 
 	@Override
 	public int getGroupCount() {
-		return mData.size();
+		return mData == null ? 0 : mData.size();
 	}
 
 	@Override

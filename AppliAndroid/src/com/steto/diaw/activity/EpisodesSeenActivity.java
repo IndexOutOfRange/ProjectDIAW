@@ -271,7 +271,9 @@ public class EpisodesSeenActivity extends RoboActivity {
 					mAllEp.addAll(episodes);
 				}
 				processUpdateListEpisodes();
-			} else {
+			} else if( resultCode == ParseGetEpisodesService.RESULT_CODE_IN_PROGRESS) {
+                Toast.makeText(EpisodesSeenActivity.this, getString(R.string.msg_work_in_progress), Toast.LENGTH_SHORT).show();
+            } else {
 				Toast.makeText(EpisodesSeenActivity.this, getString(R.string.msg_erreur_reseau), Toast.LENGTH_SHORT).show();
 			}
 		}

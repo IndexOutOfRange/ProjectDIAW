@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -28,6 +29,7 @@ import com.steto.diaw.dao.DatabaseHelper;
 import com.steto.diaw.dao.EpisodeDao;
 import com.steto.diaw.dao.ShowDao;
 import com.steto.diaw.model.Episode;
+import com.steto.diaw.model.Results;
 import com.steto.diaw.model.Show;
 import com.steto.diaw.parser.ShowParser;
 import com.steto.diaw.tools.Tools;
@@ -43,14 +45,17 @@ public class ParseGetEpisodesService extends RoboIntentService {
 	public static final int RESULT_CODE_OK = 0;
 	public static final int RESULT_CODE_ERROR = -1;
 	public static final String RESULT_DATA = "RESULT_DATA";
-	private static String WS_QUERY_WHERE = "where";
+    private static final int MAX_RETRY_COUNT = 2;
+    public static final int RESULT_CODE_IN_PROGRESS = 1;
+    private static String WS_QUERY_WHERE = "where";
 
 	@Inject
 	private DatabaseHelper mDatabaseHelper;
 	@Inject
 	private SharedPreferences mPreferences;
+    private int mRetryCount = 0;
 
-	public ParseGetEpisodesService() {
+    public ParseGetEpisodesService() {
 		super("ParseGetEpisodesService");
 	}
 
@@ -68,47 +73,62 @@ public class ParseGetEpisodesService extends RoboIntentService {
 		List<Episode> allEp = new ArrayList<Episode>();
 
 		if (forceUpdate || isDataExpired()) {
-			// recupération des données sur le web
-			String date = getDateLastUpdate();
-			String query = createQueryString(login, date);
-			ShowConnector myWeb = new ShowConnector();
-			myWeb.requestFromNetwork(query, ParseConnector.HTTPMethod.GET, null);
-			if (myWeb.getStatusCode() == HttpStatus.SC_OK) {
+            int episodeAlreadyGetCount = 0;
+            int episodeToGetCount = 1;
+            while( episodeAlreadyGetCount < episodeToGetCount && mRetryCount < MAX_RETRY_COUNT) {
+                // recupération des données sur le web
+                String date = getDateLastUpdate();
+                String query = createQueryString(login, date, episodeAlreadyGetCount);
+                ShowConnector myWeb = new ShowConnector();
+                myWeb.requestFromNetwork(query, ParseConnector.HTTPMethod.GET, null);
+                if (myWeb.getStatusCode() == HttpStatus.SC_OK) {
+                    mRetryCount = 0;
+                    // parsing des données JSON
+                    InputStream response = myWeb.getResponseBody();
+                    ShowParser myParser = new ShowParser();
+                    Results res = myParser.parse(response);
+                    allEp = res == null || res.results == null ? null : Arrays.asList(res.results);
 
-				// parsing des données JSON
-				InputStream response = myWeb.getResponseBody();
-				ShowParser myParser = new ShowParser();
-				allEp = myParser.parse(response);
-				Ln.d("on a parse : " + allEp.size() + " episodes");
-				responseCode = myParser.getStatusCode();
+                    Ln.d("on a parse : " + allEp.size() + " episodes");
+                    episodeAlreadyGetCount += allEp.size();
+                    episodeToGetCount = res.count;
+                    responseCode = myParser.getStatusCode();
 
-				// enregistrement en BDD
-				try {
-					EpisodeDao epDAO = mDatabaseHelper.getDao(Episode.class);
-					ShowDao showDAO = mDatabaseHelper.getDao(Show.class);
-					int nbCreated = epDAO.createOrUpdate(allEp);
-					Log.d("ShowService", nbCreated + " episodes créés en base");
-					for (Episode current : allEp) {
-						Show currentShow = new Show(current.getShowName());
-						showDAO.createIfNotExists(currentShow);
-					}
+                    // enregistrement en BDD
+                    try {
+                        EpisodeDao epDAO = mDatabaseHelper.getDao(Episode.class);
+                        ShowDao showDAO = mDatabaseHelper.getDao(Show.class);
+                        int nbCreated = epDAO.createOrUpdate(allEp);
+                        Log.d("ShowService", nbCreated + " episodes créés en base");
+                        for (Episode current : allEp) {
+                            Show currentShow = new Show(current.getShowName());
+                            showDAO.createIfNotExists(currentShow);
+                        }
+                    } catch (SQLException e) {
+                        responseCode = DatabaseHelper.ERROR_BDD;
+                        Ln.e(e);
+                    }
 
-					allEp = epDAO.queryForAll();
-
-					// mise à jour de la date de MAJ
-					mPreferences.edit().putLong(Tools.SHARED_PREF_LAST_UPDATE, (new Date()).getTime()).commit();
-				} catch (SQLException e) {
-					responseCode = DatabaseHelper.ERROR_BDD;
-					Ln.e(e);
-				}
-			} else {
-				try {
-					Ln.d(IOUtils.toString(myWeb.getResponseBody()));
-				} catch (IOException e) {
-					Ln.e(e);
-				}
-				responseCode = myWeb.getStatusCode();
-			}
+                    sender.send(RESULT_CODE_IN_PROGRESS, null);
+                } else {
+                    mRetryCount++;
+                    try {
+                        Ln.d(IOUtils.toString(myWeb.getResponseBody()));
+                    } catch (IOException e) {
+                        Ln.e(e);
+                    }
+                    responseCode = myWeb.getStatusCode();
+                }
+            }
+            EpisodeDao epDAO = null;
+            try {
+                epDAO = mDatabaseHelper.getDao(Episode.class);
+                allEp = epDAO.queryForAll();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            // mise à jour de la date de MAJ
+            mPreferences.edit().putLong(Tools.SHARED_PREF_LAST_UPDATE, (new Date()).getTime()).commit();
 		} else {
 			try {
 				EpisodeDao episodeDao = DaoManager.createDao(mDatabaseHelper.getConnectionSource(), Episode.class);
@@ -120,15 +140,18 @@ public class ParseGetEpisodesService extends RoboIntentService {
 			}
 		}
 
+
 		// retour à l'appelant
 		Bundle ret = new Bundle();
 		ret.putSerializable(RESULT_DATA, (Serializable) allEp);
 		sender.send(responseCode, ret);
 	}
 
-	private String createQueryString(String mail, String date) {
+	private String createQueryString(String mail, String date, Integer resultToSkip) {
 		QueryString myQuery = new QueryString();
-		myQuery.add("limit", "1000");
+		myQuery.add("limit", "200");
+        myQuery.add("count", "1");
+        myQuery.add("skip", resultToSkip.toString());
 		myQuery.add(WS_QUERY_WHERE, createWhereClause(mail, date));
 		return myQuery.toString();
 	}

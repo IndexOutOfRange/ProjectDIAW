@@ -39,9 +39,10 @@
 	<string name="dialog_rename_episode_name">nom de l\'épisode</string>
 	<string name="btn_ok">Ok</string>
 	<string name="btn_annuler">Annuler</string>
+    <string name="msg_work_in_progress">pagination : work in progress</string>
 
 
-	<!-- Action Bar Contextual -->
+    <!-- Action Bar Contextual -->
 
 	<plurals name="nb_items_selected">
 		<item quantity="one">selectionné</item>

@@ -85,7 +85,9 @@ public class LoginActivity extends RoboActivity {
 				in.putExtra(EpisodesSeenActivity.INTENT_LIST_EPISODE, resultData.getSerializable(ParseGetEpisodesService.RESULT_DATA));
 				startActivity(in);
 				finish();
-			} else {
+			} else if( resultCode == ParseGetEpisodesService.RESULT_CODE_IN_PROGRESS) {
+                Toast.makeText(LoginActivity.this, getString(R.string.msg_work_in_progress), Toast.LENGTH_SHORT).show();
+            } else {
 				Toast.makeText(LoginActivity.this, getString(R.string.msg_erreur_reseau), Toast.LENGTH_SHORT).show();
 			}
 		}

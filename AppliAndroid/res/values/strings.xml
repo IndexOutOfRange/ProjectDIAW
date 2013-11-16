@@ -12,7 +12,7 @@
 	<string name="rename">Renommer l\'épisode</string>
 
 	<string name="activity_title_list_show">Mes séries</string>
-	<string name="activity_title_home">Derniers Episodes</string>
+	<string name="activity_title_home">Derniers épisodes</string>
 	<string name="activity_title_login">Connection DIAW</string>
 
 	<!-- content description -->
@@ -21,7 +21,6 @@
 	<!-- celllist -->
 	<string name="hint_section">Section</string>
 	<string name="hint_show_title">TV Show</string>
-
 
 	<string name="msg_erreur_reseau">Unable to get response from server</string>
 	<string name="msg_send_vlc_plugin">Recevoir le plugin VLC par email</string>
@@ -37,7 +36,7 @@
 
 	<!-- Dialog -->
 	<string name="dialog_rename_episode_name">nom de l\'épisode</string>
-	<string name="btn_ok">Ok</string>
+	<string name="btn_ok">OK</string>
 	<string name="btn_annuler">Annuler</string>
     <string name="msg_work_in_progress">pagination : work in progress</string>
 
@@ -48,5 +47,13 @@
 		<item quantity="one">selectionné</item>
 		<item quantity="other">selectionnés</item>
 	</plurals>
+	
+	<!-- Drawer -->
+	<string-array name="drawer_array">
+        <item>@string/activity_title_home</item>
+        <item>@string/activity_title_list_show</item>
+    </string-array>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
 
 </resources>

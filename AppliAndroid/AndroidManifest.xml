@@ -34,12 +34,10 @@
             android:launchMode="singleTop" />
         <activity
             android:name="com.steto.diaw.activity.EpisodesSeenActivity"
-            android:label="@string/activity_title_home"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTask" />
         <activity
             android:name="com.steto.diaw.activity.ListShowsActivity"
-            android:label="@string/activity_title_list_show"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTask" />
         <activity
             android:name="com.steto.diaw.activity.ShowDetailActivity"
             android:theme="@style/AppTheme.TranslucentActionBar" />
@@ -51,19 +49,20 @@
         <service android:name="com.steto.diaw.service.TVDBService" />
         <service android:name="com.steto.diaw.service.BannerService" />
         <service android:name="com.steto.diaw.service.IMDBService" />
-        
-        <!-- ContentProvider to store episode data.
+
+        <!--
+        ContentProvider to store episode data.
 
         The "authorities" here are defined as part of a ContentProvider interface. It's used here
         as an attachment point for the SyncAdapter. See res/xml/syncadapter.xml and SyncService.java.
 
         Since this ContentProvider is not exported, it will not be accessible outside of this app's
-        package. -->
+        package.
+        -->
         <provider
-                android:name="com.steto.diaw.provider.EpisodeProvider"
-                android:authorities="com.steto.diaw"
-                android:exported="false" />
-        
+            android:name="com.steto.diaw.provider.EpisodeProvider"
+            android:authorities="com.steto.diaw"
+            android:exported="false" />
 
         <!-- This service implements our SyncAdapter. It needs to be exported, so that the system sync framework can access it. -->
         <service

@@ -5,12 +5,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import roboguice.activity.RoboActivity;
-import roboguice.inject.ContentView;
-import roboguice.inject.InjectView;
 import roboguice.util.Ln;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -33,6 +29,7 @@ import android.widget.Toast;
 import com.google.inject.Inject;
 import com.steto.diaw.SyncUtils;
 import com.steto.diaw.actionbarcallback.ActionModeCallbackEpisode;
+import com.steto.diaw.activity.model.DrawerActivity;
 import com.steto.diaw.adapter.ListEpisodeAdapter;
 import com.steto.diaw.dao.DatabaseHelper;
 import com.steto.diaw.dao.EpisodeDao;
@@ -43,13 +40,11 @@ import com.steto.diaw.service.ParseUpdateEpisodeService;
 import com.steto.diaw.tools.Tools;
 import com.steto.projectdiaw.R;
 
-@ContentView(R.layout.activity_episodes_seen)
-public class EpisodesSeenActivity extends RoboActivity {
+public class EpisodesSeenActivity extends DrawerActivity {
 
 	public static final String INTENT_LIST_EPISODE = "INTENT_LIST_EPISODE";
 
 	private boolean mUpdateInProgress;
-	private ProgressDialog mProgressDialog;
 	private List<Episode> mAllEp = new ArrayList<Episode>();
 	private ListEpisodeAdapter mAdapter;
 
@@ -58,7 +53,6 @@ public class EpisodesSeenActivity extends RoboActivity {
 	@Inject
 	private SharedPreferences mSharedPreferences;
 
-	@InjectView(R.id.list)
 	private ListView mList;
 
 	private ResultReceiver mShowResultReceiver = new ShowResultReceiver();
@@ -69,20 +63,14 @@ public class EpisodesSeenActivity extends RoboActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		super.onCreate(savedInstanceState);
-		initializeProgressDialog();
 
+		mList = (ListView) mContentView.findViewById(R.id.list);
 		mAdapter = new ListEpisodeAdapter(this, mAllEp);
 		mList.setAdapter(mAdapter);
 		setActionModeCallbackOnList();
 
 		String login = mSharedPreferences.getString(Tools.SHARED_PREF_LOGIN, "");
 		SyncUtils.CreateSyncAccount(this, login);
-	}
-
-	private void initializeProgressDialog() {
-		mProgressDialog = new ProgressDialog(this);
-		mProgressDialog.setIndeterminate(true);
-		mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 	}
 
 	@Override
@@ -120,11 +108,40 @@ public class EpisodesSeenActivity extends RoboActivity {
 			case R.id.menu_update:
 				startUpdateListEpisodes();
 				return true;
-			case R.id.menu_go_to_shows_list:
-				startActivity(new Intent(this, ListShowsActivity.class));
-				return true;
 			default:
 				return super.onOptionsItemSelected(item);
+		}
+	}
+	
+	@Override
+	protected int getLayoutContentFrame() {
+		return R.layout.activity_episodes_seen;
+	}
+
+	@Override
+	protected int getSelectedItem() {
+		return DRAWER_DERNIERS_EPISODES;
+	}
+
+	@Override
+	protected void manageIconsInActionBar(Menu menu, boolean drawerOpen) {
+		if (!drawerOpen) {
+			menu.findItem(R.id.menu_update).setVisible(!mUpdateInProgress);
+			setProgressBarIndeterminateVisibility(mUpdateInProgress);
+		} else {
+			menu.findItem(R.id.menu_update).setVisible(false);
+			setProgressBarIndeterminateVisibility(false);
+		}
+	}
+
+	@Override
+	protected void manageDrawerItemClick(int position) {
+		if (position == getSelectedItem()) {
+			return;
+		}
+		if (position == DRAWER_MES_SERIES) {
+			startActivity(new Intent(this, ListShowsActivity.class));
+			overridePendingTransition(0, 0);
 		}
 	}
 
@@ -275,9 +292,9 @@ public class EpisodesSeenActivity extends RoboActivity {
 					mAllEp.addAll(episodes);
 				}
 				processUpdateListEpisodes();
-			} else if( resultCode == ParseGetEpisodesService.RESULT_CODE_IN_PROGRESS) {
-                Toast.makeText(EpisodesSeenActivity.this, getString(R.string.msg_work_in_progress), Toast.LENGTH_SHORT).show();
-            } else {
+			} else if (resultCode == ParseGetEpisodesService.RESULT_CODE_IN_PROGRESS) {
+				Toast.makeText(EpisodesSeenActivity.this, getString(R.string.msg_work_in_progress), Toast.LENGTH_SHORT).show();
+			} else {
 				Toast.makeText(EpisodesSeenActivity.this, getString(R.string.msg_erreur_reseau), Toast.LENGTH_SHORT).show();
 			}
 		}
@@ -329,17 +346,15 @@ public class EpisodesSeenActivity extends RoboActivity {
 
 		@Override
 		protected void onPreExecute() {
-			if (mProgressDialog == null) {
-				initializeProgressDialog();
-			}
-			mProgressDialog.show();
+			mUpdateInProgress = true;
+			invalidateOptionsMenu();
 		}
 
 		@Override
 		protected Void doInBackground(Void... voids) {
 			List<Episode> episodeListFromDataBase = new ArrayList<Episode>();
 			try {
-				episodeListFromDataBase = ((EpisodeDao)mDatabaseHelper.getDao(Episode.class)).queryForAll();
+				episodeListFromDataBase = ((EpisodeDao) mDatabaseHelper.getDao(Episode.class)).queryForAll();
 			} catch (SQLException e) {
 				Ln.e(e);
 			}
@@ -351,7 +366,8 @@ public class EpisodesSeenActivity extends RoboActivity {
 		@Override
 		protected void onPostExecute(Void result) {
 			mAdapter.notifyDataSetChanged();
-			mProgressDialog.dismiss();
+			mUpdateInProgress = false;
+			invalidateOptionsMenu();
 		}
 	}
 }

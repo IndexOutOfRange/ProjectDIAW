@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-	<item
-			android:icon="@drawable/ic_menu_refresh"
-			android:id="@+id/menu_update"
-			android:title="@string/update"
-			android:showAsAction="always"/>
-
-	<item
-			android:id="@+id/menu_go_to_shows_list"
-			android:title="Liste série"
-			android:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/menu_update"
+        android:icon="@drawable/ic_menu_refresh"
+        android:showAsAction="always"
+        android:title="@string/update"/>
 
 </menu>

@@ -58,7 +58,7 @@ public class EpisodeDao extends BaseDaoImpl<Episode, Integer> {
 			if (ret.isCreated()) {
 				nbCreated++;
 			} else {
-				Ln.d("episodeDAO", "Episode : " + episode.getShowName() + " " + episode.getSeasonNumber() + " " + episode.getEpisodeNumber() + " déjà present en base");
+				Ln.d("Episode : " + episode.getShowName() + " " + episode.getSeasonNumber() + " " + episode.getEpisodeNumber() + " déjà present en base");
 			}
 		}
 		return nbCreated;

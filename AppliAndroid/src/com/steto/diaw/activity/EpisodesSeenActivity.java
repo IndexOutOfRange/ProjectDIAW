@@ -31,6 +31,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.inject.Inject;
+import com.steto.diaw.SyncUtils;
 import com.steto.diaw.actionbarcallback.ActionModeCallbackEpisode;
 import com.steto.diaw.adapter.ListEpisodeAdapter;
 import com.steto.diaw.dao.DatabaseHelper;
@@ -73,6 +74,9 @@ public class EpisodesSeenActivity extends RoboActivity {
 		mAdapter = new ListEpisodeAdapter(this, mAllEp);
 		mList.setAdapter(mAdapter);
 		setActionModeCallbackOnList();
+
+		String login = mSharedPreferences.getString(Tools.SHARED_PREF_LOGIN, "");
+		SyncUtils.CreateSyncAccount(this, login);
 	}
 
 	private void initializeProgressDialog() {

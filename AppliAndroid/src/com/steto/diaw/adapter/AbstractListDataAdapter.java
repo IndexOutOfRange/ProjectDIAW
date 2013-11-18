@@ -23,8 +23,12 @@ public abstract class AbstractListDataAdapter<T> extends BaseAdapter {
 	}
 
 	@Override
-	public Object getItem(int i) {
-		return mData.get(i);
+	public T getItem(int i) {
+		if(i < getCount()) {
+			return mData.get(i);
+		} else {
+			return null;
+		}
 	}
 
 	//see http://grepcode.com/file/repository.grepcode.com/java/ext/com.google.android/android/4.2.2_r1/android/widget/ArrayAdapter.java#ArrayAdapter.getItemId%28int%29

@@ -80,6 +80,7 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 		intent.putExtra(AmbiguityShow.INPUT_POTENTIAL_SHOW, (Serializable) ambiguous);
         intent.putExtra(AmbiguityShow.INPUT_AMBIGUOUS_SHOW, (Serializable) mShow);
 		startActivity(intent);
+		// TODO startActivityForResult seems better
 	}
 
 	private boolean processExtras() {

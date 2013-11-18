@@ -10,8 +10,10 @@ public class ListItemViewShow extends AbstractListItemView<Show> {
 	}
 
 	public void setData(Show show) {
-		mData = show;
-		if (mLeftTV != null) mLeftTV.setText(mData.getShowName());
-		if (mRightTV != null) mRightTV.setVisibility(GONE);
+		if(show != null) {
+			mData = show;
+			if (mLeftTV != null) mLeftTV.setText(mData.getShowName());
+			if (mRightTV != null) mRightTV.setVisibility(GONE);
+		}
 	}
 }

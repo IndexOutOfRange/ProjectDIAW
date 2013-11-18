@@ -22,7 +22,7 @@ public class ListShowAdapter extends AbstractListDataAdapter<Show> {
 		} else {
 			current = (ListItemViewShow) view;
 		}
-		current.setData(mData.get(i));
+		current.setData(getItem(i));
 		return current;
 	}
 }

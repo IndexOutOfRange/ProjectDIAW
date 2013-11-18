@@ -1,5 +1,9 @@
 package com.steto.diaw.activity;
 
+import java.util.List;
+
+import roboguice.activity.RoboListActivity;
+import roboguice.inject.ContentView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,15 +17,8 @@ import android.widget.Toast;
 import com.steto.diaw.adapter.ListShowAdapter;
 import com.steto.diaw.model.Show;
 import com.steto.diaw.service.IMDBService;
-import com.steto.diaw.service.ParseGetEpisodesService;
 import com.steto.diaw.service.TVDBService;
 import com.steto.projectdiaw.R;
-
-import java.util.List;
-
-import roboguice.activity.RoboListActivity;
-import roboguice.inject.ContentView;
-import roboguice.inject.InjectView;
 
 @ContentView(R.layout.activity_ambiguity_show)
 public class AmbiguityShow extends RoboListActivity {
@@ -111,6 +108,7 @@ public class AmbiguityShow extends RoboListActivity {
                     Intent intent = new Intent(AmbiguityShow.this, ShowDetailActivity.class);
                     intent.putExtra(ShowDetailActivity.EXTRA_SHOW_NAME, show.getShowName());
                     startActivity(intent);
+                    finish();
                 }
             } else {
                 Toast.makeText(AmbiguityShow.this, "unable to get response from server", Toast.LENGTH_SHORT).show();

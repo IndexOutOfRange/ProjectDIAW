@@ -134,6 +134,7 @@ public class EpisodesSeenActivity extends DrawerActivity {
 			menu.findItem(R.id.menu_update).setVisible(false);
 			setProgressBarIndeterminateVisibility(false);
 		}
+		menu.findItem(R.id.menu_database).setVisible(!drawerOpen);
 	}
 
 	@Override

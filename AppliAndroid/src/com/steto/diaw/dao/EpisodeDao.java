@@ -8,6 +8,7 @@ import roboguice.util.Ln;
 
 import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.dao.DaoManager;
+import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.SelectArg;
@@ -15,7 +16,7 @@ import com.j256.ormlite.support.ConnectionSource;
 import com.steto.diaw.model.Episode;
 import com.steto.diaw.model.Show;
 
-public class EpisodeDao extends BaseDaoImpl<Episode, Integer> {
+public class EpisodeDao extends BaseDaoImpl<Episode, String> {
 	
 	public EpisodeDao(ConnectionSource connection) throws SQLException {
 		super(connection, Episode.class);
@@ -29,7 +30,7 @@ public class EpisodeDao extends BaseDaoImpl<Episode, Integer> {
 	}
 
 	public List<Episode> queryWithLimit(int number) throws SQLException {
-		QueryBuilder<Episode, Integer> queryBuilder = queryBuilder();
+		QueryBuilder<Episode, String> queryBuilder = queryBuilder();
 		queryBuilder.orderBy(Episode.COLUMN_UPDATED_AT, false);
 		queryBuilder.limit(Long.valueOf(number));
 		queryBuilder.prepare();
@@ -38,7 +39,7 @@ public class EpisodeDao extends BaseDaoImpl<Episode, Integer> {
 	
 	public List<Episode> queryForName(String name) throws SQLException {
 		SelectArg nameArg = new SelectArg();
-		QueryBuilder<Episode, Integer> queryBuilder = queryBuilder();
+		QueryBuilder<Episode, String> queryBuilder = queryBuilder();
 		queryBuilder.where().eq(Episode.COLUMN_SHOWNAME, nameArg);
 		PreparedQuery<Episode> prepare = queryBuilder.prepare();
 		nameArg.setValue(name);
@@ -64,10 +65,9 @@ public class EpisodeDao extends BaseDaoImpl<Episode, Integer> {
 		return nbCreated;
 	}
 
-	public Show getShowFromEpisode(Episode ep) {
+	public Show getShowFromEpisode(Episode ep) throws SQLException {
 		ShowDao myDAO = null;
 		Show associated = new Show(ep.getShowName());
-		try {
 			myDAO = DaoManager.createDao(getConnectionSource(), Show.class);
 			List<Show> allShow = myDAO.queryForAll();
 			for (Show show : allShow) {
@@ -75,9 +75,14 @@ public class EpisodeDao extends BaseDaoImpl<Episode, Integer> {
 					return show;
 				}
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 		return associated;
+	}
+	
+	public int updateEpisodeAfterRename(Episode ep) throws SQLException {
+		DeleteBuilder<Episode, String> deleteBuilder = deleteBuilder();
+		deleteBuilder.where().eq(Episode.COLUMN_OBJECT_ID, ep.getObjectId());
+		delete(deleteBuilder.prepare());
+		
+		return create(ep);
 	}
 }

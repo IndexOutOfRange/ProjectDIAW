@@ -47,6 +47,7 @@ public class Episode implements Serializable, Comparable<Episode> {
 		setShowName(name);
 		setSeasonNumber(season);
 		setEpisodeNumber(episode);
+		generateCustomId();
 	}
 
 	public int getEpisodeNumber() {
@@ -55,6 +56,7 @@ public class Episode implements Serializable, Comparable<Episode> {
 
 	public void setEpisodeNumber(int episodeNumber) {
 		this.mEpisodeNumber = episodeNumber;
+		generateCustomId();
 	}
 
 	public int getSeasonNumber() {
@@ -63,6 +65,7 @@ public class Episode implements Serializable, Comparable<Episode> {
 
 	public void setSeasonNumber(int seasonNumber) {
 		this.mSeasonNumber = seasonNumber;
+		generateCustomId();
 	}
 
 	public String getShowName() {
@@ -71,6 +74,7 @@ public class Episode implements Serializable, Comparable<Episode> {
 
 	public void setShowName(String showName) {
 		this.mShowName = showName;
+		generateCustomId();
 	}
 
 	public boolean isDoubleEpisode() {
@@ -103,9 +107,13 @@ public class Episode implements Serializable, Comparable<Episode> {
 
 	public String getMCustomId() {
 		if (mCustomId == null) {
-			setMCustomId(mShowName + mSeasonNumber + "x" + mEpisodeNumber);
+			generateCustomId();
 		}
 		return mCustomId;
+	}
+
+	private void generateCustomId() {
+		setMCustomId(mShowName + mSeasonNumber + "x" + mEpisodeNumber);
 	}
 
 	public void setMCustomId(String customId) {

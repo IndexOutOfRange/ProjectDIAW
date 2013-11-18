@@ -7,6 +7,8 @@ import java.util.List;
 
 import com.j256.ormlite.dao.BaseDaoImpl;
 import com.j256.ormlite.dao.DaoManager;
+import com.j256.ormlite.stmt.DeleteBuilder;
+import com.j256.ormlite.stmt.PreparedDelete;
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.SelectArg;
@@ -15,7 +17,7 @@ import com.steto.diaw.model.Episode;
 import com.steto.diaw.model.Season;
 import com.steto.diaw.model.Show;
 
-public class ShowDao extends BaseDaoImpl<Show, Integer> {
+public class ShowDao extends BaseDaoImpl<Show, String> {
 
 	public ShowDao(ConnectionSource connectionSource) throws SQLException {
 		super(connectionSource, Show.class);
@@ -30,7 +32,7 @@ public class ShowDao extends BaseDaoImpl<Show, Integer> {
 
 	public Show queryFromName(String name) throws SQLException {
 		SelectArg nameArg = new SelectArg();
-		QueryBuilder<Show, Integer> queryBuilder = queryBuilder();
+		QueryBuilder<Show, String> queryBuilder = queryBuilder();
 		queryBuilder.where().eq(Show.COLUMN_SHOWNAME, nameArg);
 		PreparedQuery<Show> preparedQuery = queryBuilder.prepare();
 		nameArg.setValue(name);
@@ -75,5 +77,14 @@ public class ShowDao extends BaseDaoImpl<Show, Integer> {
 		season.setEpisodes(episodesToAdd);
 		seasons.add(season);
 		return seasons;
+	}
+
+	public int deleteFromName(String name) throws SQLException {
+		SelectArg nameArg = new SelectArg();
+		DeleteBuilder<Show, String> deleteBuilder = deleteBuilder();
+		deleteBuilder.where().eq(Show.COLUMN_SHOWNAME, nameArg);
+		PreparedDelete<Show> preparedDelete = deleteBuilder.prepare();
+		nameArg.setValue(name);
+		return delete(preparedDelete);
 	}
 }

@@ -1,10 +1,13 @@
 package com.steto.diaw.service;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpStatus;
 
 import roboguice.service.RoboIntentService;
@@ -80,23 +83,31 @@ public class TVDBService extends RoboIntentService {
 		myWeb.requestFromNetwork(myQuery.getQuery(), WebConnector.HTTPMethod.GET, null);
 		if (myWeb.getStatusCode() == HttpStatus.SC_OK) {
 			SeriesParser myParser = new SeriesParser();
-			ret = myParser.parse(myWeb.getResponseBody());
+            InputStream in = myWeb.getResponseBody();
+            InputStream inin = in;
+            try {
+                String tmp = IOUtils.toString(in);
+                inin = IOUtils.toInputStream(tmp);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            ret = myParser.parse(inin);
 
-			if (myParser.getStatusCode() == AbstractParser.PARSER_OK) {
-				//on va finalement renvoyer la serie avec toutes les infos à l'appelant
-				//au lieu de recopier une a une les infos on récupère juste l'ID de la base dans l'ancien objet et on le copie dans le nouvel objet
-				//on copie aussi le nom de la serie pour garder la correspondance avec la liste des episodes
-				ret.get(0).setId(input.getId());
-				ret.get(0).setTVDBConnected(false);
-				ret.get(0).setShowName(input.getShowName());
-				try {
-					ShowDao myDAO = null;
-					myDAO = mDatabaseHelper.getDao(Show.class);
-					myDAO.createOrUpdate(ret != null ? ret.get(0) : null);
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
+//			if (myParser.getStatusCode() == AbstractParser.PARSER_OK) {
+//				//on va finalement renvoyer la serie avec toutes les infos à l'appelant
+//				//au lieu de recopier une a une les infos on récupère juste l'ID de la base dans l'ancien objet et on le copie dans le nouvel objet
+//				//on copie aussi le nom de la serie pour garder la correspondance avec la liste des episodes
+//				ret.get(0).setId(input.getId());
+//				ret.get(0).setTVDBConnected(false);
+//				ret.get(0).setShowName(input.getShowName());
+//				try {
+//					ShowDao myDAO = null;
+//					myDAO = mDatabaseHelper.getDao(Show.class);
+//					myDAO.createOrUpdate(ret != null ? ret.get(0) : null);
+//				} catch (SQLException e) {
+//					e.printStackTrace();
+//				}
+//			}
 		}
 		return ret;
 	}

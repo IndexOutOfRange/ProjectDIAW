@@ -1,5 +1,6 @@
 package com.steto.diaw.activity;
 
+import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -74,9 +75,10 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 		}
 	}
 
-	private void resolveAmbiguity() {
+	private void resolveAmbiguity(List<Show> ambiguous) {
 		Intent intent = new Intent(this, AmbiguityShow.class);
-		intent.putExtra(AmbiguityShow.INPUT_SHOW, mShow);
+		intent.putExtra(AmbiguityShow.INPUT_POTENTIAL_SHOW, (Serializable) ambiguous);
+        intent.putExtra(AmbiguityShow.INPUT_AMBIGUOUS_SHOW, (Serializable) mShow);
 		startActivity(intent);
 	}
 
@@ -210,7 +212,12 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 					}
 				}
 			} else if (resultCode == TVDBService.RESULT_CODE_AMBIGUITY) {
-				resolveAmbiguity();
+                List<Show> response = (List<Show>) resultData.get(TVDBService.OUTPUT_DATA);
+                if( response != null && !response.isEmpty() ) {
+				    resolveAmbiguity(response);
+                } else {
+                    Toast.makeText(ShowDetailActivity.this, "Aucune serie ne correspond à ce nom.", Toast.LENGTH_SHORT).show();
+                }
 			} else {
 				Toast.makeText(ShowDetailActivity.this, "Unable to get result from service", Toast.LENGTH_SHORT).show();
 			}

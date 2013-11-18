@@ -14,6 +14,7 @@ import android.os.Handler;
 import android.os.ResultReceiver;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -34,6 +35,8 @@ import com.steto.projectdiaw.R;
 @ContentView(R.layout.activity_show_detail)
 public class ShowDetailActivity extends RoboExpandableListActivity {
 
+	private static final int SHORT_SUMMARY_LENGHT = 100;
+	private static final String HINT_TO_BE_CONTINUED = "...";
 	public static final String EXTRA_SHOW = "EXTRA_SHOW";
 	public static final String EXTRA_SHOW_NAME = "EXTRA_SHOW_NAME";
 
@@ -151,7 +154,6 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 			// TVDBContainerData
 			TextView title = (TextView) mHeaderContainer.findViewById(R.id.activity_show_detail_title);
 			title.setText(mShow.getShowName());
-
 			// TVDBContainerData
 			TextView genre = (TextView) mHeaderContainer.findViewById(R.id.activity_show_detail_genre);
 			genre.setText(mShow.getGenre());
@@ -161,12 +163,40 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 			// TVDBContainerData
 			TextView statut = (TextView) mHeaderContainer.findViewById(R.id.activity_show_detail_statut);
 			statut.setText(mShow.getStatus());
+			// TVDBContainerData
+			final TextView summary = (TextView) mHeaderContainer.findViewById(R.id.activity_show_detail_summary);
+			if(mShow.getResume().length() > SHORT_SUMMARY_LENGHT) {
+			summary.setText(mShow.getResume().substring(0, SHORT_SUMMARY_LENGHT)+HINT_TO_BE_CONTINUED);
+			summary.setOnClickListener(new OnSummaryClickListener(summary));
+			} else {
+				summary.setText(mShow.getResume());
+			}
 
 			if (mShow.getBanner() != null) {
 				// TVDBContainerData
 				ImageView bannerView = (ImageView) mHeaderContainer.findViewById(R.id.activity_show_detail_image);
 				bannerView.setImageBitmap(mShow.getBannerAsBitmap());
 			}
+		}
+	}
+
+	private final class OnSummaryClickListener implements OnClickListener {
+
+		private final TextView summary;
+
+		private OnSummaryClickListener(TextView summary) {
+			this.summary = summary;
+		}
+
+		@Override
+		public void onClick(View v) {
+			int nbChar = summary.getText().length();
+			if(nbChar == SHORT_SUMMARY_LENGHT + HINT_TO_BE_CONTINUED.length()) {
+				summary.setText(mShow.getResume());
+			} else {
+				summary.setText(mShow.getResume().substring(0, SHORT_SUMMARY_LENGHT)+HINT_TO_BE_CONTINUED);
+			}
+			
 		}
 	}
 

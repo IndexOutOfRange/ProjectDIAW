@@ -21,7 +21,7 @@ public class SeriesParser extends AbstractParser {
 
 		try {
 			current = serializer.read(TVDBContainerData.class, in);
-			ret.add(current.mShow);
+			ret.addAll(current.Series);
 		} catch (Exception e) {
 			setStatusCode(PARSER_GENERAL_EXCEPTION);
 			e.printStackTrace();

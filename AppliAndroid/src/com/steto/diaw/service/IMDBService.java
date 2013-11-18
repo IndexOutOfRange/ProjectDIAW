@@ -1,9 +1,12 @@
 package com.steto.diaw.service;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpStatus;
 
 import roboguice.service.RoboIntentService;
@@ -93,9 +96,15 @@ public class IMDBService extends RoboIntentService {
 		IMDBConnector myWeb = new IMDBConnector();
 		myWeb.requestFromNetwork(myQuery.toString(), WebConnector.HTTPMethod.GET, null);
 		if (myWeb.getStatusCode() == HttpStatus.SC_OK) {
-
+            InputStream in = myWeb.getResponseBody();
+            try {
+                String tmp = IOUtils.toString(in);
+                in = IOUtils.toInputStream(tmp);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 			IMDBParser myParser = new IMDBParser();
-			parsed = myParser.parse(myWeb.getResponseBody());
+			parsed = myParser.parse(in);
 			if (myParser.getStatusCode() != AbstractParser.PARSER_OK) {
 				resultCode = myParser.getStatusCode();
 			}

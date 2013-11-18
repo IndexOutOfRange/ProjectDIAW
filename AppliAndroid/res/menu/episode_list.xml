@@ -6,5 +6,9 @@
         android:icon="@drawable/ic_menu_refresh"
         android:showAsAction="always"
         android:title="@string/update"/>
+    
+    <item 
+        android:id="@+id/menu_database"
+        android:title="Voir la base de données" />
 
 </menu>

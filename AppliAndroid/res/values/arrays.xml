@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+	<!-- Drawer -->
+	<string-array name="drawer_array">
+        <item>@string/activity_title_home</item>
+        <item>@string/activity_title_list_show</item>
+    </string-array>
+
+</resources>

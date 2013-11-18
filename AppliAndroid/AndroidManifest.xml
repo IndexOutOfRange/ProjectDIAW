@@ -42,6 +42,7 @@
             android:name="com.steto.diaw.activity.ShowDetailActivity"
             android:theme="@style/AppTheme.TranslucentActionBar" />
         <activity android:name="com.steto.diaw.activity.AmbiguityShow" />
+        <activity android:name="com.steto.diaw.activity.DatabaseActivity" />
 
         <service android:name="com.steto.diaw.service.ParseGetEpisodesService" />
         <service android:name="com.steto.diaw.service.ParseUpdateEpisodeService" />

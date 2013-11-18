@@ -42,18 +42,16 @@
 
 
     <!-- Action Bar Contextual -->
-
 	<plurals name="nb_items_selected">
 		<item quantity="one">selectionné</item>
 		<item quantity="other">selectionnés</item>
 	</plurals>
 	
-	<!-- Drawer -->
-	<string-array name="drawer_array">
-        <item>@string/activity_title_home</item>
-        <item>@string/activity_title_list_show</item>
-    </string-array>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+    
+    <!-- Preferences  -->
+    <string name="pref_sync_frequency">Fréquence de synchronisation</string>
+    <string name="pref_sync_frequency_summary">A quelle fréquence votre compte doit-il être mis à jour ?</string>
 
 </resources>

@@ -108,6 +108,8 @@ public class EpisodesSeenActivity extends DrawerActivity {
 			case R.id.menu_update:
 				startUpdateListEpisodes();
 				return true;
+				case R.id.menu_database:
+					startActivity(new Intent(this, DatabaseActivity.class));
 			default:
 				return super.onOptionsItemSelected(item);
 		}

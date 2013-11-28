@@ -60,6 +60,7 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 
 		if (!processExtras()) {
 			finish();
+			return;
 		}
 
 		readDatabase();
@@ -117,6 +118,15 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 			mShow = (Show) (getIntent().getExtras().get(EXTRA_SHOW));
 			if (mShow != null) {
 				return true;
+			} else {
+				String showName = getIntent().getExtras().getString(ShowDetailActivity.EXTRA_SHOW_NAME);
+				try {
+					mShow = ((ShowDao) mDatabaseHelper.getDao(Show.class)).queryFromName(showName);
+					return true;
+				} catch (SQLException e) {
+					Ln.e(e);
+					return false;
+				}
 			}
 		}
 		return false;

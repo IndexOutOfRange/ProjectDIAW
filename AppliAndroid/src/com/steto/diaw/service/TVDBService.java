@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpStatus;
@@ -37,11 +38,12 @@ public class TVDBService extends RoboIntentService {
 	public static final String OUTPUT_DATA = "OUTPUT_DATA";
 	public static final String INPUT_RESULTRECEIVER = "INPUT_RESULTRECEIVER";
 	public static final int RESULT_CODE_OK = 0;
-	public static final int RESULT_CODE_AMBIGUITY = -20; //code d'erreur < a -20 sont des erreurs du service, < -10 des erreurs BDD, <0 des erreurs Parser, > 0 les codes retours HTTP
+	public static final int RESULT_CODE_AMBIGUITY = -20; // code d'erreur < a -20 sont des erreurs du service, < -10 des erreurs BDD, <0 des erreurs Parser, > 0
+															// les codes retours HTTP
 
 	@Inject
 	private DatabaseHelper mDatabaseHelper;
-	
+
 	public TVDBService() {
 		super(NAME);
 	}
@@ -57,8 +59,8 @@ public class TVDBService extends RoboIntentService {
 			ret = getShowsFromId(input, id, ret);
 		} else {
 			ret = getShowsFromName(input, ret);
-			sendBackResult(receiver, responseCode, (Serializable) ret);
-			if (ret != null && !ret.isEmpty() && ret.size() == 1) { //si la "recherche" sur TVDB n'a donné qu'un seul resultat alors pas besoin de lancer une recherche sur IMDB
+			if (ret != null && !ret.isEmpty() && ret.size() == 1) { // si la "recherche" sur TVDB n'a donné qu'un seul resultat alors pas besoin de lancer une
+																	// recherche sur IMDB
 				ret = getShowsFromId(input, ret.get(0).getTVDBID(), ret);
 			} else {
 				responseCode = RESULT_CODE_AMBIGUITY;
@@ -66,11 +68,10 @@ public class TVDBService extends RoboIntentService {
 		}
 		sendBackResult(receiver, responseCode, (Serializable) ret);
 
-
 	}
 
 	private void sendBackResult(ResultReceiver receiver, int responseCode, Serializable ret) {
-		//retour à l'appelant
+		// retour à l'appelant
 		Bundle retBundle = new Bundle();
 		retBundle.putSerializable(OUTPUT_DATA, ret);
 		receiver.send(responseCode, retBundle);
@@ -83,31 +84,31 @@ public class TVDBService extends RoboIntentService {
 		myWeb.requestFromNetwork(myQuery.getQuery(), WebConnector.HTTPMethod.GET, null);
 		if (myWeb.getStatusCode() == HttpStatus.SC_OK) {
 			SeriesParser myParser = new SeriesParser();
-            InputStream in = myWeb.getResponseBody();
-            InputStream inin = in;
-            try {
-                String tmp = IOUtils.toString(in);
-                inin = IOUtils.toInputStream(tmp);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            ret = myParser.parse(inin);
+			InputStream in = myWeb.getResponseBody();
+			InputStream inin = in;
+			try {
+				String tmp = IOUtils.toString(in);
+				inin = IOUtils.toInputStream(tmp);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			ret = myParser.parse(inin);
 
-//			if (myParser.getStatusCode() == AbstractParser.PARSER_OK) {
-//				//on va finalement renvoyer la serie avec toutes les infos à l'appelant
-//				//au lieu de recopier une a une les infos on récupère juste l'ID de la base dans l'ancien objet et on le copie dans le nouvel objet
-//				//on copie aussi le nom de la serie pour garder la correspondance avec la liste des episodes
-//				ret.get(0).setId(input.getId());
-//				ret.get(0).setTVDBConnected(false);
-//				ret.get(0).setShowName(input.getShowName());
-//				try {
-//					ShowDao myDAO = null;
-//					myDAO = mDatabaseHelper.getDao(Show.class);
-//					myDAO.createOrUpdate(ret != null ? ret.get(0) : null);
-//				} catch (SQLException e) {
-//					e.printStackTrace();
-//				}
-//			}
+			// if (myParser.getStatusCode() == AbstractParser.PARSER_OK) {
+			// //on va finalement renvoyer la serie avec toutes les infos à l'appelant
+			// //au lieu de recopier une a une les infos on récupère juste l'ID de la base dans l'ancien objet et on le copie dans le nouvel objet
+			// //on copie aussi le nom de la serie pour garder la correspondance avec la liste des episodes
+			// ret.get(0).setId(input.getId());
+			// ret.get(0).setTVDBConnected(false);
+			// ret.get(0).setShowName(input.getShowName());
+			// try {
+			// ShowDao myDAO = null;
+			// myDAO = mDatabaseHelper.getDao(Show.class);
+			// myDAO.createOrUpdate(ret != null ? ret.get(0) : null);
+			// } catch (SQLException e) {
+			// e.printStackTrace();
+			// }
+			// }
 		}
 		return ret;
 	}
@@ -115,7 +116,7 @@ public class TVDBService extends RoboIntentService {
 	private List<Show> getShowsFromId(Show input, Integer id, List<Show> ret) {
 		if (!input.isTVDBConnected()) {
 			SeriesIDConnector myWeb = new SeriesIDConnector();
-			myWeb.requestFromNetwork(id.toString() + "/en.xml", WebConnector.HTTPMethod.GET, null);
+			myWeb.requestFromNetwork(id.toString() + "/" + Locale.getDefault().getLanguage() + ".xml", WebConnector.HTTPMethod.GET, null);
 
 			if (myWeb.getStatusCode() == HttpStatus.SC_OK) {
 				SeriesParser myParser = new SeriesParser();
@@ -135,7 +136,7 @@ public class TVDBService extends RoboIntentService {
 			}
 		} else {
 			ret = new ArrayList<Show>();
-			ret.add(input);//si l'episode est deja complet alors on le renvois à l'apellant
+			ret.add(input);// si l'episode est deja complet alors on le renvois à l'apellant
 		}
 		return ret;
 	}

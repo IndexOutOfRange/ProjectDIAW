@@ -10,13 +10,13 @@
 			android:layout_height="match_parent"
 			android:divider="@null"
 			android:listSelector="@android:color/transparent"
-			android:scrollbarStyle="outsideOverlay"/>
+			android:scrollbarStyle="outsideOverlay" />
 
 	<TextView
 			android:id="@id/android:empty"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
 			android:gravity="center"
-			android:text="@string/list_no_data"/>
+			android:text="@string/no_data"/>
 
 </LinearLayout>

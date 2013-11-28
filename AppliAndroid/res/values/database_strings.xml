@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<string name="desc_search_icon">Recherche</string>
+
+    <string name="view_db">Voir la base de données</string>
+    
+    <string name="icon_prec">&lt;</string>
+    <string name="icon_suiv">&gt;</string>
+    
+</resources>

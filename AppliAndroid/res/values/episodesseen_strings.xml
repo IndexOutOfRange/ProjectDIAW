@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="loading">Chargement</string>
+    <string name="update">Mettre à jour</string>
+    <string name="delete">Supprimer</string>
+    <string name="rename">Renommer l\'épisode</string>
+
+    <!-- celllist -->
+    <string name="hint_section">Section</string>
+    <string name="hint_show_title">TV Show</string>
+
+    <!-- Dialog -->
+    <string name="dialog_rename_episode_name">nom de l\'épisode</string>
+
+    <!-- Action Bar Contextual -->
+    <plurals name="nb_items_selected">
+        <item quantity="one">selectionné</item>
+        <item quantity="other">selectionnés</item>
+    </plurals>
+
+</resources>

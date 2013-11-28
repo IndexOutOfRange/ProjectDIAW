@@ -29,6 +29,7 @@
             android:layout_height="48dp"
             android:layout_gravity="right"
             android:scaleType="center"
+            android:contentDescription="@string/desc_search_icon"
             android:src="@android:drawable/ic_search_category_default" />
     </LinearLayout>
 
@@ -46,7 +47,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="Recherche"
+            android:hint="@string/search"
             android:singleLine="true" />
 
         <Spinner
@@ -84,13 +85,13 @@
             android:id="@+id/btn_previousPage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="&lt;" />
+            android:text="@string/icon_prec" />
 
         <Button
             android:id="@+id/btn_nextPage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=">" />
+            android:text="@string/icon_suiv" />
 
         <TextView
             android:id="@+id/tv_pageRecap"

@@ -39,9 +39,11 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 	private static final String HINT_TO_BE_CONTINUED = "...";
 	public static final String EXTRA_SHOW = "EXTRA_SHOW";
 	public static final String EXTRA_SHOW_NAME = "EXTRA_SHOW_NAME";
+	private static final int REQUEST_RESOLVE_AMBIGUITY = 1000;
 
 	private Show mShow;
 	private List<Season> mListSeasons;
+	private boolean mBannerIsDownloading = false;
 
 	@Inject
 	private DatabaseHelper mDatabaseHelper;
@@ -68,6 +70,17 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 	}
 
 	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+
+		if (requestCode == REQUEST_RESOLVE_AMBIGUITY && resultCode == RESULT_OK) {
+			if(!manageResultResolveAmbiguity(data)) {
+				finish();
+			}
+		}
+	}
+
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case android.R.id.home:
@@ -81,28 +94,32 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 	private void resolveAmbiguity(List<Show> ambiguous) {
 		Intent intent = new Intent(this, AmbiguityShow.class);
 		intent.putExtra(AmbiguityShow.INPUT_POTENTIAL_SHOW, (Serializable) ambiguous);
-        intent.putExtra(AmbiguityShow.INPUT_AMBIGUOUS_SHOW, (Serializable) mShow);
-		startActivity(intent);
-		// TODO startActivityForResult seems better
+		intent.putExtra(AmbiguityShow.INPUT_AMBIGUOUS_SHOW, (Serializable) mShow);
+		startActivityForResult(intent, REQUEST_RESOLVE_AMBIGUITY);
+	}
+
+	private boolean manageResultResolveAmbiguity(Intent data) {
+		String showName = data.getExtras().getString(ShowDetailActivity.EXTRA_SHOW_NAME);
+		try {
+			mShow = ((ShowDao) mDatabaseHelper.getDao(Show.class)).queryFromName(showName);
+			setProgressBarIndeterminateVisibility(true);
+			launchSerieService();
+			launchBannerService();
+			return true;
+		} catch (SQLException e) {
+			Ln.e(e);
+			return false;
+		}
 	}
 
 	private boolean processExtras() {
 		if (getIntent().getExtras() != null) {
 			mShow = (Show) (getIntent().getExtras().get(EXTRA_SHOW));
-			if (mShow == null) {
-				String showName = getIntent().getExtras().getString(EXTRA_SHOW_NAME);
-				try {
-					mShow = ((ShowDao) mDatabaseHelper.getDao(Show.class)).queryFromName(showName);
-					return true;
-				} catch (SQLException e) {
-					Ln.e(e);
-					return false;
-				}
+			if (mShow != null) {
+				return true;
 			}
-			return true;
-		} else {
-			return false;
 		}
+		return false;
 	}
 
 	private void readDatabase() {
@@ -127,7 +144,8 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 	}
 
 	private void launchBannerService() {
-		if (mShow.getBannerURL() != null) {
+		if (mShow.getBannerURL() != null && mShow.getBanner() == null && !mBannerIsDownloading) {
+			mBannerIsDownloading = true;
 			Intent intent = new Intent(this, BannerService.class);
 			intent.putExtra(BannerService.INPUT_SERIE, mShow);
 			intent.putExtra(BannerService.INPUT_RECEIVER, mBannerResultReceiver);
@@ -165,9 +183,9 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 			statut.setText(mShow.getStatus());
 			// TVDBContainerData
 			final TextView summary = (TextView) mHeaderContainer.findViewById(R.id.activity_show_detail_summary);
-			if(mShow.getResume().length() > SHORT_SUMMARY_LENGHT) {
-			summary.setText(mShow.getResume().substring(0, SHORT_SUMMARY_LENGHT)+HINT_TO_BE_CONTINUED);
-			summary.setOnClickListener(new OnSummaryClickListener(summary));
+			if (mShow.getResume().length() > SHORT_SUMMARY_LENGHT) {
+				summary.setText(mShow.getResume().substring(0, SHORT_SUMMARY_LENGHT) + HINT_TO_BE_CONTINUED);
+				summary.setOnClickListener(new OnSummaryClickListener(summary));
 			} else {
 				summary.setText(mShow.getResume());
 			}
@@ -191,12 +209,12 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 		@Override
 		public void onClick(View v) {
 			int nbChar = summary.getText().length();
-			if(nbChar == SHORT_SUMMARY_LENGHT + HINT_TO_BE_CONTINUED.length()) {
+			if (nbChar == SHORT_SUMMARY_LENGHT + HINT_TO_BE_CONTINUED.length()) {
 				summary.setText(mShow.getResume());
 			} else {
-				summary.setText(mShow.getResume().substring(0, SHORT_SUMMARY_LENGHT)+HINT_TO_BE_CONTINUED);
+				summary.setText(mShow.getResume().substring(0, SHORT_SUMMARY_LENGHT) + HINT_TO_BE_CONTINUED);
 			}
-			
+
 		}
 	}
 
@@ -211,6 +229,7 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 			super.onReceiveResult(resultCode, resultData);
 			Ln.i("onResult");
 			setProgressBarIndeterminateVisibility(false);
+			mBannerIsDownloading = false;
 			if (resultCode == ParseGetEpisodesService.RESULT_CODE_OK) {
 				Bitmap banner = (Bitmap) resultData.getParcelable(BannerService.OUTPUT_BITMAP);
 				mShow.setBanner(banner);
@@ -238,17 +257,15 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 				if (response != null && !response.isEmpty()) {
 					mShow = response.get(0);
 					refreshLayout();
-					if (mShow.getBanner() == null) {
-						launchBannerService();
-					}
+					launchBannerService();
 				}
 			} else if (resultCode == TVDBService.RESULT_CODE_AMBIGUITY) {
-                List<Show> response = (List<Show>) resultData.get(TVDBService.OUTPUT_DATA);
-                if( response != null && !response.isEmpty() ) {
-				    resolveAmbiguity(response);
-                } else {
-                    Toast.makeText(ShowDetailActivity.this, "Aucune serie ne correspond à ce nom.", Toast.LENGTH_SHORT).show();
-                }
+				List<Show> response = (List<Show>) resultData.get(TVDBService.OUTPUT_DATA);
+				if (response != null && !response.isEmpty()) {
+					resolveAmbiguity(response);
+				} else {
+					Toast.makeText(ShowDetailActivity.this, "Aucune serie ne correspond à ce nom.", Toast.LENGTH_SHORT).show();
+				}
 			} else {
 				Toast.makeText(ShowDetailActivity.this, "Unable to get result from service", Toast.LENGTH_SHORT).show();
 			}

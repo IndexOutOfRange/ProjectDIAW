@@ -9,6 +9,6 @@
     
     <item 
         android:id="@+id/menu_database"
-        android:title="Voir la base de données" />
+        android:title="@string/view_db" />
 
 </menu>

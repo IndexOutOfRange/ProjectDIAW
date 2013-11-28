@@ -1,57 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-	<string name="app_name">DIAW</string>
-	<string name="login_text_button">Login</string>
-	<string name="pass_label">Password</string>
-	<string name="login_label">Login</string>
-	<string name="search">Recherche</string>
-	<string name="loading">Chargement</string>
-	<string name="update">Mettre à jour</string>
-	<string name="delete">Supprimer</string>
-	<string name="rename">Renommer l\'épisode</string>
+    <!-- Manifest -->
+    <string name="app_name">DIAW</string>
+    <string name="activity_title_list_show">Mes séries</string>
+    <string name="activity_title_home">Derniers épisodes</string>
+    <string name="activity_title_login">Connection DIAW</string>
 
-	<string name="activity_title_list_show">Mes séries</string>
-	<string name="activity_title_home">Derniers épisodes</string>
-	<string name="activity_title_login">Connection DIAW</string>
+    <!-- General -->
+    <string name="no_data">Pas de données</string>
+    <string name="search">Recherche</string>
+    <string name="btn_ok">OK</string>
+    <string name="btn_annuler">Annuler</string>
 
-	<!-- content description -->
-	<string name="desc_splash_screen">Splash screen image</string>
+    <!-- content description -->
+    <string name="desc_banner_show">Image de la bannière de la série</string>
 
-	<!-- celllist -->
-	<string name="hint_section">Section</string>
-	<string name="hint_show_title">TV Show</string>
+    <!-- Reseau -->
+    <string name="msg_erreur_reseau">Echec de communication avec le serveur</string>
 
-	<string name="msg_erreur_reseau">Unable to get response from server</string>
-	<string name="msg_send_vlc_plugin">Recevoir le plugin VLC par email</string>
-	<string name="msg_app_description_login_screen">Bienvenue dans l\'application qui va vous permettre de gérer vos
-		séries ainsi que d\'etre tenu informé des evolutions de vos series préférées.
-	</string>
-	<string name="msg_pourquoi_se_loger">En ayant un compte l\'application vous permettra de suivre l\'évolution des
-		séries que vous regardez.
-	</string>
-	<string name="email_hint">mon@adresse.mail</string>
-	<string name="email_error">Veuillez indiquer votre email</string>
-	<string name="list_no_data">Pas de données</string>
+    <!-- Drawer -->
+    <string name="drawer_open">Tiroir de navigation ouvert</string>
+    <string name="drawer_close">Tiroir de navigation fermé</string>
 
-	<!-- Dialog -->
-	<string name="dialog_rename_episode_name">nom de l\'épisode</string>
-	<string name="btn_ok">OK</string>
-	<string name="btn_annuler">Annuler</string>
-    <string name="msg_work_in_progress">pagination : work in progress</string>
-
-
-    <!-- Action Bar Contextual -->
-	<plurals name="nb_items_selected">
-		<item quantity="one">selectionné</item>
-		<item quantity="other">selectionnés</item>
-	</plurals>
-	
-    <string name="drawer_open">Open navigation drawer</string>
-    <string name="drawer_close">Close navigation drawer</string>
-    
-    <!-- Preferences  -->
+    <!-- Preferences -->
     <string name="pref_sync_frequency">Fréquence de synchronisation</string>
     <string name="pref_sync_frequency_summary">A quelle fréquence votre compte doit-il être mis à jour ?</string>
+    <string name="pref_sync_number_episode">Nombre d\'épisodes à télécharger par requête</string>
+    <string name="pref_sync_number_episode_summary">Combien d\'épisodes voulez-vous récupérer par mise-à-jour ?</string>
+    
+    <!-- A RANGE / WIP / TO DELETE -->
+	<string name="msg_work_in_progress">pagination : work in progress</string>
 
 </resources>

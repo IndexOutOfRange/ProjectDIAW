@@ -15,7 +15,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
 import android.view.ActionMode;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -218,8 +217,7 @@ public class EpisodesSeenActivity extends DrawerActivity {
 
 	public void renameEpisode(final Episode episode) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		LayoutInflater inflater = getLayoutInflater();
-		View viewInDialog = inflater.inflate(R.layout.dialog_rename, null);
+		View viewInDialog = getLayoutInflater().inflate(R.layout.dialog_rename, null);
 		final EditText nameShowEditText = (EditText) viewInDialog.findViewById(R.id.dialog_rename_episode_name);
 		nameShowEditText.setText(episode.getShowName());
 
@@ -248,7 +246,7 @@ public class EpisodesSeenActivity extends DrawerActivity {
 						dialog.dismiss();
 					}
 				})
-				.setTitle(R.string.rename);
+				.setTitle(R.string.rename_episode);
 		AlertDialog dialog = builder.create();
 		dialog.show();
 	}

@@ -13,7 +13,7 @@ import com.steto.diaw.account.AccountService;
  * Static helper methods for working with the sync framework.
  */
 public class SyncUtils {
-    private static final long SYNC_FREQUENCY = 2 * 60 * 60;  // 2 hour (in seconds)
+    private static final long SYNC_FREQUENCY = 4 * 60 * 60;  // 4 hours (in seconds)
     private static final String CONTENT_AUTHORITY = "com.steto.diaw";
     private static final String PREF_SETUP_COMPLETE = "setup_complete";
 

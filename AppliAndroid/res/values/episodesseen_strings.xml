@@ -4,7 +4,7 @@
     <string name="loading">Chargement</string>
     <string name="update">Mettre à jour</string>
     <string name="delete">Supprimer</string>
-    <string name="rename">Renommer l\'épisode</string>
+    <string name="rename_episode">Renommer l\'épisode</string>
 
     <!-- celllist -->
     <string name="hint_section">Section</string>

@@ -7,15 +7,20 @@ import java.util.List;
 import roboguice.activity.RoboExpandableListActivity;
 import roboguice.inject.ContentView;
 import roboguice.util.Ln;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
+import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,8 +28,10 @@ import android.widget.Toast;
 import com.google.inject.Inject;
 import com.steto.diaw.adapter.SeasonWithEpisodesExpandableAdapter;
 import com.steto.diaw.dao.DatabaseHelper;
+import com.steto.diaw.dao.EpisodeDao;
 import com.steto.diaw.dao.ShowDao;
 import com.steto.diaw.helper.TranslucideActionBarHelper;
+import com.steto.diaw.model.Episode;
 import com.steto.diaw.model.Season;
 import com.steto.diaw.model.Show;
 import com.steto.diaw.service.BannerService;
@@ -75,10 +82,16 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 		super.onActivityResult(requestCode, resultCode, data);
 
 		if (requestCode == REQUEST_RESOLVE_AMBIGUITY && resultCode == RESULT_OK) {
-			if(!manageResultResolveAmbiguity(data)) {
+			if (!manageResultResolveAmbiguity(data)) {
 				finish();
 			}
 		}
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.show_detail, menu);
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
@@ -87,9 +100,95 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 			case android.R.id.home:
 				onBackPressed();
 				return true;
+			case R.id.menu_rename:
+				renameShow();
+				return true;
+
 			default:
 				return super.onOptionsItemSelected(item);
 		}
+	}
+
+	private void searchSerieWithAnotherName() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		LayoutInflater inflater = getLayoutInflater();
+		View viewInDialog = inflater.inflate(R.layout.dialog_rename, null);
+		final EditText nameShowEditText = (EditText) viewInDialog.findViewById(R.id.dialog_rename_episode_name);
+		nameShowEditText.setHint(R.string.dialog_search_show_name);
+		nameShowEditText.setText(mShow.getShowName());
+		builder.setCancelable(false);
+		builder.setView(viewInDialog)
+				// Add action buttons
+				.setPositiveButton(R.string.btn_ok, new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+						String showNameBeforeRename = mShow.getShowName();
+						mShow.setShowName(nameShowEditText.getText().toString());
+						setProgressBarIndeterminateVisibility(true);
+						launchSerieService(showNameBeforeRename);
+					}
+				})
+				.setNegativeButton(R.string.btn_annuler, new DialogInterface.OnClickListener() {
+
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.dismiss();
+					}
+				})
+				.setTitle(R.string.search_show);
+		AlertDialog dialog = builder.create();
+		dialog.show();
+	}
+
+	private void renameShow() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		LayoutInflater inflater = getLayoutInflater();
+		View viewInDialog = inflater.inflate(R.layout.dialog_rename, null);
+		final EditText nameShowEditText = (EditText) viewInDialog.findViewById(R.id.dialog_rename_episode_name);
+		nameShowEditText.setHint(R.string.dialog_rename_show_name);
+		nameShowEditText.setText(mShow.getShowName());
+
+		builder.setView(viewInDialog)
+				// Add action buttons
+				.setPositiveButton(R.string.btn_ok, new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+						setProgressBarIndeterminate(true);
+						String newName = nameShowEditText.getText().toString();
+						// rename all tv shows in this activity
+						try {
+							EpisodeDao episodeDao = mDatabaseHelper.getDao(Episode.class);
+							ShowDao showDao = mDatabaseHelper.getDao(Show.class);
+							for (Season season : mListSeasons) {
+								for (Episode episode : season.getEpisodes()) {
+									episodeDao.delete(episode);
+									episode.setShowName(newName); // change id : TODO in DAO method...
+									episodeDao.create(episode);
+								}
+							}
+							Show newShow = new Show(newName);
+							showDao.createIfNotExists(newShow);
+							showDao.delete(mShow);
+						} catch (SQLException e) {
+							Ln.e(e);
+						}
+						// new ShowDetailActivity
+						Intent intentDetail = new Intent(ShowDetailActivity.this, ShowDetailActivity.class);
+						intentDetail.putExtra(ShowDetailActivity.EXTRA_SHOW_NAME, newName);
+						startActivity(intentDetail);
+						finish();
+					}
+				})
+				.setNegativeButton(R.string.btn_annuler, new DialogInterface.OnClickListener() {
+
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.dismiss();
+					}
+				})
+				.setTitle(R.string.rename_show);
+		AlertDialog dialog = builder.create();
+		dialog.show();
 	}
 
 	private void resolveAmbiguity(List<Show> ambiguous) {
@@ -147,8 +246,13 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 	}
 
 	private void launchSerieService() {
+		launchSerieService(null);
+	}
+
+	private void launchSerieService(String explicitShowName) {
 		Intent intent = new Intent(this, TVDBService.class);
 		intent.putExtra(TVDBService.INPUT_SERIE, mShow);
+		intent.putExtra(TVDBService.INPUT_NAME, explicitShowName == null ? mShow.getShowName() : explicitShowName);
 		intent.putExtra(TVDBService.INPUT_RESULTRECEIVER, mShowResultReceiver);
 		startService(intent);
 	}
@@ -275,6 +379,7 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 					resolveAmbiguity(response);
 				} else {
 					Toast.makeText(ShowDetailActivity.this, "Aucune serie ne correspond à ce nom.", Toast.LENGTH_SHORT).show();
+					searchSerieWithAnotherName();
 				}
 			} else {
 				Toast.makeText(ShowDetailActivity.this, "Unable to get result from service", Toast.LENGTH_SHORT).show();

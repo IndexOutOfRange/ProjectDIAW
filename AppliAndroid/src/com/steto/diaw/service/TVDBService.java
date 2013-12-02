@@ -34,6 +34,7 @@ public class TVDBService extends RoboIntentService {
 
 	private static final String NAME = "TVDBService";
 	public static final String INPUT_SERIE = "INPUT_SERIE";
+	public static final String INPUT_NAME = "INPUT_NAME";
 	private static final String SERIE_NAME_QUERY = "seriesname";
 	public static final String OUTPUT_DATA = "OUTPUT_DATA";
 	public static final String INPUT_RESULTRECEIVER = "INPUT_RESULTRECEIVER";
@@ -43,6 +44,7 @@ public class TVDBService extends RoboIntentService {
 
 	@Inject
 	private DatabaseHelper mDatabaseHelper;
+	private String mShowName;
 
 	public TVDBService() {
 		super(NAME);
@@ -51,6 +53,7 @@ public class TVDBService extends RoboIntentService {
 	@Override
 	protected void onHandleIntent(Intent intent) {
 		Show input = (Show) intent.getExtras().get(INPUT_SERIE);
+		mShowName = intent.getExtras().getString(INPUT_NAME);
 		ResultReceiver receiver = (ResultReceiver) intent.getExtras().get(INPUT_RESULTRECEIVER);
 		Integer id = input.getTVDBID();
 		int responseCode = RESULT_CODE_OK;
@@ -124,7 +127,7 @@ public class TVDBService extends RoboIntentService {
 				if (myParser.getStatusCode() == AbstractParser.PARSER_OK) {
 					ret.get(0).setId(input.getId());
 					ret.get(0).setTVDBConnected(true);
-					ret.get(0).setShowName(input.getShowName());
+					ret.get(0).setShowName(mShowName);
 					try {
 						ShowDao myDAO = null;
 						myDAO = mDatabaseHelper.getDao(Show.class);
@@ -136,7 +139,7 @@ public class TVDBService extends RoboIntentService {
 			}
 		} else {
 			ret = new ArrayList<Show>();
-			ret.add(input);// si l'episode est deja complet alors on le renvois à l'apellant
+			ret.add(input);// si l'episode est deja complet alors on le renvoie à l'apellant
 		}
 		return ret;
 	}

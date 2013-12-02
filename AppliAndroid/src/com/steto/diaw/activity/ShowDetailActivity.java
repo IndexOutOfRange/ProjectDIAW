@@ -252,7 +252,7 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 	private void launchSerieService(String explicitShowName) {
 		Intent intent = new Intent(this, TVDBService.class);
 		intent.putExtra(TVDBService.INPUT_SERIE, mShow);
-		intent.putExtra(TVDBService.INPUT_NAME, explicitShowName == null ? mShow.getShowName() : explicitShowName);
+		intent.putExtra(TVDBService.INPUT_REAL_NAME, explicitShowName != null ? explicitShowName : null);
 		intent.putExtra(TVDBService.INPUT_RESULTRECEIVER, mShowResultReceiver);
 		startService(intent);
 	}

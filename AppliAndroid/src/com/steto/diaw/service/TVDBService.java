@@ -34,7 +34,7 @@ public class TVDBService extends RoboIntentService {
 
 	private static final String NAME = "TVDBService";
 	public static final String INPUT_SERIE = "INPUT_SERIE";
-	public static final String INPUT_NAME = "INPUT_NAME";
+	public static final String INPUT_REAL_NAME = "INPUT_REAL_NAME";
 	private static final String SERIE_NAME_QUERY = "seriesname";
 	public static final String OUTPUT_DATA = "OUTPUT_DATA";
 	public static final String INPUT_RESULTRECEIVER = "INPUT_RESULTRECEIVER";
@@ -44,7 +44,7 @@ public class TVDBService extends RoboIntentService {
 
 	@Inject
 	private DatabaseHelper mDatabaseHelper;
-	private String mShowName;
+	private String mRealShowName;
 
 	public TVDBService() {
 		super(NAME);
@@ -53,7 +53,7 @@ public class TVDBService extends RoboIntentService {
 	@Override
 	protected void onHandleIntent(Intent intent) {
 		Show input = (Show) intent.getExtras().get(INPUT_SERIE);
-		mShowName = intent.getExtras().getString(INPUT_NAME);
+		mRealShowName = intent.getExtras().getString(INPUT_REAL_NAME, null);
 		ResultReceiver receiver = (ResultReceiver) intent.getExtras().get(INPUT_RESULTRECEIVER);
 		Integer id = input.getTVDBID();
 		int responseCode = RESULT_CODE_OK;
@@ -127,7 +127,7 @@ public class TVDBService extends RoboIntentService {
 				if (myParser.getStatusCode() == AbstractParser.PARSER_OK) {
 					ret.get(0).setId(input.getId());
 					ret.get(0).setTVDBConnected(true);
-					ret.get(0).setShowName(mShowName);
+					ret.get(0).setShowName(mRealShowName != null ? mRealShowName : input.getShowName());
 					try {
 						ShowDao myDAO = null;
 						myDAO = mDatabaseHelper.getDao(Show.class);

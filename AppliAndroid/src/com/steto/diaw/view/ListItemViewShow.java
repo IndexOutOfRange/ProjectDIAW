@@ -16,4 +16,8 @@ public class ListItemViewShow extends AbstractListItemView<Show> {
 			if (mRightTV != null) mRightTV.setVisibility(GONE);
 		}
 	}
+
+    public void setLayoutBackgroundState(int[] state) {
+        mLinearLayout.getBackground().setState(state);
+    }
 }

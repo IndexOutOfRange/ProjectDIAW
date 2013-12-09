@@ -27,7 +27,7 @@ import android.widget.Toast;
 
 import com.google.inject.Inject;
 import com.steto.diaw.SyncUtils;
-import com.steto.diaw.actionbarcallback.ActionModeCallbackEpisode;
+import com.steto.diaw.actionbarcallback.ActionModeCallback;
 import com.steto.diaw.activity.model.DrawerActivity;
 import com.steto.diaw.adapter.ListEpisodeAdapter;
 import com.steto.diaw.dao.DatabaseHelper;
@@ -57,6 +57,7 @@ public class EpisodesSeenActivity extends DrawerActivity {
 	private ResultReceiver mShowResultReceiver = new ShowResultReceiver();
 	private ResultReceiver mDeleteEpisodeResultReceiver = new DeleteEpisodeResultReceiver();
 	private ResultReceiver mRenameEpisodeResultReceiver = new RenameResultReceiver();
+    private ActionModeCallback mActionMode;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -65,14 +66,14 @@ public class EpisodesSeenActivity extends DrawerActivity {
 
 		mList = (ListView) mContentView.findViewById(R.id.list);
 		mAdapter = new ListEpisodeAdapter(this, mAllEp);
-		mList.setAdapter(mAdapter);
-		setActionModeCallbackOnList();
+        initializeListView();
+        mActionMode = new ActionModeCallback(this, mAdapter, new OnRenameEpisodeClickListener(), new OnDeleteEpisodeClickListener());
 
 		String login = mSharedPreferences.getString(Tools.SHARED_PREF_LOGIN, "");
 		SyncUtils.CreateSyncAccount(this, login);
 	}
 
-	@Override
+    @Override
 	protected void onResume() {
 		super.onResume();
 		invalidateOptionsMenu();
@@ -84,9 +85,8 @@ public class EpisodesSeenActivity extends DrawerActivity {
 	protected void onPause() {
 		super.onPause();
 		mAdapter.exitMultiMode();
-		ActionMode actionMode = ActionModeCallbackEpisode.getInstance(EpisodesSeenActivity.this, mAdapter).getActionMode();
-		if (actionMode != null) {
-			actionMode.invalidate();
+		if (mActionMode != null && mActionMode.getActionMode() != null) {
+            mActionMode.getActionMode().invalidate();
 		}
 	}
 
@@ -147,6 +147,12 @@ public class EpisodesSeenActivity extends DrawerActivity {
 		}
 	}
 
+    private void initializeListView() {
+        mList.setAdapter(mAdapter);
+        mList.setOnItemLongClickListener(new OnEpisodeItemLongClickListener());
+        mList.setOnItemClickListener(new OnEpisodeItemClickListener());
+    }
+
 	private void startUpdateListEpisodes() {
 		mUpdateInProgress = true;
 		invalidateOptionsMenu();
@@ -166,41 +172,6 @@ public class EpisodesSeenActivity extends DrawerActivity {
 		mUpdateInProgress = false;
 		invalidateOptionsMenu();
 		mAdapter.notifyDataSetChanged();
-	}
-
-	private void setActionModeCallbackOnList() {
-		final ActionModeCallbackEpisode actionModeCallback = ActionModeCallbackEpisode.getInstance(EpisodesSeenActivity.this, mAdapter);
-		mList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-
-			@Override
-			public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-				if (actionModeCallback.getActionMode() != null) {
-					// if already in action mode - do nothing
-					return false;
-				}
-				// set checked selected item and enter multi selection mode
-				mAdapter.setChecked(arg2, true);
-				EpisodesSeenActivity.this.startActionMode(actionModeCallback);
-				actionModeCallback.getActionMode().invalidate();
-				return true;
-			}
-		});
-
-		mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-				if (actionModeCallback.getActionMode() != null) {
-					// if action mode, toggle checked state of item
-					mAdapter.toggleChecked(arg2);
-					actionModeCallback.getActionMode().invalidate();
-				} else {
-					Intent intent = new Intent(EpisodesSeenActivity.this, ShowDetailActivity.class);
-					intent.putExtra(ShowDetailActivity.EXTRA_SHOW_NAME, mAllEp.get(arg2).getShowName());
-					startActivity(intent);
-				}
-			}
-		});
 	}
 
 	public void deleteEpisodes() {
@@ -343,32 +314,80 @@ public class EpisodesSeenActivity extends DrawerActivity {
 		}
 	}
 
-	private class LoadEpisodesFromDatabaseTask extends AsyncTask<Void, Integer, Void> {
+    private class OnRenameEpisodeClickListener implements ActionModeCallback.OnRenameClickListener {
 
-		@Override
-		protected void onPreExecute() {
-			mUpdateInProgress = true;
-			invalidateOptionsMenu();
-		}
+        @Override
+        public void onRenameClicked() {
+            Episode ep = mAdapter.getFirstCheckedItem();
+            renameEpisode(ep);
+        }
+    }
 
-		@Override
-		protected Void doInBackground(Void... voids) {
-			List<Episode> episodeListFromDataBase = new ArrayList<Episode>();
-			try {
-				episodeListFromDataBase = ((EpisodeDao) mDatabaseHelper.getDao(Episode.class)).queryForAll();
-			} catch (SQLException e) {
-				Ln.e(e);
-			}
-			mAllEp.clear();
-			mAllEp.addAll(episodeListFromDataBase);
-			return null;
-		}
+    private class OnDeleteEpisodeClickListener implements ActionModeCallback.OnDeleteClickListener {
+        @Override
+        public void onDeleteClicked() {
+            deleteEpisodes();
+        }
+    }
 
-		@Override
-		protected void onPostExecute(Void result) {
-			mAdapter.notifyDataSetChanged();
-			mUpdateInProgress = false;
-			invalidateOptionsMenu();
-		}
-	}
+    private class OnEpisodeItemLongClickListener implements AdapterView.OnItemLongClickListener {
+
+        @Override
+        public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+            if (mActionMode.getActionMode() != null) {
+                // if already in action mode - do nothing
+                return false;
+            }
+            // set checked selected item and enter multi selection mode
+            mAdapter.setChecked(arg2, true);
+            EpisodesSeenActivity.this.startActionMode(mActionMode);
+            mActionMode.getActionMode().invalidate();
+            return true;
+        }
+    }
+
+    private class OnEpisodeItemClickListener implements AdapterView.OnItemClickListener {
+
+        @Override
+        public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+            if (mActionMode.getActionMode() != null) {
+                // if action mode, toggle checked state of item
+                mAdapter.toggleChecked(arg2);
+                mActionMode.getActionMode().invalidate();
+            } else {
+                Intent intent = new Intent(EpisodesSeenActivity.this, ShowDetailActivity.class);
+                intent.putExtra(ShowDetailActivity.EXTRA_SHOW_NAME, mAllEp.get(arg2).getShowName());
+                startActivity(intent);
+            }
+        }
+    }
+
+    private class LoadEpisodesFromDatabaseTask extends AsyncTask<Void, Integer, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            mUpdateInProgress = true;
+            invalidateOptionsMenu();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            List<Episode> episodeListFromDataBase = new ArrayList<Episode>();
+            try {
+                episodeListFromDataBase = ((EpisodeDao) mDatabaseHelper.getDao(Episode.class)).queryForAll();
+            } catch (SQLException e) {
+                Ln.e(e);
+            }
+            mAllEp.clear();
+            mAllEp.addAll(episodeListFromDataBase);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            mAdapter.notifyDataSetChanged();
+            mUpdateInProgress = false;
+            invalidateOptionsMenu();
+        }
+    }
 }

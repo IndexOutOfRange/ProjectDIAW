@@ -2,6 +2,7 @@ package com.steto.diaw.dao;
 
 import java.sql.SQLException;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import roboguice.util.Ln;
@@ -37,7 +38,7 @@ public class EpisodeDao extends BaseDaoImpl<Episode, String> {
 		return queryBuilder.query();
 	}
 	
-	public List<Episode> queryForName(String name) throws SQLException {
+	public List<Episode> getAllEpisodeFromShowName(String name) throws SQLException {
 		SelectArg nameArg = new SelectArg();
 		QueryBuilder<Episode, String> queryBuilder = queryBuilder();
 		queryBuilder.where().eq(Episode.COLUMN_SHOWNAME, nameArg);
@@ -78,11 +79,36 @@ public class EpisodeDao extends BaseDaoImpl<Episode, String> {
 		return associated;
 	}
 	
-	public int updateEpisodeAfterRename(Episode ep) throws SQLException {
+	public int deleteEpisodeAfterRename(Episode ep) throws SQLException {
 		DeleteBuilder<Episode, String> deleteBuilder = deleteBuilder();
 		deleteBuilder.where().eq(Episode.COLUMN_OBJECT_ID, ep.getObjectId());
 		delete(deleteBuilder.prepare());
 		
 		return create(ep);
 	}
+
+    public void updateEpisode(Episode episode, String keyOfNewValue, String newValue) throws SQLException {
+        Episode episodeUpdated = queryForEq(Episode.COLUMN_OBJECT_ID, episode.getObjectId()).get(0);
+        String oldShowName = episodeUpdated.getShowName();
+        episodeUpdated.setUpdatedAt(new Date());
+
+        if (Episode.COLUMN_SHOWNAME.equals(keyOfNewValue)) {
+            episodeUpdated.setShowName(newValue);
+
+            ShowDao showDao = new ShowDao(getConnectionSource());
+            if(showDao.queryFromName(newValue) == null) {
+                Ln.d("recherche si le show n'existe pas pour l'ajouter en base");
+
+                Show show = new Show(newValue);
+                showDao.create(show);
+            }
+
+            deleteEpisodeAfterRename(episodeUpdated);
+
+            if(getAllEpisodeFromShowName(oldShowName).isEmpty()) {
+                showDao.deleteFromName(oldShowName);
+                Ln.d("Suppression de l'ancien Show " + oldShowName + " devenu inutile");
+            }
+        }
+    }
 }

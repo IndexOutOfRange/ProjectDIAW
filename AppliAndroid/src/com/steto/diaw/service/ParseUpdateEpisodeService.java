@@ -53,52 +53,33 @@ public class ParseUpdateEpisodeService extends RoboIntentService {
 	@Override
 	protected void onHandleIntent(Intent intent) {
 		ResultReceiver sender = (ResultReceiver) intent.getExtras().get(INTENT_RESULT_RECEIVER);
-		String objectId = intent.getExtras().getString(INTENT_OBJECT_TO_RENAME);
-		String key = intent.getExtras().getString(INTENT_KEY);
-		String value = intent.getExtras().getString(INTENT_VALUE);
+		List<Episode> allEpisodeToUpdate = (List<Episode>) intent.getExtras().getSerializable(INTENT_OBJECT_TO_RENAME);
+		String keyOfNewValue = intent.getExtras().getString(INTENT_KEY);
+		String newValue = intent.getExtras().getString(INTENT_VALUE);
 		int responseCode = RESULT_CODE_OK;
 
-		String body = createUpdate(key, value);
-		ShowConnector myWeb = new ShowConnector(objectId);
-		myWeb.requestFromNetwork("", ParseConnector.HTTPMethod.PUT, body);
-		if (myWeb.getStatusCode() == HttpStatus.SC_OK) {
-			// la maj ne donne que la updateDate, on refait donc un appel au serveur pour avoir exactement les mêmes données
-			myWeb.requestFromNetwork("", ParseConnector.HTTPMethod.GET, "");
-			if (myWeb.getStatusCode() == HttpStatus.SC_OK) {
-				// pas de parsing des données JSON car le JSON donne que la updateDate
+        for(Episode episodeToUpdate: allEpisodeToUpdate) {
+            String body = createUpdate(keyOfNewValue, newValue);
+            ShowConnector myWeb = new ShowConnector(episodeToUpdate.getObjectId());
+            myWeb.requestFromNetwork("", ParseConnector.HTTPMethod.PUT, body);
+            if (myWeb.getStatusCode() == HttpStatus.SC_OK) {
+                // la maj ne donne que la updateDate, on refait donc un appel au serveur pour avoir exactement les mêmes données
+                myWeb.requestFromNetwork("", ParseConnector.HTTPMethod.GET, "");
+                if (myWeb.getStatusCode() == HttpStatus.SC_OK) {
+                    // pas de parsing des données JSON car le JSON donne que la updateDate
 
-				try {
-					EpisodeDao epDao = mDatabaseHelper.getDao(Episode.class);
-					Episode episodeUpdated = epDao.queryForEq(Episode.COLUMN_OBJECT_ID, objectId).get(0);
-					String oldShowName = episodeUpdated.getShowName();
-					episodeUpdated.setUpdatedAt(new Date());
-					
-					if (Episode.COLUMN_SHOWNAME.equals(key)) {
-						episodeUpdated.setShowName(value);
-
-						ShowDao showDao = mDatabaseHelper.getDao(Show.class);
-						if(showDao.queryFromName(value) == null) {
-							Ln.d("recherche si le show n'existe pas pour l'ajouter en base");
-
-							Show show = new Show(value);
-							showDao.create(show);
-						}
-						
-						epDao.updateEpisodeAfterRename(episodeUpdated);
-						
-						if(epDao.queryForName(oldShowName).isEmpty()) {
-							showDao.deleteFromName(oldShowName);
-							Ln.d("Suppression de l'ancien Show " + oldShowName + " devenu inutile");
-						}
-					}
-				} catch (SQLException e) {
-					responseCode = DatabaseHelper.ERROR_BDD;
-					e.printStackTrace();
-				}
-			}
-		} else {
-			responseCode = myWeb.getStatusCode();
-		}
+                    try {
+                        EpisodeDao epDao = mDatabaseHelper.getDao(Episode.class);
+                        epDao.updateEpisode(episodeToUpdate, keyOfNewValue, newValue);
+                    } catch (SQLException e) {
+                        responseCode = DatabaseHelper.ERROR_BDD;
+                        e.printStackTrace();
+                    }
+                }
+            } else {
+                responseCode = myWeb.getStatusCode();
+            }
+        }
 
 		List<Episode> allEp = new ArrayList<Episode>();
 		try {

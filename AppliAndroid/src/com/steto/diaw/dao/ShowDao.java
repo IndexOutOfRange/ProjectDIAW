@@ -17,6 +17,8 @@ import com.steto.diaw.model.Episode;
 import com.steto.diaw.model.Season;
 import com.steto.diaw.model.Show;
 
+import roboguice.util.Ln;
+
 public class ShowDao extends BaseDaoImpl<Show, String> {
 
 	public ShowDao(ConnectionSource connectionSource) throws SQLException {
@@ -41,7 +43,7 @@ public class ShowDao extends BaseDaoImpl<Show, String> {
 
 	public List<Episode> getEpisodeFromShow(Show show) throws SQLException {
 		EpisodeDao episodesDao = DaoManager.createDao(getConnectionSource(), Episode.class);
-		return episodesDao.queryForName(show.getShowName());
+		return episodesDao.getAllEpisodeFromShowName(show.getShowName());
 	}
 
 	public List<Season> getSeasonsFromShow(Show show) throws SQLException {
@@ -87,4 +89,16 @@ public class ShowDao extends BaseDaoImpl<Show, String> {
 		nameArg.setValue(name);
 		return delete(preparedDelete);
 	}
+
+    public void renameShow(Show oldShow, String newName) throws SQLException {
+        EpisodeDao episodeDao = new EpisodeDao(getConnectionSource());
+        for (Episode episode : getEpisodeFromShow(oldShow)) {
+            episodeDao.delete(episode);
+            episode.setShowName(newName); // change id : TODO in DAO method...
+            episodeDao.create(episode);
+        }
+        Show newShow = new Show(newName);
+        createIfNotExists(newShow);
+        delete(oldShow);
+    }
 }

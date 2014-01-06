@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+import sun.security.action.GetLongAction;
+
 import com.diaw.lib.model.User;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -40,6 +42,7 @@ public class ConfParser {
 			// e.printStackTrace();
 			setResultCode(PARSER_KO_JSON_OBJETS_INVALID);
 		} catch (IOException e) {
+			System.out.println(e);
 			// e.printStackTrace();
 			setResultCode(PARSER_KO);
 		}

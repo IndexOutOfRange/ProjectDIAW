@@ -1,6 +1,7 @@
 package com.steto.diaw.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
@@ -12,5 +13,8 @@ import org.simpleframework.xml.Root;
 public class TVDBContainerData {
 
     @ElementList(entry="Series", inline=true)
-    public ArrayList<Show> Series;
+    public List<Show> series = new ArrayList<Show>();
+
+    @ElementList(entry="Episode", inline=true, required=false, type=Episode.class)
+    public List<Episode> episodes = new ArrayList<Episode>();
 }

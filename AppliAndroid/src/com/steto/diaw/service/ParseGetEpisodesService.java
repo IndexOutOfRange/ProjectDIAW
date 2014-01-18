@@ -21,7 +21,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.ResultReceiver;
-import android.util.Log;
 
 import com.google.inject.Inject;
 import com.j256.ormlite.dao.DaoManager;
@@ -99,8 +98,10 @@ public class ParseGetEpisodesService extends RoboIntentService {
                         EpisodeDao epDAO = mDatabaseHelper.getDao(Episode.class);
                         ShowDao showDAO = mDatabaseHelper.getDao(Show.class);
                         int nbCreated = epDAO.createOrUpdate(allEp);
-                        Log.d("ShowService", nbCreated + " episodes créés en base");
+                        Ln.d(nbCreated + " episodes créés en base");
                         for (Episode current : allEp) {
+                        	current.setSeen(true);
+                        	epDAO.update(current);
                             Show currentShow = new Show(current.getShowName());
                             showDAO.createIfNotExists(currentShow);
                         }

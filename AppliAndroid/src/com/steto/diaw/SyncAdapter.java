@@ -109,6 +109,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 		int nbCreated = epDAO.createOrUpdate(episodes);
 		Ln.d(nbCreated + " episodes added in the database");
 		for (Episode episode : episodes) {
+			episode.setSeen(true);
+			epDAO.update(episode);
 			Show currentShow = new Show(episode.getShowName());
 			showDAO.createIfNotExists(currentShow);
 		}

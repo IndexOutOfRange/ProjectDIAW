@@ -85,4 +85,11 @@ public class EpisodeDao extends BaseDaoImpl<Episode, String> {
 		
 		return create(ep);
 	}
+
+	public List<Episode> queryForAllSeen() throws SQLException {
+		QueryBuilder<Episode, String> queryBuilder = queryBuilder();
+		queryBuilder.where().eq(Episode.COLUMN_SEEN, true);
+		queryBuilder.orderBy(Episode.COLUMN_UPDATED_AT, false);
+		return query(queryBuilder.prepare());
+	}
 }

@@ -12,7 +12,7 @@
     <uses-permission android:name="android.permission.READ_SYNC_STATS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
-    
+
     <permission android:name="com.steto.projetdiaw" />
 
     <application
@@ -39,7 +39,15 @@
             android:launchMode="singleTask" />
         <activity
             android:name="com.steto.diaw.activity.ListShowsActivity"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask" >
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable_show" />
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+        </activity>
         <activity
             android:name="com.steto.diaw.activity.ShowDetailActivity"
             android:theme="@style/AppTheme.TranslucentActionBar" />
@@ -60,7 +68,7 @@
         as an attachment point for the SyncAdapter. See res/xml/syncadapter.xml and SyncService.java.
 
         Since this ContentProvider is not exported, it will not be accessible outside of this app's
-        package.
+        package.
         -->
         <provider
             android:name="com.steto.diaw.provider.EpisodeProvider"
@@ -80,8 +88,9 @@
                 android:name="android.content.SyncAdapter"
                 android:resource="@xml/syncadapter" />
         </service>
-        <service android:name="com.steto.diaw.account.AccountService" 
-            android:permission="com.steto.projetdiaw">
+        <service
+            android:name="com.steto.diaw.account.AccountService"
+            android:permission="com.steto.projetdiaw" >
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
             </intent-filter>

@@ -13,7 +13,11 @@ public class ListItemEpisodeExpendable extends AbstractListItemView<Episode> {
 		mData = episode;
 		// TODO utiliser un string des ressources
 		String text = "Episode " + String.valueOf(mData.getEpisodeNumber());
-		if (mLeftTV != null) mLeftTV.setText(text);
-		if (mRightTV != null) mRightTV.setVisibility(GONE);
+		if (mLeftTV != null) {
+			mLeftTV.setText(text);
+		}
+		if (mRightTV != null) {
+			mRightTV.setText(mData.isSeen()? "VU" : "PAS VU");
+		}
 	}
 }

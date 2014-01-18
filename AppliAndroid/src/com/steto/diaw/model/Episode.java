@@ -9,6 +9,10 @@ import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Date;
 
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
+
+@Root(name = "Episode", strict = false)
 @DatabaseTable(tableName = "Episode", daoClass = EpisodeDao.class)
 public class Episode implements Serializable, Comparable<Episode> {
 
@@ -16,25 +20,36 @@ public class Episode implements Serializable, Comparable<Episode> {
 	public static final String COLUMN_SHOWNAME = "showName";
 	public static final String COLUMN_OBJECT_ID = "objectId";
 	public static final String COLUMN_UPDATED_AT = "updatedAt";
+	public static final String COLUMN_SEEN = "seen";
 
 	@DatabaseField(columnName = COLUMN_SHOWNAME)
 	private String mShowName;
+
+	@Element(name = "SeasonNumber")
 	@DatabaseField
 	private int mSeasonNumber;
+
+	@Element(name = "EpisodeNumber")
 	@DatabaseField
 	private int mEpisodeNumber;
+
 	@JsonIgnore
 	private boolean mDoubleEpisode = false;
-	@DatabaseField(columnName =  COLUMN_UPDATED_AT)
+
+	@DatabaseField(columnName = COLUMN_UPDATED_AT)
 	private Date mUpdatedAt;
+
 	@DatabaseField(id = true, useGetSet = true)
 	@JsonIgnore
 	private String mCustomId;
+
 	@DatabaseField(columnName = COLUMN_OBJECT_ID)
 	private String mObjectId;
 
-	public Episode() {
-	}
+	@DatabaseField(columnName = COLUMN_SEEN)
+	private boolean mSeen;
+
+	public Episode() {}
 
 	public Episode(String name, int season, int episode, Date updateAt) {
 		setShowName(name);
@@ -128,6 +143,14 @@ public class Episode implements Serializable, Comparable<Episode> {
 		this.mObjectId = objectId;
 	}
 
+	public boolean isSeen() {
+		return mSeen;
+	}
+
+	public void setSeen(boolean mSeen) {
+		this.mSeen = mSeen;
+	}
+
 	@Override
 	public String toString() {
 		return "Episode{" +
@@ -139,10 +162,20 @@ public class Episode implements Serializable, Comparable<Episode> {
 
 	@Override
 	public int compareTo(Episode episode) {
+		if (getUpdatedAt() == null && episode.getUpdatedAt() == null) {
+			return 0;
+		}
+		if (getUpdatedAt() == null) {
+			return -1;
+		}
+		if (episode.getUpdatedAt() == null) {
+			return 1;
+		}
 		return episode.getUpdatedAt().compareTo(this.getUpdatedAt());
 	}
 
 	public static class OrderShowComparator implements Comparator<Episode> {
+
 		public int compare(Episode episode1, Episode episode2) {
 
 			int seasonComp = episode1.getSeasonNumber() - episode2.getSeasonNumber();

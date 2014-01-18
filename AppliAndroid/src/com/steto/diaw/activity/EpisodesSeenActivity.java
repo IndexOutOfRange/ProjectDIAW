@@ -355,7 +355,7 @@ public class EpisodesSeenActivity extends DrawerActivity {
 		protected Void doInBackground(Void... voids) {
 			List<Episode> episodeListFromDataBase = new ArrayList<Episode>();
 			try {
-				episodeListFromDataBase = ((EpisodeDao) mDatabaseHelper.getDao(Episode.class)).queryForAll();
+				episodeListFromDataBase = ((EpisodeDao) mDatabaseHelper.getDao(Episode.class)).queryForAllSeen();
 			} catch (SQLException e) {
 				Ln.e(e);
 			}

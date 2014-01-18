@@ -1,6 +1,5 @@
 package com.steto.diaw.service;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.sql.SQLException;
@@ -8,18 +7,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpStatus;
 
 import roboguice.service.RoboIntentService;
+import roboguice.util.Ln;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.ResultReceiver;
 
 import com.google.inject.Inject;
 import com.steto.diaw.dao.DatabaseHelper;
+import com.steto.diaw.dao.EpisodeDao;
 import com.steto.diaw.dao.ShowDao;
+import com.steto.diaw.model.Episode;
 import com.steto.diaw.model.Show;
+import com.steto.diaw.model.TVDBContainerData;
 import com.steto.diaw.parser.AbstractParser;
 import com.steto.diaw.parser.SeriesParser;
 import com.steto.diaw.web.QueryString;
@@ -44,7 +46,6 @@ public class TVDBService extends RoboIntentService {
 
 	@Inject
 	private DatabaseHelper mDatabaseHelper;
-	private String mRealShowName;
 
 	public TVDBService() {
 		super(NAME);
@@ -52,24 +53,24 @@ public class TVDBService extends RoboIntentService {
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
-		Show input = (Show) intent.getExtras().get(INPUT_SERIE);
-		mRealShowName = intent.getExtras().getString(INPUT_REAL_NAME, null);
+		Show inputShow = (Show) intent.getExtras().get(INPUT_SERIE);
 		ResultReceiver receiver = (ResultReceiver) intent.getExtras().get(INPUT_RESULTRECEIVER);
-		Integer id = input.getTVDBID();
+
+		Integer id = inputShow.getTVDBID();
 		int responseCode = RESULT_CODE_OK;
-		List<Show> ret = null;
+		List<Show> listShow = null;
 		if (id != 0) {
-			ret = getShowsFromId(input, id, ret);
+			listShow = getShowsFromId(inputShow, id);
 		} else {
-			ret = getShowsFromName(input, ret);
-			if (ret != null && !ret.isEmpty() && ret.size() == 1) { // si la "recherche" sur TVDB n'a donné qu'un seul resultat alors pas besoin de lancer une
-																	// recherche sur IMDB
-				ret = getShowsFromId(input, ret.get(0).getTVDBID(), ret);
+			listShow = getShowsFromName(inputShow);
+			if (listShow != null && !listShow.isEmpty() && listShow.size() == 1) {
+				// si la "recherche" sur TVDB n'a donné qu'un seul resultat alors pas besoin de lancer une recherche sur IMDB
+				listShow = getShowsFromId(inputShow, listShow.get(0).getTVDBID());
 			} else {
 				responseCode = RESULT_CODE_AMBIGUITY;
 			}
 		}
-		sendBackResult(receiver, responseCode, (Serializable) ret);
+		sendBackResult(receiver, responseCode, (Serializable) listShow);
 
 	}
 
@@ -80,67 +81,60 @@ public class TVDBService extends RoboIntentService {
 		receiver.send(responseCode, retBundle);
 	}
 
-	private List<Show> getShowsFromName(Show input, List<Show> ret) {
+	private List<Show> getShowsFromName(Show show) {
+		List<Show> listShow = null;
 		SeriesNameConnector myWeb = new SeriesNameConnector();
 		QueryString myQuery = new QueryString();
-		myQuery.add(SERIE_NAME_QUERY, input.getShowName());
+		myQuery.add(SERIE_NAME_QUERY, show.getShowName());
 		myWeb.requestFromNetwork(myQuery.getQuery(), WebConnector.HTTPMethod.GET, null);
 		if (myWeb.getStatusCode() == HttpStatus.SC_OK) {
 			SeriesParser myParser = new SeriesParser();
 			InputStream in = myWeb.getResponseBody();
-			InputStream inin = in;
-			try {
-				String tmp = IOUtils.toString(in);
-				inin = IOUtils.toInputStream(tmp);
-			} catch (IOException e) {
-				e.printStackTrace();
+			TVDBContainerData tvdbContainerData = myParser.parse(in);
+			if(myParser.getStatusCode() == AbstractParser.PARSER_OK) {
+				listShow = tvdbContainerData.series;
 			}
-			ret = myParser.parse(inin);
-
-			// if (myParser.getStatusCode() == AbstractParser.PARSER_OK) {
-			// //on va finalement renvoyer la serie avec toutes les infos à l'appelant
-			// //au lieu de recopier une a une les infos on récupère juste l'ID de la base dans l'ancien objet et on le copie dans le nouvel objet
-			// //on copie aussi le nom de la serie pour garder la correspondance avec la liste des episodes
-			// ret.get(0).setId(input.getId());
-			// ret.get(0).setTVDBConnected(false);
-			// ret.get(0).setShowName(input.getShowName());
-			// try {
-			// ShowDao myDAO = null;
-			// myDAO = mDatabaseHelper.getDao(Show.class);
-			// myDAO.createOrUpdate(ret != null ? ret.get(0) : null);
-			// } catch (SQLException e) {
-			// e.printStackTrace();
-			// }
-			// }
 		}
-		return ret;
+		return listShow;
 	}
 
-	private List<Show> getShowsFromId(Show input, Integer id, List<Show> ret) {
+	private List<Show> getShowsFromId(Show input, Integer id) {
+		List<Show> listShow = null;
+
 		if (!input.isTVDBConnected()) {
 			SeriesIDConnector myWeb = new SeriesIDConnector();
-			myWeb.requestFromNetwork(id.toString() + "/" + Locale.getDefault().getLanguage() + ".xml", WebConnector.HTTPMethod.GET, null);
+			myWeb.requestFromNetwork(id.toString() + "/all/" + Locale.getDefault().getLanguage() + ".xml", WebConnector.HTTPMethod.GET, null);
 
 			if (myWeb.getStatusCode() == HttpStatus.SC_OK) {
 				SeriesParser myParser = new SeriesParser();
-				ret = myParser.parse(myWeb.getResponseBody());
+				TVDBContainerData tvdbContainerData = myParser.parse(myWeb.getResponseBody());
+
 				if (myParser.getStatusCode() == AbstractParser.PARSER_OK) {
-					ret.get(0).setId(input.getId());
-					ret.get(0).setTVDBConnected(true);
-					ret.get(0).setShowName(mRealShowName != null ? mRealShowName : input.getShowName());
+					listShow = tvdbContainerData.series;
+					listShow.get(0).setId(input.getId());
+					listShow.get(0).setTVDBConnected(true);
+					listShow.get(0).setShowName(input.getId());
+					Ln.i(tvdbContainerData.episodes.size() + " episodes");
+					listShow.get(0).setNumberEpisodes(tvdbContainerData.episodes.size());
+					
 					try {
-						ShowDao myDAO = null;
-						myDAO = mDatabaseHelper.getDao(Show.class);
-						myDAO.createOrUpdate(ret != null ? ret.get(0) : null);
+						ShowDao showDao = mDatabaseHelper.getDao(Show.class);
+						EpisodeDao episodeDao = mDatabaseHelper.getDao(Episode.class);
+						showDao.createOrUpdate(listShow.get(0));						
+						for (Episode ep : tvdbContainerData.episodes) {
+							ep.setShowName(input.getId());
+							episodeDao.createIfNotExists(ep);
+						}
 					} catch (SQLException e) {
 						e.printStackTrace();
 					}
 				}
 			}
 		} else {
-			ret = new ArrayList<Show>();
-			ret.add(input);// si l'episode est deja complet alors on le renvoie à l'apellant
+			// si l'episode est deja complet alors on le renvoie à l'appelant
+			listShow = new ArrayList<Show>();
+			listShow.add(input);
 		}
-		return ret;
+		return listShow;
 	}
 }

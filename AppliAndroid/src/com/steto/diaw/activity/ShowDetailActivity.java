@@ -135,7 +135,7 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 						dialog.dismiss();
 					}
 				})
-				.setTitle(R.string.search_show);
+				.setTitle(R.string.search_show_dialog);
 		AlertDialog dialog = builder.create();
 		dialog.show();
 	}

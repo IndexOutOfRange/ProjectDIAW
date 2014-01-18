@@ -1,13 +1,13 @@
 package com.steto.diaw.parser;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.steto.diaw.model.Results;
-
-import java.io.IOException;
-import java.io.InputStream;
 
 public class ShowParser extends AbstractParser {
 

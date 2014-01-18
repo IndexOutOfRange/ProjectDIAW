@@ -1,6 +1,7 @@
 package com.steto.diaw.view;
 
 import android.content.Context;
+
 import com.steto.diaw.model.Episode;
 
 public class ListItemEpisodeExpendable extends AbstractListItemView<Episode> {
@@ -17,7 +18,7 @@ public class ListItemEpisodeExpendable extends AbstractListItemView<Episode> {
 			mLeftTV.setText(text);
 		}
 		if (mRightTV != null) {
-			mRightTV.setText(mData.isSeen()? "VU" : "PAS VU");
+			mRightTV.setText(mData.isSeen() ? "VU" : "PAS VU");
 		}
 	}
 }

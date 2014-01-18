@@ -12,9 +12,9 @@ import org.simpleframework.xml.Root;
 @Root(name = "Data", strict = false)
 public class TVDBContainerData {
 
-    @ElementList(entry="Series", inline=true)
-    public List<Show> series = new ArrayList<Show>();
+	@ElementList(entry = "Series", inline = true)
+	public List<Show> series = new ArrayList<Show>();
 
-    @ElementList(entry="Episode", inline=true, required=false, type=Episode.class)
-    public List<Episode> episodes = new ArrayList<Episode>();
+	@ElementList(entry = "Episode", inline = true, required = false, type = Episode.class)
+	public List<Episode> episodes = new ArrayList<Episode>();
 }

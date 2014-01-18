@@ -29,7 +29,7 @@ public class SplashScreen extends RoboActivity {
 			finish();
 		} else {
 			// TODO to delete if Sync is ok
-			//getShowsFromNetwork();
+			// getShowsFromNetwork();
 			Intent intent = new Intent(SplashScreen.this, EpisodesSeenActivity.class);
 			startActivity(intent);
 			finish();
@@ -44,29 +44,29 @@ public class SplashScreen extends RoboActivity {
 			return false;
 		}
 	}
-	
-//	private void getShowsFromNetwork() {
-//		Intent intent = new Intent(this, ParseGetEpisodesService.class);
-//		intent.putExtra(ParseGetEpisodesService.INTENT_LOGIN, mLogin);
-//		intent.putExtra(ParseGetEpisodesService.INTENT_RESULT_RECEIVER, new ShowResultReceiver());
-//		startService(intent);
-//	}
-//	private final class ShowResultReceiver extends ResultReceiver {
-//
-//		private ShowResultReceiver() {
-//			super(new Handler());
-//		}
-//
-//		@Override
-//		protected void onReceiveResult(int resultCode, Bundle resultData) {
-//			super.onReceiveResult(resultCode, resultData);
-//			if (resultCode == ParseGetEpisodesService.RESULT_CODE_OK) {
-//				Intent intent = new Intent(SplashScreen.this, EpisodesSeenActivity.class);
-//				startActivity(intent);
-//				finish();
-//			} else {
-//				Toast.makeText(SplashScreen.this, getString(R.string.msg_erreur_reseau), Toast.LENGTH_SHORT).show();
-//			}
-//		}
-//	}
+
+	// private void getShowsFromNetwork() {
+	// Intent intent = new Intent(this, ParseGetEpisodesService.class);
+	// intent.putExtra(ParseGetEpisodesService.INTENT_LOGIN, mLogin);
+	// intent.putExtra(ParseGetEpisodesService.INTENT_RESULT_RECEIVER, new ShowResultReceiver());
+	// startService(intent);
+	// }
+	// private final class ShowResultReceiver extends ResultReceiver {
+	//
+	// private ShowResultReceiver() {
+	// super(new Handler());
+	// }
+	//
+	// @Override
+	// protected void onReceiveResult(int resultCode, Bundle resultData) {
+	// super.onReceiveResult(resultCode, resultData);
+	// if (resultCode == ParseGetEpisodesService.RESULT_CODE_OK) {
+	// Intent intent = new Intent(SplashScreen.this, EpisodesSeenActivity.class);
+	// startActivity(intent);
+	// finish();
+	// } else {
+	// Toast.makeText(SplashScreen.this, getString(R.string.msg_erreur_reseau), Toast.LENGTH_SHORT).show();
+	// }
+	// }
+	// }
 }

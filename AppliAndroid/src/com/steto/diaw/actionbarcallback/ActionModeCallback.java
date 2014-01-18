@@ -5,31 +5,26 @@ import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.steto.diaw.activity.EpisodesSeenActivity;
-import com.steto.diaw.adapter.ListEpisodeAdapter;
-import com.steto.diaw.model.Episode;
+import com.steto.diaw.adapter.AbstractSelectableItemListAdapter;
 import com.steto.projectdiaw.R;
 
 /**
  * Created by Benjamin on 09/06/13.
  */
-public class ActionModeCallbackEpisode implements ActionMode.Callback {
+public class ActionModeCallback implements ActionMode.Callback {
 
-	private Activity mActivity;
 	private ActionMode mActionMode;
-	private ListEpisodeAdapter mAdapter;
+	private AbstractSelectableItemListAdapter mAdapter;
+	private OnDeleteClickListener mOnDeleteClickListener;
+	private OnRenameClickListener mOnRenameClickListener;
+	private Activity mActivity;
 
-	private ActionModeCallbackEpisode(Activity activity, ListEpisodeAdapter adapter) {
-		this.mActivity = activity;
+	public ActionModeCallback(Activity activity, AbstractSelectableItemListAdapter adapter, OnRenameClickListener renameClickListener,
+			OnDeleteClickListener deleteClickListener) {
 		this.mAdapter = adapter;
-	}
-
-	private static ActionModeCallbackEpisode instance;
-
-	public static ActionModeCallbackEpisode getInstance(Activity act, ListEpisodeAdapter adap) {
-		if(instance == null || instance.mActivity != act ||instance.mAdapter != adap ) {
-			instance = new ActionModeCallbackEpisode(act, adap);
-		} return instance;
+		mOnRenameClickListener = renameClickListener;
+		mOnDeleteClickListener = deleteClickListener;
+		mActivity = activity;
 	}
 
 	@Override
@@ -68,12 +63,12 @@ public class ActionModeCallbackEpisode implements ActionMode.Callback {
 	public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.context_menu_rename:
-				((EpisodesSeenActivity) mActivity).renameEpisode((Episode) mAdapter.getFirstCheckedItem());
+				mOnRenameClickListener.onRenameClicked();
 				mode.finish();
 				return true;
 
 			case R.id.context_menu_delete:
-				((EpisodesSeenActivity) mActivity).deleteEpisodes();
+				mOnDeleteClickListener.onDeleteClicked();
 				mode.finish();
 				return true;
 			default:
@@ -89,5 +84,15 @@ public class ActionModeCallbackEpisode implements ActionMode.Callback {
 
 	public ActionMode getActionMode() {
 		return mActionMode;
+	}
+
+	public interface OnRenameClickListener {
+
+		public void onRenameClicked();
+	}
+
+	public interface OnDeleteClickListener {
+
+		public void onDeleteClicked();
 	}
 }

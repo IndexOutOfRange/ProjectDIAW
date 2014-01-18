@@ -2,7 +2,6 @@ package com.steto.diaw.web;
 
 import org.apache.http.client.methods.HttpRequestBase;
 
-
 public abstract class ParseConnector extends WebConnector {
 
 	private static String DNS = "https://api.parse.com";

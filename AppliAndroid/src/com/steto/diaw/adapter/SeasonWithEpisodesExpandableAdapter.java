@@ -1,15 +1,16 @@
 package com.steto.diaw.adapter;
 
+import java.util.List;
+
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+
 import com.steto.diaw.model.Episode;
 import com.steto.diaw.model.Season;
 import com.steto.diaw.view.ListItemEpisodeExpendable;
 import com.steto.diaw.view.ListItemSeasonGroup;
-
-import java.util.List;
 
 public class SeasonWithEpisodesExpandableAdapter extends BaseExpandableListAdapter {
 
@@ -46,7 +47,8 @@ public class SeasonWithEpisodesExpandableAdapter extends BaseExpandableListAdapt
 		return getGroup(pos).getNumber();
 	}
 
-	//see http://grepcode.com/file/repository.grepcode.com/java/ext/com.google.android/android/4.2.2_r1/android/widget/SimpleExpandableListAdapter.java#SimpleExpandableListAdapter.getChildId%28int%2Cint%29
+	// see
+	// http://grepcode.com/file/repository.grepcode.com/java/ext/com.google.android/android/4.2.2_r1/android/widget/SimpleExpandableListAdapter.java#SimpleExpandableListAdapter.getChildId%28int%2Cint%29
 	@Override
 	public long getChildId(int posGroup, int posChild) {
 		return posChild;

@@ -1,11 +1,20 @@
 package com.steto.diaw.web;
 
-import com.steto.diaw.tools.FakeSocketFactory;
-import com.steto.diaw.tools.MySSLSocketFactory;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.security.KeyStore;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.*;
+import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
@@ -20,13 +29,14 @@ import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.HTTP;
 
-import java.io.*;
-import java.security.KeyStore;
+import com.steto.diaw.tools.FakeSocketFactory;
+import com.steto.diaw.tools.MySSLSocketFactory;
 
 /**
  * Created by Stephane on 02/06/13.
  */
 public abstract class WebConnector {
+
 	private HttpClient mHttpClient;
 	private int mStatusCode = 0;
 	protected InputStream mResponseBody = null;
@@ -65,7 +75,6 @@ public abstract class WebConnector {
 			registry.register(new Scheme("https", new FakeSocketFactory(), 443));
 
 			ClientConnectionManager ccm = new ThreadSafeClientConnManager(params, registry);
-
 
 			mHttpClient = new DefaultHttpClient(ccm, params);
 
@@ -119,7 +128,7 @@ public abstract class WebConnector {
 			read = br.readLine();
 
 			while (read != null) {
-				//System.out.println(read);
+				// System.out.println(read);
 				sb.append(read);
 				read = br.readLine();
 

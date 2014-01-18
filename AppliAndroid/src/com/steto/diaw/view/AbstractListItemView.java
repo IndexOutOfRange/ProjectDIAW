@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.steto.projectdiaw.R;
 
 public abstract class AbstractListItemView<T> extends LinearLayout {
@@ -13,7 +14,6 @@ public abstract class AbstractListItemView<T> extends LinearLayout {
 	protected TextView mLeftTV;
 	protected TextView mRightTV;
 	protected LinearLayout mLinearLayout;
-
 
 	public AbstractListItemView(Context context) {
 		super(context);

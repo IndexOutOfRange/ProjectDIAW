@@ -1,7 +1,5 @@
 package com.steto.diaw.provider;
 
-import com.steto.diaw.tools.SelectionBuilder;
-
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.Context;
@@ -11,222 +9,223 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 
+import com.steto.diaw.tools.SelectionBuilder;
 
 public class EpisodeProvider extends ContentProvider {
-    EpisodeDatabase mDatabaseHelper;
 
-    /**
-     * Content authority for this provider.
-     */
-    private static final String AUTHORITY = EpisodeContract.CONTENT_AUTHORITY;
+	EpisodeDatabase mDatabaseHelper;
 
-    // The constants below represent individual URI routes, as IDs. Every URI pattern recognized by
-    // this ContentProvider is defined using sUriMatcher.addURI(), and associated with one of these
-    // IDs.
-    //
-    // When a incoming URI is run through sUriMatcher, it will be tested against the defined
-    // URI patterns, and the corresponding route ID will be returned.
-    /**
-     * URI ID for route: /episodes
-     */
-    public static final int ROUTE_EPISODES = 1;
+	/**
+	 * Content authority for this provider.
+	 */
+	private static final String AUTHORITY = EpisodeContract.CONTENT_AUTHORITY;
 
-    /**
-     * URI ID for route: /episodes/{ID}
-     */
-    public static final int ROUTE_EPISODES_ID = 2;
+	// The constants below represent individual URI routes, as IDs. Every URI pattern recognized by
+	// this ContentProvider is defined using sUriMatcher.addURI(), and associated with one of these
+	// IDs.
+	//
+	// When a incoming URI is run through sUriMatcher, it will be tested against the defined
+	// URI patterns, and the corresponding route ID will be returned.
+	/**
+	 * URI ID for route: /episodes
+	 */
+	public static final int ROUTE_EPISODES = 1;
 
-    /**
-     * UriMatcher, used to decode incoming URIs.
-     */
-    private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-    static {
-        sUriMatcher.addURI(AUTHORITY, "episodes", ROUTE_EPISODES);
-        sUriMatcher.addURI(AUTHORITY, "episodes/*", ROUTE_EPISODES_ID);
-    }
+	/**
+	 * URI ID for route: /episodes/{ID}
+	 */
+	public static final int ROUTE_EPISODES_ID = 2;
 
-    @Override
-    public boolean onCreate() {
-        mDatabaseHelper = new EpisodeDatabase(getContext());
-        return true;
-    }
+	/**
+	 * UriMatcher, used to decode incoming URIs.
+	 */
+	private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+	static {
+		sUriMatcher.addURI(AUTHORITY, "episodes", ROUTE_EPISODES);
+		sUriMatcher.addURI(AUTHORITY, "episodes/*", ROUTE_EPISODES_ID);
+	}
 
-    /**
-     * Determine the mime type for episodes returned by a given URI.
-     */
-    @Override
-    public String getType(Uri uri) {
-        final int match = sUriMatcher.match(uri);
-        switch (match) {
-            case ROUTE_EPISODES:
-                return EpisodeContract.Episode.CONTENT_TYPE;
-            case ROUTE_EPISODES_ID:
-                return EpisodeContract.Episode.CONTENT_ITEM_TYPE;
-            default:
-                throw new UnsupportedOperationException("Unknown uri: " + uri);
-        }
-    }
+	@Override
+	public boolean onCreate() {
+		mDatabaseHelper = new EpisodeDatabase(getContext());
+		return true;
+	}
 
-    /**
-     * Perform a database query by URI.
-     *
-     * <p>Currently supports returning all entries (/episodes) and individual entries by ID
-     * (/episodes/{ID}).
-     */
-    @Override
-    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        SQLiteDatabase db = mDatabaseHelper.getReadableDatabase();
-        SelectionBuilder builder = new SelectionBuilder();
-        int uriMatch = sUriMatcher.match(uri);
-        switch (uriMatch) {
-            case ROUTE_EPISODES_ID:
-                // Return a single episode, by ID.
-                String id = uri.getLastPathSegment();
-                builder.where(EpisodeContract.Episode._ID + "=?", id);
-            case ROUTE_EPISODES:
-                // Return all known episodes.
-                builder.table(EpisodeContract.Episode.TABLE_NAME)
-                       .where(selection, selectionArgs);
-                Cursor c = builder.query(db, projection, sortOrder);
-                // Note: Notification URI must be manually set here for loaders to correctly
-                // register ContentObservers.
-                Context ctx = getContext();
-                assert ctx != null;
-                c.setNotificationUri(ctx.getContentResolver(), uri);
-                return c;
-            default:
-                throw new UnsupportedOperationException("Unknown uri: " + uri);
-        }
-    }
+	/**
+	 * Determine the mime type for episodes returned by a given URI.
+	 */
+	@Override
+	public String getType(Uri uri) {
+		final int match = sUriMatcher.match(uri);
+		switch (match) {
+			case ROUTE_EPISODES:
+				return EpisodeContract.Episode.CONTENT_TYPE;
+			case ROUTE_EPISODES_ID:
+				return EpisodeContract.Episode.CONTENT_ITEM_TYPE;
+			default:
+				throw new UnsupportedOperationException("Unknown uri: " + uri);
+		}
+	}
 
-    /**
-     * Insert a new episode into the database.
-     */
-    @Override
-    public Uri insert(Uri uri, ContentValues values) {
-        final SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
-        assert db != null;
-        final int match = sUriMatcher.match(uri);
-        Uri result;
-        switch (match) {
-            case ROUTE_EPISODES:
-                long id = db.insertOrThrow(EpisodeContract.Episode.TABLE_NAME, null, values);
-                result = Uri.parse(EpisodeContract.Episode.CONTENT_URI + "/" + id);
-                break;
-            case ROUTE_EPISODES_ID:
-                throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
-            default:
-                throw new UnsupportedOperationException("Unknown uri: " + uri);
-        }
-        // Send broadcast to registered ContentObservers, to refresh UI.
-        Context ctx = getContext();
-        assert ctx != null;
-        ctx.getContentResolver().notifyChange(uri, null, false);
-        return result;
-    }
+	/**
+	 * Perform a database query by URI.
+	 * <p>
+	 * Currently supports returning all entries (/episodes) and individual entries by ID (/episodes/{ID}).
+	 */
+	@Override
+	public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+		SQLiteDatabase db = mDatabaseHelper.getReadableDatabase();
+		SelectionBuilder builder = new SelectionBuilder();
+		int uriMatch = sUriMatcher.match(uri);
+		switch (uriMatch) {
+			case ROUTE_EPISODES_ID:
+				// Return a single episode, by ID.
+				String id = uri.getLastPathSegment();
+				builder.where(EpisodeContract.Episode._ID + "=?", id);
+			case ROUTE_EPISODES:
+				// Return all known episodes.
+				builder.table(EpisodeContract.Episode.TABLE_NAME)
+						.where(selection, selectionArgs);
+				Cursor c = builder.query(db, projection, sortOrder);
+				// Note: Notification URI must be manually set here for loaders to correctly
+				// register ContentObservers.
+				Context ctx = getContext();
+				assert ctx != null;
+				c.setNotificationUri(ctx.getContentResolver(), uri);
+				return c;
+			default:
+				throw new UnsupportedOperationException("Unknown uri: " + uri);
+		}
+	}
 
-    /**
-     * Delete an episode by database by URI.
-     */
-    @Override
-    public int delete(Uri uri, String selection, String[] selectionArgs) {
-        SelectionBuilder builder = new SelectionBuilder();
-        final SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
-        final int match = sUriMatcher.match(uri);
-        int count;
-        switch (match) {
-            case ROUTE_EPISODES:
-                count = builder.table(EpisodeContract.Episode.TABLE_NAME)
-                        .where(selection, selectionArgs)
-                        .delete(db);
-                break;
-            case ROUTE_EPISODES_ID:
-                String id = uri.getLastPathSegment();
-                count = builder.table(EpisodeContract.Episode.TABLE_NAME)
-                       .where(EpisodeContract.Episode._ID + "=?", id)
-                       .where(selection, selectionArgs)
-                       .delete(db);
-                break;
-            default:
-                throw new UnsupportedOperationException("Unknown uri: " + uri);
-        }
-        // Send broadcast to registered ContentObservers, to refresh UI.
-        Context ctx = getContext();
-        assert ctx != null;
-        ctx.getContentResolver().notifyChange(uri, null, false);
-        return count;
-    }
+	/**
+	 * Insert a new episode into the database.
+	 */
+	@Override
+	public Uri insert(Uri uri, ContentValues values) {
+		final SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
+		assert db != null;
+		final int match = sUriMatcher.match(uri);
+		Uri result;
+		switch (match) {
+			case ROUTE_EPISODES:
+				long id = db.insertOrThrow(EpisodeContract.Episode.TABLE_NAME, null, values);
+				result = Uri.parse(EpisodeContract.Episode.CONTENT_URI + "/" + id);
+				break;
+			case ROUTE_EPISODES_ID:
+				throw new UnsupportedOperationException("Insert not supported on URI: " + uri);
+			default:
+				throw new UnsupportedOperationException("Unknown uri: " + uri);
+		}
+		// Send broadcast to registered ContentObservers, to refresh UI.
+		Context ctx = getContext();
+		assert ctx != null;
+		ctx.getContentResolver().notifyChange(uri, null, false);
+		return result;
+	}
 
-    /**
-     * Update an episode in the database by URI.
-     */
-    @Override
-    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        SelectionBuilder builder = new SelectionBuilder();
-        final SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
-        final int match = sUriMatcher.match(uri);
-        int count;
-        switch (match) {
-            case ROUTE_EPISODES:
-                count = builder.table(EpisodeContract.Episode.TABLE_NAME)
-                        .where(selection, selectionArgs)
-                        .update(db, values);
-                break;
-            case ROUTE_EPISODES_ID:
-                String id = uri.getLastPathSegment();
-                count = builder.table(EpisodeContract.Episode.TABLE_NAME)
-                        .where(EpisodeContract.Episode._ID + "=?", id)
-                        .where(selection, selectionArgs)
-                        .update(db, values);
-                break;
-            default:
-                throw new UnsupportedOperationException("Unknown uri: " + uri);
-        }
-        Context ctx = getContext();
-        assert ctx != null;
-        ctx.getContentResolver().notifyChange(uri, null, false);
-        return count;
-    }
+	/**
+	 * Delete an episode by database by URI.
+	 */
+	@Override
+	public int delete(Uri uri, String selection, String[] selectionArgs) {
+		SelectionBuilder builder = new SelectionBuilder();
+		final SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
+		final int match = sUriMatcher.match(uri);
+		int count;
+		switch (match) {
+			case ROUTE_EPISODES:
+				count = builder.table(EpisodeContract.Episode.TABLE_NAME)
+						.where(selection, selectionArgs)
+						.delete(db);
+				break;
+			case ROUTE_EPISODES_ID:
+				String id = uri.getLastPathSegment();
+				count = builder.table(EpisodeContract.Episode.TABLE_NAME)
+						.where(EpisodeContract.Episode._ID + "=?", id)
+						.where(selection, selectionArgs)
+						.delete(db);
+				break;
+			default:
+				throw new UnsupportedOperationException("Unknown uri: " + uri);
+		}
+		// Send broadcast to registered ContentObservers, to refresh UI.
+		Context ctx = getContext();
+		assert ctx != null;
+		ctx.getContentResolver().notifyChange(uri, null, false);
+		return count;
+	}
 
-    /**
-     * SQLite backend for @{link EpisodeProvider}.
-     *
-     * Provides access to an disk-backed, SQLite datastore which is utilized by EpisodeProvider. This
-     * database should never be accessed by other parts of the application directly.
-     */
-    static class EpisodeDatabase extends SQLiteOpenHelper {
-        public static final int DATABASE_VERSION = 1;
-        public static final String DATABASE_NAME = "episode.db";
+	/**
+	 * Update an episode in the database by URI.
+	 */
+	@Override
+	public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+		SelectionBuilder builder = new SelectionBuilder();
+		final SQLiteDatabase db = mDatabaseHelper.getWritableDatabase();
+		final int match = sUriMatcher.match(uri);
+		int count;
+		switch (match) {
+			case ROUTE_EPISODES:
+				count = builder.table(EpisodeContract.Episode.TABLE_NAME)
+						.where(selection, selectionArgs)
+						.update(db, values);
+				break;
+			case ROUTE_EPISODES_ID:
+				String id = uri.getLastPathSegment();
+				count = builder.table(EpisodeContract.Episode.TABLE_NAME)
+						.where(EpisodeContract.Episode._ID + "=?", id)
+						.where(selection, selectionArgs)
+						.update(db, values);
+				break;
+			default:
+				throw new UnsupportedOperationException("Unknown uri: " + uri);
+		}
+		Context ctx = getContext();
+		assert ctx != null;
+		ctx.getContentResolver().notifyChange(uri, null, false);
+		return count;
+	}
 
-        private static final String TYPE_TEXT = " TEXT";
-        private static final String TYPE_INTEGER = " INTEGER";
-        private static final String COMMA_SEP = ",";
-        /** SQL statement to create "episode" table. */
-        private static final String SQL_CREATE_EPISODE =
-                "CREATE TABLE " + EpisodeContract.Episode.TABLE_NAME + " (" +
-                        EpisodeContract.Episode._ID + " INTEGER PRIMARY KEY," +
-                        EpisodeContract.Episode.COLUMN_NAME_SHOW + TYPE_TEXT + COMMA_SEP +
-                        EpisodeContract.Episode.COLUMN_NAME_SEASON    + TYPE_TEXT + COMMA_SEP +
-                        EpisodeContract.Episode.COLUMN_NAME_EPISODE + TYPE_TEXT + COMMA_SEP +
-                        EpisodeContract.Episode.COLUMN_NAME_UPDATE + TYPE_INTEGER + ")";
+	/**
+	 * SQLite backend for @{link EpisodeProvider}.
+	 * Provides access to an disk-backed, SQLite datastore which is utilized by EpisodeProvider. This
+	 * database should never be accessed by other parts of the application directly.
+	 */
+	static class EpisodeDatabase extends SQLiteOpenHelper {
 
-        /** SQL statement to drop "episode" table. */
-        private static final String SQL_DELETE_ENTRIES =
-                "DROP TABLE IF EXISTS " + EpisodeContract.Episode.TABLE_NAME;
+		public static final int DATABASE_VERSION = 1;
+		public static final String DATABASE_NAME = "episode.db";
 
-        public EpisodeDatabase(Context context) {
-            super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        }
+		private static final String TYPE_TEXT = " TEXT";
+		private static final String TYPE_INTEGER = " INTEGER";
+		private static final String COMMA_SEP = ",";
+		/** SQL statement to create "episode" table. */
+		private static final String SQL_CREATE_EPISODE =
+				"CREATE TABLE " + EpisodeContract.Episode.TABLE_NAME + " (" +
+						EpisodeContract.Episode._ID + " INTEGER PRIMARY KEY," +
+						EpisodeContract.Episode.COLUMN_NAME_SHOW + TYPE_TEXT + COMMA_SEP +
+						EpisodeContract.Episode.COLUMN_NAME_SEASON + TYPE_TEXT + COMMA_SEP +
+						EpisodeContract.Episode.COLUMN_NAME_EPISODE + TYPE_TEXT + COMMA_SEP +
+						EpisodeContract.Episode.COLUMN_NAME_UPDATE + TYPE_INTEGER + ")";
 
-        @Override
-        public void onCreate(SQLiteDatabase db) {
-            db.execSQL(SQL_CREATE_EPISODE);
-        }
+		/** SQL statement to drop "episode" table. */
+		private static final String SQL_DELETE_ENTRIES =
+				"DROP TABLE IF EXISTS " + EpisodeContract.Episode.TABLE_NAME;
 
-        @Override
-        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            db.execSQL(SQL_DELETE_ENTRIES);
-            onCreate(db);
-        }
-    }
+		public EpisodeDatabase(Context context) {
+			super(context, DATABASE_NAME, null, DATABASE_VERSION);
+		}
+
+		@Override
+		public void onCreate(SQLiteDatabase db) {
+			db.execSQL(SQL_CREATE_EPISODE);
+		}
+
+		@Override
+		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+			db.execSQL(SQL_DELETE_ENTRIES);
+			onCreate(db);
+		}
+	}
 }

@@ -1,7 +1,17 @@
 package com.steto.diaw.model;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.Serializable;
+import java.util.Date;
+
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -9,14 +19,6 @@ import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import com.steto.diaw.dao.ShowDao;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Root;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.Serializable;
-import java.util.Date;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Root(name = "Series", strict = false)
@@ -78,8 +80,7 @@ public class Show implements Serializable, Comparable<Show> {
 	@DatabaseField
 	private boolean mTVDBConnected;
 
-	public Show() {
-	}
+	public Show() {}
 
 	public Show(String name) {
 		setShowName(name);
@@ -93,12 +94,15 @@ public class Show implements Serializable, Comparable<Show> {
 
 	@Override
 	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
 
 		Show show = (Show) o;
 
-		if (mShowName != null ? !mShowName.equals(show.mShowName) : show.mShowName != null) return false;
+		if (mShowName != null ? !mShowName.equals(show.mShowName) : show.mShowName != null)
+			return false;
 
 		return true;
 	}
@@ -205,7 +209,6 @@ public class Show implements Serializable, Comparable<Show> {
 		Bitmap bmp = BitmapFactory.decodeStream(is);
 		return bmp;
 	}
-
 
 	public void setBanner(byte[] banner) {
 		mBanner = banner;

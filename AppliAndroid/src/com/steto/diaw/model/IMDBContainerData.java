@@ -1,6 +1,5 @@
 package com.steto.diaw.model;
 
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**

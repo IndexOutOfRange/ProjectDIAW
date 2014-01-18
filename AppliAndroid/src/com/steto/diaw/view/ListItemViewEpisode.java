@@ -14,8 +14,10 @@ public class ListItemViewEpisode extends AbstractListItemView<Episode> {
 		mData = ep;
 		// TODO utiliser un string des ressources
 		String sub = "Saison " + String.valueOf(mData.getSeasonNumber()) + " Episode " + String.valueOf(mData.getEpisodeNumber());
-		if (mLeftTV != null) mLeftTV.setText(ep.getShowName());
-		if (mRightTV != null) mRightTV.setText(sub);
+		if (mLeftTV != null)
+			mLeftTV.setText(ep.getShowName());
+		if (mRightTV != null)
+			mRightTV.setText(sub);
 	}
 
 	public void setLayoutBackgroundState(int[] state) {

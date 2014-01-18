@@ -8,6 +8,7 @@ import java.util.zip.GZIPInputStream;
  * Created by Stephane on 02/06/13.
  */
 public class SeriesNameConnector extends WebConnector {
+
 	private static final String URL = "GetSeries.php";
 	private static final String DNS = "http://thetvdb.com/api/";
 

@@ -1,16 +1,16 @@
 package com.steto.diaw.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
-import com.steto.diaw.dao.EpisodeDao;
-
 import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Date;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+import com.steto.diaw.dao.EpisodeDao;
 
 @Root(name = "Episode", strict = false)
 @DatabaseTable(tableName = "Episode", daoClass = EpisodeDao.class)

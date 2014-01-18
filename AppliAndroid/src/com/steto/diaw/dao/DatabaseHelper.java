@@ -20,7 +20,7 @@ import com.steto.diaw.tools.Tools;
 @Singleton
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
-	//les erreurs d'ecritures en BDD commencent a -10 et sont de plus en plus petit
+	// les erreurs d'ecritures en BDD commencent a -10 et sont de plus en plus petit
 	public static final int ERROR_BDD = -10;
 
 	private static final String TAG = "DatabaseHelper";
@@ -63,7 +63,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 	}
 
 	private void reinitDateMAJ() {
-		//reboot de la date de MJ de la base
+		// reboot de la date de MJ de la base
 		mSharedPreferences.edit().putLong(Tools.SHARED_PREF_LAST_UPDATE, 0).commit();
 	}
 }

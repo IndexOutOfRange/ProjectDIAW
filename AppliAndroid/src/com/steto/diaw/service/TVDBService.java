@@ -91,7 +91,7 @@ public class TVDBService extends RoboIntentService {
 			SeriesParser myParser = new SeriesParser();
 			InputStream in = myWeb.getResponseBody();
 			TVDBContainerData tvdbContainerData = myParser.parse(in);
-			if(myParser.getStatusCode() == AbstractParser.PARSER_OK) {
+			if (myParser.getStatusCode() == AbstractParser.PARSER_OK) {
 				listShow = tvdbContainerData.series;
 			}
 		}
@@ -116,11 +116,11 @@ public class TVDBService extends RoboIntentService {
 					listShow.get(0).setShowName(input.getId());
 					Ln.i(tvdbContainerData.episodes.size() + " episodes");
 					listShow.get(0).setNumberEpisodes(tvdbContainerData.episodes.size());
-					
+
 					try {
 						ShowDao showDao = mDatabaseHelper.getDao(Show.class);
 						EpisodeDao episodeDao = mDatabaseHelper.getDao(Episode.class);
-						showDao.createOrUpdate(listShow.get(0));						
+						showDao.createOrUpdate(listShow.get(0));
 						for (Episode ep : tvdbContainerData.episodes) {
 							ep.setShowName(input.getId());
 							episodeDao.createIfNotExists(ep);

@@ -25,7 +25,7 @@ public class SeriesParser extends AbstractParser {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		TVDBContainerData current = null;
 		Serializer serializer = new Persister();
 

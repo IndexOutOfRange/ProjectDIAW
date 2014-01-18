@@ -14,6 +14,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,10 +29,8 @@ import android.widget.Toast;
 import com.google.inject.Inject;
 import com.steto.diaw.adapter.SeasonWithEpisodesExpandableAdapter;
 import com.steto.diaw.dao.DatabaseHelper;
-import com.steto.diaw.dao.EpisodeDao;
 import com.steto.diaw.dao.ShowDao;
 import com.steto.diaw.helper.TranslucideActionBarHelper;
-import com.steto.diaw.model.Episode;
 import com.steto.diaw.model.Season;
 import com.steto.diaw.model.Show;
 import com.steto.diaw.service.BannerService;
@@ -150,42 +149,8 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 
 		builder.setView(viewInDialog)
 				// Add action buttons
-				.setPositiveButton(R.string.btn_ok, new DialogInterface.OnClickListener() {
-
-					@Override
-					public void onClick(DialogInterface dialog, int id) {
-						setProgressBarIndeterminate(true);
-						String newName = nameShowEditText.getText().toString();
-						// rename all tv shows in this activity
-						try {
-							EpisodeDao episodeDao = mDatabaseHelper.getDao(Episode.class);
-							ShowDao showDao = mDatabaseHelper.getDao(Show.class);
-							for (Season season : mListSeasons) {
-								for (Episode episode : season.getEpisodes()) {
-									episodeDao.delete(episode);
-									episode.setShowName(newName); // change id : TODO in DAO method...
-									episodeDao.create(episode);
-								}
-							}
-							Show newShow = new Show(newName);
-							showDao.createIfNotExists(newShow);
-							showDao.delete(mShow);
-						} catch (SQLException e) {
-							Ln.e(e);
-						}
-						// new ShowDetailActivity
-						Intent intentDetail = new Intent(ShowDetailActivity.this, ShowDetailActivity.class);
-						intentDetail.putExtra(ShowDetailActivity.EXTRA_SHOW_NAME, newName);
-						startActivity(intentDetail);
-						finish();
-					}
-				})
-				.setNegativeButton(R.string.btn_annuler, new DialogInterface.OnClickListener() {
-
-					public void onClick(DialogInterface dialog, int id) {
-						dialog.dismiss();
-					}
-				})
+				.setPositiveButton(R.string.btn_ok, new OnRenameOKClickListener(nameShowEditText))
+				.setNegativeButton(R.string.btn_annuler, new OnRenameCancelClickListener())
 				.setTitle(R.string.rename_show);
 		AlertDialog dialog = builder.create();
 		dialog.show();
@@ -312,6 +277,13 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 		}
 	}
 
+	private static class OnRenameCancelClickListener implements DialogInterface.OnClickListener {
+
+		public void onClick(DialogInterface dialog, int id) {
+			dialog.dismiss();
+		}
+	}
+
 	private final class OnSummaryClickListener implements OnClickListener {
 
 		private final TextView summary;
@@ -383,6 +355,36 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 				}
 			} else {
 				Toast.makeText(ShowDetailActivity.this, "Unable to get result from service", Toast.LENGTH_SHORT).show();
+			}
+		}
+	}
+
+	private class OnRenameOKClickListener implements DialogInterface.OnClickListener {
+
+		private final EditText nameShowEditText;
+
+		public OnRenameOKClickListener(EditText nameShowEditText) {
+			this.nameShowEditText = nameShowEditText;
+		}
+
+		@Override
+		public void onClick(DialogInterface dialog, int id) {
+			try {
+				setProgressBarIndeterminate(true);
+				String newName = nameShowEditText.getText().toString();
+				// rename all tv shows in this activity
+
+				ShowDao dao = mDatabaseHelper.getDao(Show.class);
+				dao.renameShow(mShow, newName);
+
+				// new ShowDetailActivity
+				Intent intentDetail = new Intent(ShowDetailActivity.this, ShowDetailActivity.class);
+				intentDetail.putExtra(ShowDetailActivity.EXTRA_SHOW_NAME, newName);
+				startActivity(intentDetail);
+				finish();
+			} catch (SQLException e) {
+				Log.e("ShowDetail", "impossible de renommer la serie");
+				dialog.dismiss();
 			}
 		}
 	}

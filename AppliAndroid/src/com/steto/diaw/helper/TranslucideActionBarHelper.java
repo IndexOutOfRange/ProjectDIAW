@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AbsListView;
 
 public class TranslucideActionBarHelper {
+
 	private ActionBar mActionBar;
 	private Drawable mActionBarBackgroundDrawable;
 	private View mHeaderContainer;
@@ -35,18 +36,17 @@ public class TranslucideActionBarHelper {
 	}
 
 	private Drawable.Callback mDrawableCallback = new Drawable.Callback() {
+
 		@Override
 		public void invalidateDrawable(Drawable who) {
 			mActionBar.setBackgroundDrawable(who);
 		}
 
 		@Override
-		public void scheduleDrawable(Drawable who, Runnable what, long when) {
-		}
+		public void scheduleDrawable(Drawable who, Runnable what, long when) {}
 
 		@Override
-		public void unscheduleDrawable(Drawable who, Runnable what) {
-		}
+		public void unscheduleDrawable(Drawable who, Runnable what) {}
 	};
 
 	public void setHeaderContainer(View headerContainer) {
@@ -62,9 +62,9 @@ public class TranslucideActionBarHelper {
 	}
 
 	private AbsListView.OnScrollListener mOnScrollChangedListener = new AbsListView.OnScrollListener() {
+
 		@Override
-		public void onScrollStateChanged(AbsListView view, int scrollState) {
-		}
+		public void onScrollStateChanged(AbsListView view, int scrollState) {}
 
 		@Override
 		public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {

@@ -33,7 +33,7 @@ public class IMDBService extends RoboIntentService {
 	public static String SERVICE_INPUT_RECEIVER = "SERVICE_INPUT_RECEIVER";
 	public static String SERVICE_OUTPUT_DATA = "SERVICE_OUTPUT_DATA";
 
-	//QUERY CONSTANTS rien d'interessant...
+	// QUERY CONSTANTS rien d'interessant...
 	private static String QUERY_TITLE = "title";
 	private static String QUERY_TYPE = "xml";
 	private static String QUERY_PLOT = "plot";
@@ -58,13 +58,12 @@ public class IMDBService extends RoboIntentService {
 	private static String QUERY_BUSINESS_VALUE = "0";
 	private static String QUERY_TECH_VALUE = "0";
 
-	//QUERY VARIABLE
+	// QUERY VARIABLE
 	private static String QUERY_RESULT_PER_PAGE = "10";
 
 	private Integer mSearchOffset = 0;
 
-
-	//http://imdbapi.org/?title=South&type=xml&plot=none&episode=0&limit=10&yg=0&mt=TVS&lang=en-US&offset=0&aka=simple&release=simple&business=0&tech=0
+	// http://imdbapi.org/?title=South&type=xml&plot=none&episode=0&limit=10&yg=0&mt=TVS&lang=en-US&offset=0&aka=simple&release=simple&business=0&tech=0
 	public IMDBService() {
 		super(IMDB_SERVICE);
 	}
@@ -96,13 +95,13 @@ public class IMDBService extends RoboIntentService {
 		IMDBConnector myWeb = new IMDBConnector();
 		myWeb.requestFromNetwork(myQuery.toString(), WebConnector.HTTPMethod.GET, null);
 		if (myWeb.getStatusCode() == HttpStatus.SC_OK) {
-            InputStream in = myWeb.getResponseBody();
-            try {
-                String tmp = IOUtils.toString(in);
-                in = IOUtils.toInputStream(tmp);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+			InputStream in = myWeb.getResponseBody();
+			try {
+				String tmp = IOUtils.toString(in);
+				in = IOUtils.toInputStream(tmp);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			IMDBParser myParser = new IMDBParser();
 			parsed = myParser.parse(in);
 			if (myParser.getStatusCode() != AbstractParser.PARSER_OK) {

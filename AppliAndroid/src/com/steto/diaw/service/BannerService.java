@@ -27,7 +27,7 @@ public class BannerService extends RoboIntentService {
 	public static final String INPUT_RECEIVER = "INPUT_RECEIVER";
 	public static final String OUTPUT_BITMAP = "OUTPUT_BITMAP";
 	public static final int RESULT_CODE_OK = 0;
-	
+
 	@Inject
 	private DatabaseHelper mDatabaseHelper;
 

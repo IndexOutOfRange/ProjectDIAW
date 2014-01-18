@@ -82,7 +82,8 @@ public class ParseDeleteEpisodeService extends RoboIntentService {
 
 		try {
 			allEp = episodeDao.queryForAll();
-			if (responseCode == RESULT_CODE_ERROR) responseCode = RESULT_CODE_OK;
+			if (responseCode == RESULT_CODE_ERROR)
+				responseCode = RESULT_CODE_OK;
 		} catch (SQLException e) {
 			responseCode = DatabaseHelper.ERROR_BDD;
 			Ln.e(e);

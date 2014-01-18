@@ -8,7 +8,6 @@ import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 import roboguice.util.Ln;
-
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;

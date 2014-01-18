@@ -14,8 +14,7 @@ public class Season {
 		this.mEpisodes = mEpisodes;
 	}
 
-	public Season() {
-	}
+	public Season() {}
 
 	public int getNumber() {
 		return mNumber;

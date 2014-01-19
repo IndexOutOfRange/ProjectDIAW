@@ -203,7 +203,9 @@ public class EpisodesSeenActivity extends DrawerActivity {
 						// service
 						String newName = nameShowEditText.getText().toString();
 						Intent intent = new Intent(EpisodesSeenActivity.this, ParseUpdateEpisodeService.class);
-						intent.putExtra(ParseUpdateEpisodeService.INTENT_OBJECT_TO_RENAME, episode.getObjectId());
+						List<Episode> episodeToRename = new ArrayList<Episode>();
+						episodeToRename.add(episode);
+						intent.putExtra(ParseUpdateEpisodeService.INTENT_OBJECT_TO_RENAME, (Serializable) episodeToRename);
 						intent.putExtra(ParseUpdateEpisodeService.INTENT_KEY, Episode.COLUMN_SHOWNAME);
 						intent.putExtra(ParseUpdateEpisodeService.INTENT_VALUE, newName);
 						intent.putExtra(ParseUpdateEpisodeService.INTENT_RESULT_RECEIVER, mRenameEpisodeResultReceiver);

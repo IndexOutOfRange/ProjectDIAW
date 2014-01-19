@@ -13,6 +13,7 @@ public abstract class AbstractListItemView<T> extends LinearLayout {
 	protected T mData;
 	protected TextView mLeftTV;
 	protected TextView mRightTV;
+	protected TextView mCenterTV;
 	protected LinearLayout mLinearLayout;
 
 	public AbstractListItemView(Context context) {
@@ -25,6 +26,7 @@ public abstract class AbstractListItemView<T> extends LinearLayout {
 		mLinearLayout = (LinearLayout) findViewById(R.id.listitem_layout);
 		mLeftTV = (TextView) findViewById(R.id.listitem_left_tv);
 		mRightTV = (TextView) findViewById(R.id.listitem_right_tv);
+		mCenterTV = (TextView) findViewById(R.id.listitem_center_tv);
 	}
 
 	public abstract void setData(T data);

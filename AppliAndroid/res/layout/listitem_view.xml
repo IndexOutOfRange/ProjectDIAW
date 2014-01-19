@@ -1,24 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/listitem_layout"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:background="@drawable/card_background"
-              android:orientation="horizontal"
-              android:padding="@dimen/normal">
+    android:id="@+id/listitem_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/card_background"
+    android:orientation="vertical"
+    android:padding="@dimen/normal" >
 
-	<TextView
-			android:id="@+id/listitem_left_tv"
-			android:layout_width="0dp"
-			android:layout_weight="1"
-			android:ellipsize="marquee"
-			android:layout_height="wrap_content"
-			android:hint="@string/hint_show_title"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
 
-	<TextView
-			android:id="@+id/listitem_right_tv"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:hint="@string/hint_show_title"/>
+        <TextView
+            android:id="@+id/listitem_left_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="marquee"
+            android:hint="@string/hint_show_title" />
+
+        <TextView
+            android:id="@+id/listitem_right_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_show_title" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/listitem_center_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
 
 </LinearLayout>

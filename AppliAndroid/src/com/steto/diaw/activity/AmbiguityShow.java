@@ -68,7 +68,7 @@ public class AmbiguityShow extends RoboListActivity {
 	public void setAllSuggestedShow(List<Show> allSuggestedShow) {
 		if (mAllSuggestedShow == null) {
 			mAllSuggestedShow = allSuggestedShow;
-			mAdapter = new ListShowAdapter(this, mAllSuggestedShow);
+			mAdapter = new ListShowAdapter(this, mAllSuggestedShow, true);
 			mList.setAdapter(mAdapter);
 		} else {
 			mAllSuggestedShow.clear();

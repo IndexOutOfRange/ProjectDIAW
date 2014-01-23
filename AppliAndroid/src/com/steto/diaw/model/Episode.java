@@ -16,21 +16,27 @@ import com.steto.diaw.dao.EpisodeDao;
 @DatabaseTable(tableName = "Episode", daoClass = EpisodeDao.class)
 public class Episode implements Serializable, Comparable<Episode> {
 
-	private static final long serialVersionUID = 8857517715427495822L;
-	public static final String COLUMN_SHOWNAME = "showName";
-	public static final String COLUMN_OBJECT_ID = "objectId";
-	public static final String COLUMN_UPDATED_AT = "updatedAt";
-	public static final String COLUMN_SEEN = "seen";
-
+	private static final long serialVersionUID = 1L;
+	public static final String COLUMN_SHOWNAME = "ShowName";
+	public static final String COLUMN_OBJECT_ID = "ObjectId";
+	public static final String COLUMN_UPDATED_AT = "UpdatedAt";
+	public static final String COLUMN_SEEN = "Seen";
+	public static final String COLUMN_EPISODE_NUMBER = "EpisodeNumber";
+	public static final String COLUMN_SEASON_NUMBER = "SeasonNumber";
+	public static final String COLUMN_ID = "ID";
+	
+	@DatabaseField(id = true, useGetSet = true, columnName = COLUMN_ID)
+	@JsonIgnore
+	private String mCustomId;
 	@DatabaseField(columnName = COLUMN_SHOWNAME)
 	private String mShowName;
 
 	@Element(name = "SeasonNumber")
-	@DatabaseField
+	@DatabaseField(columnName = COLUMN_SEASON_NUMBER)
 	private int mSeasonNumber;
 
 	@Element(name = "EpisodeNumber")
-	@DatabaseField
+	@DatabaseField(columnName = COLUMN_EPISODE_NUMBER)
 	private int mEpisodeNumber;
 
 	@JsonIgnore
@@ -38,10 +44,6 @@ public class Episode implements Serializable, Comparable<Episode> {
 
 	@DatabaseField(columnName = COLUMN_UPDATED_AT)
 	private Date mUpdatedAt;
-
-	@DatabaseField(id = true, useGetSet = true)
-	@JsonIgnore
-	private String mCustomId;
 
 	@DatabaseField(columnName = COLUMN_OBJECT_ID)
 	private String mObjectId;

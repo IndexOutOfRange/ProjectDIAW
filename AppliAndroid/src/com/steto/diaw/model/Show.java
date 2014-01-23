@@ -25,10 +25,23 @@ import com.steto.diaw.dao.ShowDao;
 @DatabaseTable(tableName = "Show", daoClass = ShowDao.class)
 public class Show implements Serializable, Comparable<Show> {
 
-	private static final long serialVersionUID = 2402273750582116603L;
-	public static final String COLUMN_SHOWNAME = "showName";
+	private static final long serialVersionUID = 1L;
+	public static final String COLUMN_ID = "ID";
+	public static final String COLUMN_SHOWNAME = "ShowName";
+	public static final String COLUMN_SEASON_NUMBER = "NumberSeasons";
+	public static final String COLUMN_EPISODE_NUMBER = "NumberEpisodes";
+	public static final String COLUMN_TVDB_ID = "TVDB_ID";
+	public static final String COLUMN_IMDB_ID = "IMDB_ID";
+	public static final String COLUMN_DATE_DEBUT = "DateDebut";
+	public static final String COLUMN_GENRE = "Genre";
+	public static final String COLUMN_CHAINE = "Chaine";
+	public static final String COLUMN_RESUME = "Resume";
+	public static final String COLUMN_STATUS = "Status";
+	public static final String COLUMN_BANNER_URL = "BannerUrl";
+	public static final String COLUMN_BANNER_DATA = "BannerData";
+	public static final String COLUMN_TVDB_CONNECTED = "TVDB_CONNECTED";
 
-	@DatabaseField(id = true, useGetSet = true)
+	@DatabaseField(id = true, useGetSet = true, columnName = COLUMN_ID)
 	private String mCustomId;
 
 	@JsonProperty("title")
@@ -36,48 +49,48 @@ public class Show implements Serializable, Comparable<Show> {
 	@DatabaseField(columnName = COLUMN_SHOWNAME)
 	private String mShowName;
 
-	@DatabaseField
+	@DatabaseField(columnName = COLUMN_SEASON_NUMBER)
 	private int mNumberSeasons;
 
-	@DatabaseField
+	@DatabaseField(columnName = COLUMN_EPISODE_NUMBER)
 	private int mNumberEpisodes;
 
-	@DatabaseField
+	@DatabaseField(columnName = COLUMN_TVDB_ID)
 	@Element(name = "id")
 	private int mTVDBID;
 
 	@JsonProperty("imdb_id")
-	@DatabaseField
+	@DatabaseField(columnName = COLUMN_IMDB_ID)
 	private String mIMDBID;
 
-	@DatabaseField
+	@DatabaseField(columnName = COLUMN_DATE_DEBUT)
 	@Element(name = "FirstAired", required = false)
 	private Date mDateDebut;
 
-	@DatabaseField
+	@DatabaseField(columnName = COLUMN_GENRE)
 	@Element(name = "Genre", required = false)
 	private String mGenre;
 
-	@DatabaseField
+	@DatabaseField(columnName = COLUMN_CHAINE)
 	@Element(name = "Network", required = false)
 	private String mChaine;
 
-	@DatabaseField
+	@DatabaseField(columnName = COLUMN_RESUME)
 	@Element(name = "Overview", required = false)
 	private String mResume;
 
-	@DatabaseField
+	@DatabaseField(columnName = COLUMN_STATUS)
 	@Element(name = "Status", required = false)
 	private String mStatus;
 
-	@DatabaseField
+	@DatabaseField(columnName = COLUMN_BANNER_URL)
 	@Element(name = "banner", required = false)
 	private String mBannerURL;
 
-	@DatabaseField(dataType = DataType.BYTE_ARRAY)
+	@DatabaseField(dataType = DataType.BYTE_ARRAY, columnName = COLUMN_BANNER_DATA)
 	private byte[] mBanner;
 
-	@DatabaseField
+	@DatabaseField(columnName = COLUMN_TVDB_CONNECTED)
 	private boolean mTVDBConnected;
 
 	public Show() {}
@@ -120,7 +133,7 @@ public class Show implements Serializable, Comparable<Show> {
 		this.mShowName = showName;
 	}
 
-	public int getmNumberSeasons() {
+	public int getNumberSeasons() {
 		return mNumberSeasons;
 	}
 
@@ -128,7 +141,7 @@ public class Show implements Serializable, Comparable<Show> {
 		this.mNumberSeasons = numberSeasons;
 	}
 
-	public int getmNumberEpisodes() {
+	public int getNumberEpisodes() {
 		return mNumberEpisodes;
 	}
 
@@ -148,8 +161,8 @@ public class Show implements Serializable, Comparable<Show> {
 		return mTVDBID;
 	}
 
-	public void setTVDBID(int TVDBID) {
-		mTVDBID = TVDBID;
+	public void setTVDBID(int tvdbId) {
+		mTVDBID = tvdbId;
 	}
 
 	public String getStatus() {
@@ -225,8 +238,8 @@ public class Show implements Serializable, Comparable<Show> {
 		return mTVDBConnected;
 	}
 
-	public void setTVDBConnected(boolean TVDBConnected) {
-		mTVDBConnected = TVDBConnected;
+	public void setTVDBConnected(boolean tvdbConnected) {
+		mTVDBConnected = tvdbConnected;
 	}
 
 	public String getMCustomId() {
@@ -244,7 +257,7 @@ public class Show implements Serializable, Comparable<Show> {
 		return mIMDBID;
 	}
 
-	public void setIMDBID(String IMDBID) {
-		mIMDBID = IMDBID;
+	public void setIMDBID(String imdb) {
+		mIMDBID = imdb;
 	}
 }

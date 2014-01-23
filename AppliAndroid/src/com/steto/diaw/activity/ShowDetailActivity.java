@@ -58,6 +58,7 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 	private TranslucideActionBarHelper mActionBarTranslucideHelper;
 	private ResultReceiver mShowResultReceiver = new ShowResultReceiver();
 	private ResultReceiver mBannerResultReceiver = new BannerReceiverExtension();
+	private SeasonWithEpisodesExpandableAdapter mAdapter;
 
 	public void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
@@ -200,6 +201,15 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 		try {
 			ShowDao showDao = mDatabaseHelper.getDao(Show.class);
 			mListSeasons = showDao.getSeasonsFromShow(mShow);
+
+			if (mShow.getNumberSeasons() == 0) {
+				int nbSeason = mListSeasons.size();
+				if (mListSeasons.get(0).getNumber() == 0) {
+					nbSeason--;
+				}
+				mShow.setNumberSeasons(nbSeason);
+				showDao.update(mShow);
+			}
 		} catch (SQLException e) {
 			Ln.e(e);
 			Toast.makeText(this, "Erreur lors de la récupération des episodes de la serie", Toast.LENGTH_SHORT).show();
@@ -234,18 +244,16 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 
 	private void processDataInLayout() {
 		// List
-		SeasonWithEpisodesExpandableAdapter adapter = new SeasonWithEpisodesExpandableAdapter(this, mListSeasons);
+		mAdapter = new SeasonWithEpisodesExpandableAdapter(this, mListSeasons);
 		mHeaderContainer = getLayoutInflater().inflate(R.layout.header_show, null);
 		getExpandableListView().addHeaderView(mHeaderContainer);
-		setListAdapter(adapter);
+		setListAdapter(mAdapter);
 
 		// ActionBar
 		mActionBarTranslucideHelper.setHeaderContainer(mHeaderContainer);
-
 	}
 
 	private void refreshLayout() {
-
 		if (mShow != null) {
 			findViewById(R.id.activity_show_detail_info_layout).setVisibility(View.VISIBLE);
 			// TVDBContainerData
@@ -300,7 +308,6 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 			} else {
 				summary.setText(mShow.getResume().substring(0, SHORT_SUMMARY_LENGHT) + HINT_TO_BE_CONTINUED);
 			}
-
 		}
 	}
 
@@ -342,6 +349,20 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 				List<Show> response = (List<Show>) resultData.get(TVDBService.OUTPUT_DATA);
 				if (response != null && !response.isEmpty()) {
 					mShow = response.get(0);
+
+					try {
+						ShowDao showDao = mDatabaseHelper.getDao(Show.class);
+						List<Season> list = showDao.getSeasonsFromShow(mShow);
+						if (list != null && !list.isEmpty()) {
+							mListSeasons.clear();
+							mListSeasons.addAll(list);
+							mAdapter.notifyDataSetChanged();
+						}
+					} catch (SQLException e) {
+						Ln.e(e);
+						Toast.makeText(getApplicationContext(), "Erreur lors de la récupération des episodes de la serie", Toast.LENGTH_SHORT).show();
+					}
+
 					refreshLayout();
 					launchBannerService();
 				}

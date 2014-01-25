@@ -201,15 +201,6 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 		try {
 			ShowDao showDao = mDatabaseHelper.getDao(Show.class);
 			mListSeasons = showDao.getSeasonsFromShow(mShow);
-
-			if (mShow.getNumberSeasons() == 0) {
-				int nbSeason = mListSeasons.size();
-				if (mListSeasons.get(0).getNumber() == 0) {
-					nbSeason--;
-				}
-				mShow.setNumberSeasons(nbSeason);
-				showDao.update(mShow);
-			}
 		} catch (SQLException e) {
 			Ln.e(e);
 			Toast.makeText(this, "Erreur lors de la récupération des episodes de la serie", Toast.LENGTH_SHORT).show();
@@ -256,19 +247,20 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 	private void refreshLayout() {
 		if (mShow != null) {
 			findViewById(R.id.activity_show_detail_info_layout).setVisibility(View.VISIBLE);
-			// TVDBContainerData
+
 			TextView title = (TextView) mHeaderContainer.findViewById(R.id.activity_show_detail_title);
 			title.setText(mShow.getShowName());
-			// TVDBContainerData
 			TextView genre = (TextView) mHeaderContainer.findViewById(R.id.activity_show_detail_genre);
 			genre.setText(mShow.getGenre());
-			// TVDBContainerData
 			TextView onAir = (TextView) mHeaderContainer.findViewById(R.id.activity_show_detail_on_air);
 			onAir.setText(mShow.getDateDebut() != null ? mShow.getDateDebut().toString() : "loading");
-			// TVDBContainerData
 			TextView statut = (TextView) mHeaderContainer.findViewById(R.id.activity_show_detail_statut);
 			statut.setText(mShow.getStatus());
-			// TVDBContainerData
+			TextView nbSeasons = (TextView) mHeaderContainer.findViewById(R.id.activity_show_nb_seasons);
+			nbSeasons.setText(String.valueOf(mShow.getNumberSeasons()));
+			TextView nbEpisodes = (TextView) mHeaderContainer.findViewById(R.id.activity_show_nb_episodes);
+			nbEpisodes.setText(String.valueOf(mShow.getNumberEpisodes()));
+
 			final TextView summary = (TextView) mHeaderContainer.findViewById(R.id.activity_show_detail_summary);
 			if (mShow.getResume().length() > SHORT_SUMMARY_LENGHT) {
 				summary.setText(mShow.getResume().substring(0, SHORT_SUMMARY_LENGHT) + HINT_TO_BE_CONTINUED);
@@ -278,7 +270,6 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 			}
 
 			if (mShow.getBanner() != null) {
-				// TVDBContainerData
 				ImageView bannerView = (ImageView) mHeaderContainer.findViewById(R.id.activity_show_detail_image);
 				bannerView.setImageBitmap(mShow.getBannerAsBitmap());
 			}
@@ -357,6 +348,15 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 							mListSeasons.clear();
 							mListSeasons.addAll(list);
 							mAdapter.notifyDataSetChanged();
+							
+							if (mShow.getNumberSeasons() == 0) {
+								int nbSeason = mListSeasons.size();
+								if (mListSeasons.get(0).getNumber() == 0) {
+									nbSeason--;
+								}
+								mShow.setNumberSeasons(nbSeason);
+								showDao.update(mShow);
+							}
 						}
 					} catch (SQLException e) {
 						Ln.e(e);

@@ -34,6 +34,7 @@ import com.steto.diaw.actionbarcallback.ActionModeCallback;
 import com.steto.diaw.activity.model.DrawerActivity;
 import com.steto.diaw.adapter.ListShowAdapter;
 import com.steto.diaw.dao.DatabaseHelper;
+import com.steto.diaw.dao.EpisodeDao;
 import com.steto.diaw.dao.ShowDao;
 import com.steto.diaw.model.Episode;
 import com.steto.diaw.model.Show;
@@ -282,14 +283,17 @@ public class ListShowsActivity extends DrawerActivity {
 
 				mAllShows.addAll(((ShowDao) mDatabaseHelper.getDao(Show.class)).queryForAll());
 				if (TextUtils.isEmpty(mQuery)) {
+					for (Show show : mAllShows) {
+						show.setNumberEpisodesSaw(((EpisodeDao) mDatabaseHelper.getDao(Episode.class)).countAllEpisodeFromShowNameSeen(show.getShowName()));
+					}
 					mShowsVisible.addAll(mAllShows);
 				} else {
 					for (Show show : mAllShows) {
+						show.setNumberEpisodesSaw(((EpisodeDao) mDatabaseHelper.getDao(Episode.class)).countAllEpisodeFromShowNameSeen(show.getShowName()));
 						if (show.getShowName().toLowerCase(Locale.getDefault()).contains(mQuery.toLowerCase(Locale.getDefault()))) {
 							mShowsVisible.add(show);
 						}
 					}
-
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();

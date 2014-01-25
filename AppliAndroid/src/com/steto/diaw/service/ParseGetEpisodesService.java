@@ -124,7 +124,7 @@ public class ParseGetEpisodesService extends RoboIntentService {
 			EpisodeDao epDAO = null;
 			try {
 				epDAO = mDatabaseHelper.getDao(Episode.class);
-				allEp = epDAO.queryForAll();
+				allEp = epDAO.queryForAllSeen();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -133,7 +133,7 @@ public class ParseGetEpisodesService extends RoboIntentService {
 		} else {
 			try {
 				EpisodeDao episodeDao = DaoManager.createDao(mDatabaseHelper.getConnectionSource(), Episode.class);
-				allEp = episodeDao.queryForAll();
+				allEp = episodeDao.queryForAllSeen();
 				responseCode = RESULT_CODE_OK;
 			} catch (SQLException e) {
 				responseCode = DatabaseHelper.ERROR_BDD;

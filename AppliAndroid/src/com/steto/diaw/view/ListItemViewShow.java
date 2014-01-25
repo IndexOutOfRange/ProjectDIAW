@@ -26,10 +26,9 @@ public class ListItemViewShow extends AbstractListItemView<Show> {
 				mCenterTV.setVisibility(VISIBLE);
 				mCenterTV.setText(mData.getResume());
 			} else {
-				int nbEpisodes = show.getNumberEpisodes();
-				if (nbEpisodes != 0) {
+				if (show.getNumberEpisodes() != 0) {
 					mRightTV.setVisibility(VISIBLE);
-					mRightTV.setText(String.valueOf(nbEpisodes));
+					mRightTV.setText(show.getNumberEpisodesSaw() + "/" + show.getNumberEpisodes());
 				} else {
 					mRightTV.setVisibility(GONE);
 				}

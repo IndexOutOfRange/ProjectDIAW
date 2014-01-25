@@ -13,6 +13,7 @@ import com.j256.ormlite.stmt.DeleteBuilder;
 import com.j256.ormlite.stmt.PreparedQuery;
 import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.SelectArg;
+import com.j256.ormlite.stmt.Where;
 import com.j256.ormlite.support.ConnectionSource;
 import com.steto.diaw.model.Episode;
 import com.steto.diaw.model.Show;
@@ -46,7 +47,29 @@ public class EpisodeDao extends BaseDaoImpl<Episode, String> {
 		nameArg.setValue(name);
 		return query(prepare);
 	}
+	
+	public List<Episode> getAllEpisodeFromShowNameSeen(String name) throws SQLException {
+		SelectArg nameArg = new SelectArg();
+		QueryBuilder<Episode, String> queryBuilder = queryBuilder();
+		queryBuilder.where().eq(Episode.COLUMN_SHOWNAME, nameArg);
+		queryBuilder.where().eq(Episode.COLUMN_SEEN, true);
+		PreparedQuery<Episode> prepare = queryBuilder.prepare();
+		nameArg.setValue(name);
+		return query(prepare);
+	}
 
+	public int countAllEpisodeFromShowNameSeen(String name) throws SQLException {
+		SelectArg nameArg = new SelectArg();
+		nameArg.setMetaInfo(Episode.COLUMN_SHOWNAME);
+		nameArg.setValue(name);
+		QueryBuilder<Episode, String> queryBuilder = queryBuilder();
+		queryBuilder.setCountOf(true);
+		Where<Episode, String> where = queryBuilder.where();
+		where.eq(Episode.COLUMN_SHOWNAME, nameArg);
+		where.and().eq(Episode.COLUMN_SEEN, true);
+		PreparedQuery<Episode> prepare = queryBuilder.prepare();
+		return (int) countOf(prepare);
+	}
 	/**
 	 * @param allEp la liste des episodes à ajouter
 	 * @return le nombre d'épisode ajouté en base et pas updaté

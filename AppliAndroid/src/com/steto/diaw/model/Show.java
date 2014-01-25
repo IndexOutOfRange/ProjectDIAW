@@ -54,6 +54,8 @@ public class Show implements Serializable, Comparable<Show> {
 
 	@DatabaseField(columnName = COLUMN_EPISODE_NUMBER)
 	private int mNumberEpisodes;
+	
+	private int mNumberEpisodesSaw = 0;
 
 	@DatabaseField(columnName = COLUMN_TVDB_ID)
 	@Element(name = "id")
@@ -259,5 +261,13 @@ public class Show implements Serializable, Comparable<Show> {
 
 	public void setIMDBID(String imdb) {
 		mIMDBID = imdb;
+	}
+
+	public int getNumberEpisodesSaw() {
+		return mNumberEpisodesSaw;
+	}
+
+	public void setNumberEpisodesSaw(int numberEpisodesSaw) {
+		mNumberEpisodesSaw = numberEpisodesSaw;
 	}
 }

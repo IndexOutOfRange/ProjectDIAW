@@ -121,9 +121,17 @@ public class TVDBService extends RoboIntentService {
 						ShowDao showDao = mDatabaseHelper.getDao(Show.class);
 						EpisodeDao episodeDao = mDatabaseHelper.getDao(Episode.class);
 						showDao.createOrUpdate(listShow.get(0));
+						
 						for (Episode ep : tvdbContainerData.episodes) {
 							ep.setShowName(input.getId());
-							episodeDao.createIfNotExists(ep);
+							Episode episodeInDatabase = episodeDao.createIfNotExists(ep);
+							if(! episodeInDatabase.equals(episodeDao)) {
+								// update
+								episodeInDatabase.setEpisodeName(ep.getEpisodeName());
+								episodeInDatabase.setFirstAired(ep.getFirstAired());
+								episodeInDatabase.setOverview(ep.getOverview());
+								episodeDao.update(episodeInDatabase);
+							}
 						}
 					} catch (SQLException e) {
 						e.printStackTrace();

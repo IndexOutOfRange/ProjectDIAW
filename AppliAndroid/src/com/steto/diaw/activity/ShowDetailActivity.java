@@ -41,7 +41,7 @@ import com.steto.projectdiaw.R;
 @ContentView(R.layout.activity_show_detail)
 public class ShowDetailActivity extends RoboExpandableListActivity {
 
-	private static final int SHORT_SUMMARY_LENGHT = 100;
+	private static final int SHORT_SUMMARY_LENGHT = 200;
 	private static final String HINT_TO_BE_CONTINUED = "...";
 	public static final String EXTRA_SHOW = "EXTRA_SHOW";
 	public static final String EXTRA_SHOW_NAME = "EXTRA_SHOW_NAME";

@@ -1,6 +1,7 @@
 package com.steto.diaw.view;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.steto.diaw.model.Episode;
 
@@ -14,6 +15,9 @@ public class ListItemEpisodeExpendable extends AbstractListItemView<Episode> {
 		mData = episode;
 		// TODO utiliser un string des ressources
 		String text = "Episode " + String.valueOf(mData.getEpisodeNumber());
+		if(!TextUtils.isEmpty(mData.getEpisodeName())) {
+			text += " - " + mData.getEpisodeName();
+		}
 		if (mLeftTV != null) {
 			mLeftTV.setText(text);
 		}

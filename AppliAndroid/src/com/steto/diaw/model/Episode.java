@@ -24,7 +24,10 @@ public class Episode implements Serializable, Comparable<Episode> {
 	public static final String COLUMN_EPISODE_NUMBER = "EpisodeNumber";
 	public static final String COLUMN_SEASON_NUMBER = "SeasonNumber";
 	public static final String COLUMN_ID = "ID";
-	
+	public static final String COLUMN_EPISODE_NAME = "EpisodeName";
+	public static final String COLUMN_FIRST_AIRED = "FirstAired";
+	public static final String COLUMN_OVERVIEW = "Overview";
+
 	@DatabaseField(id = true, useGetSet = true, columnName = COLUMN_ID)
 	@JsonIgnore
 	private String mCustomId;
@@ -50,6 +53,18 @@ public class Episode implements Serializable, Comparable<Episode> {
 
 	@DatabaseField(columnName = COLUMN_SEEN)
 	private boolean mSeen;
+
+	@Element(name = "EpisodeName", required = false)
+	@DatabaseField(columnName = COLUMN_EPISODE_NAME)
+	private String mEpisodeName = "";
+
+	@Element(name = "FirstAired", required = false)
+	@DatabaseField(columnName = COLUMN_FIRST_AIRED)
+	private String mFirstAired = "";
+
+	@Element(name = "Overview", required = false)
+	@DatabaseField(columnName = COLUMN_OVERVIEW)
+	private String mOverview= "";
 
 	public Episode() {}
 
@@ -151,6 +166,30 @@ public class Episode implements Serializable, Comparable<Episode> {
 
 	public void setSeen(boolean mSeen) {
 		this.mSeen = mSeen;
+	}
+
+	public String getEpisodeName() {
+		return mEpisodeName;
+	}
+
+	public void setEpisodeName(String episodeName) {
+		mEpisodeName = episodeName;
+	}
+
+	public String getOverview() {
+		return mOverview;
+	}
+
+	public void setOverview(String overview) {
+		mOverview = overview;
+	}
+
+	public String getFirstAired() {
+		return mFirstAired;
+	}
+
+	public void setFirstAired(String firstAired) {
+		mFirstAired = firstAired;
 	}
 
 	@Override

@@ -5,5 +5,9 @@
         android:id="@+id/menu_rename"
         android:icon="@drawable/ic_menu_edit"
         android:title="@string/rename_show"/>
+    <item
+        android:id="@+id/menu_remove_show_link"
+        android:icon="@drawable/ic_menu_stop"
+        android:title="@string/rename_remove_show_link"/>
 
 </menu>

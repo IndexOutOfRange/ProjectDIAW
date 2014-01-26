@@ -31,6 +31,7 @@ import com.steto.diaw.adapter.SeasonWithEpisodesExpandableAdapter;
 import com.steto.diaw.dao.DatabaseHelper;
 import com.steto.diaw.dao.ShowDao;
 import com.steto.diaw.helper.TranslucideActionBarHelper;
+import com.steto.diaw.model.Episode;
 import com.steto.diaw.model.Season;
 import com.steto.diaw.model.Show;
 import com.steto.diaw.service.BannerService;
@@ -103,10 +104,52 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 			case R.id.menu_rename:
 				renameShow();
 				return true;
-
+			case R.id.menu_remove_show_link:
+				removeShowLink();
+				return true;
 			default:
 				return super.onOptionsItemSelected(item);
 		}
+	}
+
+	private void removeShowLink() {
+		// suppression du lien des Episode
+		for (Season season : mListSeasons) {
+			for (Episode episode : season.getEpisodes()) {
+				try {
+					if (!episode.isSeen()) {
+						mDatabaseHelper.getDao(Episode.class).delete(episode);
+					} else {
+						episode.setEpisodeName(null);
+						mDatabaseHelper.getDao(Episode.class).update(episode);
+					}
+				} catch (SQLException e) {
+					Ln.e(e);
+				}
+			}
+		}
+		// suppression du lien du Show
+		try {
+			mShow.setBanner((byte[]) null);
+			mShow.setBannerURL(null);
+			mShow.setChaine(null);
+			mShow.setDateDebut(null);
+			mShow.setGenre(null);
+			mShow.setIMDBID(null);
+			mShow.setStatus(null);
+			mShow.setResume(null);
+			mShow.setNumberSeasons(0);
+			mShow.setNumberEpisodes(0);
+			mShow.setTVDBConnected(false);
+			mShow.setTVDBID(0);
+			mDatabaseHelper.getDao(Show.class).update(mShow);
+		} catch (SQLException e) {
+			Ln.e(e);
+		}
+		Intent intent = new Intent(getApplicationContext(), ShowDetailActivity.class);
+		intent.putExtra(EXTRA_SHOW, mShow);
+		startActivity(intent);
+		finish();
 	}
 
 	private void searchSerieWithAnotherName() {
@@ -262,7 +305,7 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 			nbEpisodes.setText(String.valueOf(mShow.getNumberEpisodes()));
 
 			final TextView summary = (TextView) mHeaderContainer.findViewById(R.id.activity_show_detail_summary);
-			if (mShow.getResume().length() > SHORT_SUMMARY_LENGHT) {
+			if (mShow.getResume() != null && mShow.getResume().length() > SHORT_SUMMARY_LENGHT) {
 				summary.setText(mShow.getResume().substring(0, SHORT_SUMMARY_LENGHT) + HINT_TO_BE_CONTINUED);
 				summary.setOnClickListener(new OnSummaryClickListener(summary));
 			} else {
@@ -348,7 +391,7 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 							mListSeasons.clear();
 							mListSeasons.addAll(list);
 							mAdapter.notifyDataSetChanged();
-							
+
 							if (mShow.getNumberSeasons() == 0) {
 								int nbSeason = mListSeasons.size();
 								if (mListSeasons.get(0).getNumber() == 0) {

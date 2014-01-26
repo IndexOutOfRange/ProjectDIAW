@@ -2,6 +2,7 @@
 <resources>
 
     <string name="rename_show">Renommer la série</string>
+    <string name="rename_remove_show_link">Retirer les données de la série</string>
     <string name="search_show_dialog">Renommer la série pour faire une recherche ?</string>
     <string name="dialog_rename_show_name">nom de la série</string>
     <string name="dialog_search_show_name">nom de la série à chercher</string>

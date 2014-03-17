@@ -9,6 +9,7 @@
         android:targetSdkVersion="19" />
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_SYNC_STATS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
@@ -57,6 +58,7 @@
         <service android:name="com.steto.diaw.service.ParseGetEpisodesService" />
         <service android:name="com.steto.diaw.service.ParseUpdateEpisodeService" />
         <service android:name="com.steto.diaw.service.ParseDeleteEpisodeService" />
+        <service android:name="com.steto.diaw.service.DeleteService" />
         <service android:name="com.steto.diaw.service.TVDBService" />
         <service android:name="com.steto.diaw.service.BannerService" />
         <service android:name="com.steto.diaw.service.IMDBService" />

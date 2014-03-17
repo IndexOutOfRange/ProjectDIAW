@@ -38,8 +38,7 @@ public class SyncUtils {
 			ContentResolver.setSyncAutomatically(account, CONTENT_AUTHORITY, true);
 			// Recommend a schedule for automatic synchronization. The system may modify this based
 			// on other scheduled syncs and network utilization.
-			ContentResolver.addPeriodicSync(
-					account, CONTENT_AUTHORITY, new Bundle(), SYNC_FREQUENCY);
+			ContentResolver.addPeriodicSync(account, CONTENT_AUTHORITY, new Bundle(), SYNC_FREQUENCY);
 			newAccount = true;
 		}
 

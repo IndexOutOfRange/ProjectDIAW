@@ -22,7 +22,7 @@ import javax.net.ssl.X509TrustManager;
  * Accepts any certificate, ideal for self-signed certificates.
  * source : http://code.google.com/p/acra/source/browse/trunk/acra/src/main/java/org/acra/util/NaiveTrustManager.java?r=733
  */
-class NaiveTrustManager implements X509TrustManager {
+public class NaiveTrustManager implements X509TrustManager {
 
 	/*
 	 * (non-Javadoc)

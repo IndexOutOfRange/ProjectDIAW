@@ -1,5 +1,6 @@
 package com.steto.diaw.service;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -7,38 +8,32 @@ import java.util.List;
 
 import org.apache.http.HttpStatus;
 
-import roboguice.service.RoboIntentService;
 import roboguice.util.Ln;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.ResultReceiver;
-import android.util.Log;
 
 import com.google.inject.Inject;
 import com.steto.diaw.dao.DatabaseHelper;
 import com.steto.diaw.dao.EpisodeDao;
 import com.steto.diaw.model.Episode;
-import com.steto.diaw.web.ParseConnector;
-import com.steto.diaw.web.ShowConnector;
+import com.steto.diaw.network.Response;
+import com.steto.diaw.network.connector.IHttpsConnector;
+import com.steto.diaw.network.connector.ParseConnector;
+import com.steto.diaw.service.model.AbstractIntentService;
 
-/**
- * Created by Benjamin on 09/06/13.
- */
-public class ParseDeleteEpisodeService extends RoboIntentService {
+public class ParseDeleteEpisodeService extends AbstractIntentService {
 
-	public static final String INTENT_RESULT_RECEIVER = "INTENT_RESULT_RECEIVER";
-	public static final String INTENT_OBJECTS_TO_DELETE = "INTENT_OBJECTS_TO_DELETE";
-	public static final String INTENT_OBJECTS_NOT_DELETED = "INTENT_OBJECTS_NOT_DELETED";
-	public static final String RESULT_DATA = "RESULT_DATA";
-	public static final int RESULT_CODE_OK = 0;
-	public static final int RESULT_CODE_ERROR = -1;
-	private static final String TAG = "ParseDeleteEpisodeService";
+	public static final String EXTRA_INPUT_OBJECTS_TO_DELETE = "INTENT_OBJECTS_TO_DELETE";
+	public static final String EXTRA_OUTPUT_OBJECTS_NOT_DELETED = "INTENT_OBJECTS_NOT_DELETED";
+	public static final String EXTRA_OUTPUT_RESULT_DATA = "INTENT_RESULT_DATA";
 
 	@Inject
 	private DatabaseHelper mDatabaseHelper;
+	private List<Episode> mListEpisodeToDelete;
+	private EpisodeDao mEpisodeDao;
+	private List<Episode> mResultFail;
 
 	public ParseDeleteEpisodeService() {
-		super(TAG);
+		super("ParseDeleteEpisodeService");
 	}
 
 	public ParseDeleteEpisodeService(String name) {
@@ -47,52 +42,80 @@ public class ParseDeleteEpisodeService extends RoboIntentService {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	protected void onHandleIntent(Intent intent) {
-		ResultReceiver sender = (ResultReceiver) intent.getExtras().get(INTENT_RESULT_RECEIVER);
-		List<Episode> episodesToDelete = (List<Episode>) intent.getExtras().getSerializable(INTENT_OBJECTS_TO_DELETE);
-		int responseCode = RESULT_CODE_ERROR;
-		List<Episode> allEp = new ArrayList<Episode>();
-		List<Episode> resultFail = new ArrayList<Episode>();
-		EpisodeDao episodeDao = null;
+	protected void processInputExtras(Bundle bundle) {
+		super.processInputExtras(bundle);
+		mListEpisodeToDelete = (List<Episode>) bundle.getSerializable(EXTRA_INPUT_OBJECTS_TO_DELETE);
+	}
 
+	@Override
+	protected void processRequest() {
+		mResultFail = new ArrayList<Episode>();
 		try {
-			episodeDao = mDatabaseHelper.getDao(Episode.class);
+			mEpisodeDao = mDatabaseHelper.getDao(Episode.class);
 		} catch (SQLException e) {
+			mServiceStatusCode = AbstractIntentService.BDD_ERROR;
+			setServiceResponseCode(ServiceResponseCode.KO);
 			Ln.e(e);
+			return;
 		}
 
-		for (Episode episodeToDelete : episodesToDelete) {
-			Log.d(TAG, "Episode to delete : " + episodeToDelete.getMCustomId());
-			ShowConnector myWeb = new ShowConnector(episodeToDelete.getObjectId());
-			myWeb.requestFromNetwork(null, ParseConnector.HTTPMethod.DELETE, null);
-			if (myWeb.getStatusCode() == HttpStatus.SC_OK) {
+		for (Episode episodeToDelete : mListEpisodeToDelete) {
+			Ln.d("Episode to delete : " + episodeToDelete.getMCustomId());
+			Response response = null;
+			try {
+				response = deleteResponse(episodeToDelete.getObjectId(), null);
+			} catch (IOException e) {
+				Ln.e(e);
+				mServiceStatusCode = AbstractIntentService.RESEAU_ERROR;
+				setServiceResponseCode(ServiceResponseCode.KO);
+				return;
+			}
+
+			if (response.getStatusCode() == HttpStatus.SC_OK) {
 				try {
-					Episode episodeUpdated = episodeDao.queryForEq(Episode.COLUMN_OBJECT_ID, episodeToDelete.getObjectId()).get(0);
-					episodeDao.delete(episodeUpdated);
+					mEpisodeDao.delete(episodeToDelete);
 				} catch (SQLException e) {
-					resultFail.add(episodeToDelete);
-					responseCode = DatabaseHelper.ERROR_BDD;
+					mResultFail.add(episodeToDelete);
+					mServiceStatusCode = AbstractIntentService.BDD_ERROR;
+					setServiceResponseCode(ServiceResponseCode.KO);
 					Ln.e(e);
 				}
 			} else {
-				responseCode = myWeb.getStatusCode();
-				resultFail.add(episodeToDelete);
+				mServiceStatusCode = AbstractIntentService.HTTP_ERROR;
+				setServiceResponseCode(ServiceResponseCode.KO);
+				mResultFail.add(episodeToDelete);
 			}
 		}
+	}
 
+	@Override
+	protected void fillBundleResponse(Bundle bundle) {
+		List<Episode> allEp = new ArrayList<Episode>();
 		try {
-			allEp = episodeDao.queryForAll();
-			if (responseCode == RESULT_CODE_ERROR)
-				responseCode = RESULT_CODE_OK;
+			if(mEpisodeDao == null) {
+				mEpisodeDao = mDatabaseHelper.getDao(Episode.class);
+			}
+			allEp = mEpisodeDao.queryForAll();
 		} catch (SQLException e) {
-			responseCode = DatabaseHelper.ERROR_BDD;
+			mServiceStatusCode = AbstractIntentService.BDD_ERROR;
+			setServiceResponseCode(ServiceResponseCode.KO);
 			Ln.e(e);
 		}
 
 		// retour à l'appelant
 		Bundle ret = new Bundle();
-		ret.putSerializable(RESULT_DATA, (Serializable) allEp);
-		ret.putSerializable(INTENT_OBJECTS_NOT_DELETED, (Serializable) resultFail);
-		sender.send(responseCode, ret);
+		ret.putSerializable(EXTRA_OUTPUT_RESULT_DATA, (Serializable) allEp);
+		ret.putSerializable(EXTRA_OUTPUT_OBJECTS_NOT_DELETED, (Serializable) mResultFail);
 	}
+
+	@Override
+	protected String getQuery() {
+		return "/1/classes/Show/";
+	}
+
+	@Override
+	protected IHttpsConnector getConnector() {
+		return new ParseConnector();
+	}
+
 }

@@ -58,7 +58,6 @@
         <service android:name="com.steto.diaw.service.ParseGetEpisodesService" />
         <service android:name="com.steto.diaw.service.ParseUpdateEpisodeService" />
         <service android:name="com.steto.diaw.service.ParseDeleteEpisodeService" />
-        <service android:name="com.steto.diaw.service.DeleteService" />
         <service android:name="com.steto.diaw.service.TVDBService" />
         <service android:name="com.steto.diaw.service.BannerService" />
         <service android:name="com.steto.diaw.service.IMDBService" />

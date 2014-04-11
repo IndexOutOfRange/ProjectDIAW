@@ -193,6 +193,79 @@ public class Episode implements Serializable, Comparable<Episode> {
 	}
 
 	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((mCustomId == null) ? 0 : mCustomId.hashCode());
+		result = prime * result + (mDoubleEpisode ? 1231 : 1237);
+		result = prime * result + ((mEpisodeName == null) ? 0 : mEpisodeName.hashCode());
+		result = prime * result + mEpisodeNumber;
+		result = prime * result + ((mFirstAired == null) ? 0 : mFirstAired.hashCode());
+		result = prime * result + ((mObjectId == null) ? 0 : mObjectId.hashCode());
+		result = prime * result + ((mOverview == null) ? 0 : mOverview.hashCode());
+		result = prime * result + mSeasonNumber;
+		result = prime * result + (mSeen ? 1231 : 1237);
+		result = prime * result + ((mShowName == null) ? 0 : mShowName.hashCode());
+		result = prime * result + ((mUpdatedAt == null) ? 0 : mUpdatedAt.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Episode other = (Episode) obj;
+		if (mCustomId == null) {
+			if (other.mCustomId != null)
+				return false;
+		} else if (!mCustomId.equals(other.mCustomId))
+			return false;
+		if (mDoubleEpisode != other.mDoubleEpisode)
+			return false;
+		if (mEpisodeName == null) {
+			if (other.mEpisodeName != null)
+				return false;
+		} else if (!mEpisodeName.equals(other.mEpisodeName))
+			return false;
+		if (mEpisodeNumber != other.mEpisodeNumber)
+			return false;
+		if (mFirstAired == null) {
+			if (other.mFirstAired != null)
+				return false;
+		} else if (!mFirstAired.equals(other.mFirstAired))
+			return false;
+		if (mObjectId == null) {
+			if (other.mObjectId != null)
+				return false;
+		} else if (!mObjectId.equals(other.mObjectId))
+			return false;
+		if (mOverview == null) {
+			if (other.mOverview != null)
+				return false;
+		} else if (!mOverview.equals(other.mOverview))
+			return false;
+		if (mSeasonNumber != other.mSeasonNumber)
+			return false;
+		if (mSeen != other.mSeen)
+			return false;
+		if (mShowName == null) {
+			if (other.mShowName != null)
+				return false;
+		} else if (!mShowName.equals(other.mShowName))
+			return false;
+		if (mUpdatedAt == null) {
+			if (other.mUpdatedAt != null)
+				return false;
+		} else if (!mUpdatedAt.equals(other.mUpdatedAt))
+			return false;
+		return true;
+	}
+
+	@Override
 	public String toString() {
 		return "Episode{" +
 				"mShowName='" + mShowName + '\'' +

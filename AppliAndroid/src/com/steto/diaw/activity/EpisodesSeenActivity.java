@@ -32,9 +32,10 @@ import com.steto.diaw.adapter.ListEpisodeAdapter;
 import com.steto.diaw.dao.DatabaseHelper;
 import com.steto.diaw.dao.EpisodeDao;
 import com.steto.diaw.model.Episode;
-import com.steto.diaw.service.DeleteService;
+import com.steto.diaw.service.ParseDeleteEpisodeService;
 import com.steto.diaw.service.ParseGetEpisodesService;
 import com.steto.diaw.service.ParseUpdateEpisodeService;
+import com.steto.diaw.service.model.AbstractIntentService.ServiceResponseCode;
 import com.steto.diaw.tools.Tools;
 import com.steto.projectdiaw.R;
 
@@ -179,9 +180,9 @@ public class EpisodesSeenActivity extends DrawerActivity {
 		mUpdateInProgress = true;
 		invalidateOptionsMenu();
 
-		Intent intent = new Intent(this, DeleteService.class);
-		intent.putExtra(DeleteService.EXTRA_INPUT_OBJECTS_TO_DELETE, (Serializable) episodesToDelete);
-		intent.putExtra(DeleteService.INTENT_RESULT_RECEIVER, mDeleteEpisodeResultReceiver);
+		Intent intent = new Intent(this, ParseDeleteEpisodeService.class);
+		intent.putExtra(ParseDeleteEpisodeService.EXTRA_INPUT_OBJECTS_TO_DELETE, (Serializable) episodesToDelete);
+		intent.putExtra(ParseDeleteEpisodeService.EXTRA_INPUT_RESULT_RECEIVER, mDeleteEpisodeResultReceiver);
 		startService(intent);
 	}
 
@@ -286,11 +287,11 @@ public class EpisodesSeenActivity extends DrawerActivity {
 			mUpdateInProgress = false;
 			invalidateOptionsMenu();
 
-			if (/*resultCode == ServiceResponseCode.OK.value*/resultCode == DeleteService.RESULT_CODE_OK) {
-				List<Episode> episodesNotDeleted = (List<Episode>) resultData.getSerializable(DeleteService.EXTRA_OUTPUT_OBJECTS_NOT_DELETED);
+			if (resultCode == ServiceResponseCode.OK.value) {
+				List<Episode> episodesNotDeleted = (List<Episode>) resultData.getSerializable(ParseDeleteEpisodeService.EXTRA_OUTPUT_OBJECTS_NOT_DELETED);
 
 				mAllEp.clear();
-				mAllEp.addAll((List<Episode>) resultData.get(DeleteService.EXTRA_OUTPUT_RESULT_DATA));
+				mAllEp.addAll((List<Episode>) resultData.get(ParseDeleteEpisodeService.EXTRA_OUTPUT_RESULT_DATA));
 				mAdapter.notifyDataSetChanged();
 
 				if (episodesNotDeleted != null && !episodesNotDeleted.isEmpty()) {

@@ -95,7 +95,7 @@ public class ParseDeleteEpisodeService extends AbstractIntentService {
 			if(mEpisodeDao == null) {
 				mEpisodeDao = mDatabaseHelper.getDao(Episode.class);
 			}
-			allEp = mEpisodeDao.queryForAll();
+			allEp = mEpisodeDao.queryForAllSeen();
 		} catch (SQLException e) {
 			mServiceStatusCode = AbstractIntentService.BDD_ERROR;
 			setServiceResponseCode(ServiceResponseCode.KO);
@@ -103,9 +103,8 @@ public class ParseDeleteEpisodeService extends AbstractIntentService {
 		}
 
 		// retour à l'appelant
-		Bundle ret = new Bundle();
-		ret.putSerializable(EXTRA_OUTPUT_RESULT_DATA, (Serializable) allEp);
-		ret.putSerializable(EXTRA_OUTPUT_OBJECTS_NOT_DELETED, (Serializable) mResultFail);
+		bundle.putSerializable(EXTRA_OUTPUT_RESULT_DATA, (Serializable) allEp);
+		bundle.putSerializable(EXTRA_OUTPUT_OBJECTS_NOT_DELETED, (Serializable) mResultFail);
 	}
 
 	@Override

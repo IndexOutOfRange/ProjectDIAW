@@ -106,12 +106,16 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
 		EpisodeDao epDAO = mDatabaseHelper.getDao(Episode.class);
 		ShowDao showDAO = mDatabaseHelper.getDao(Show.class);
-		int nbCreated = epDAO.createOrUpdate(episodes);
-		Ln.d(nbCreated + " episodes added in the database");
-		for (Episode episode : episodes) {
-			episode.setSeen(true);
-			epDAO.update(episode);
-			Show currentShow = new Show(episode.getShowName());
+		List<Episode> episodeListSyncedDatabase = epDAO.createFromWebService(episodes);
+		Ln.d(episodeListSyncedDatabase.size() + " episodes added in the database");
+		for (int cpt = 0; cpt < episodes.size(); cpt++) {
+			Episode episodeBase = episodeListSyncedDatabase.get(cpt);
+			Episode episodeWeb = episodes.get(cpt);
+			episodeBase.setSeen(true);
+			episodeBase.setUpdatedAt(episodeWeb.getUpdatedAt());
+			episodeBase.setObjectId(episodeWeb.getObjectId());
+			epDAO.update(episodeBase);
+			Show currentShow = new Show(episodeBase.getShowName());
 			showDAO.createIfNotExists(currentShow);
 		}
 	}

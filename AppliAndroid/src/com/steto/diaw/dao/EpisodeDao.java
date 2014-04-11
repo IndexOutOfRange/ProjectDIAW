@@ -1,6 +1,7 @@
 package com.steto.diaw.dao;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -72,20 +73,34 @@ public class EpisodeDao extends BaseDaoImpl<Episode, String> {
 	}
 	/**
 	 * @param allEp la liste des episodes à ajouter
-	 * @return le nombre d'épisode ajouté en base et pas updaté
+	 * @return les épisodes correspondant dans la base
 	 */
-	public int createOrUpdate(List<Episode> allEp) throws SQLException {
-		int nbCreated = 0;
+	public List<Episode> createFromWebService(List<Episode> allEp) throws SQLException {
+		List<Episode> episodeInDatabaseList = new ArrayList<Episode>();
 
 		for (Episode episode : allEp) {
-			CreateOrUpdateStatus ret = createOrUpdate(episode);
-			if (ret.isCreated()) {
-				nbCreated++;
-			} else {
+			Episode ret = createIfNotExists(episode);
+			if (!ret.equals(episode)) {
 				Ln.d("Episode : " + episode.getShowName() + " " + episode.getSeasonNumber() + " " + episode.getEpisodeNumber() + " déjà present en base");
 			}
+			episodeInDatabaseList.add(ret);
 		}
-		return nbCreated;
+		return episodeInDatabaseList;
+	}
+	
+	public CreateOrUpdateStatus createFromWebService(Episode episode) throws SQLException {
+		if (episode == null) {
+			return new CreateOrUpdateStatus(false, false, 0);
+		}
+		String id = extractId(episode);
+		// assume we need to create it if there is no id
+		if (id == null || !idExists(id)) {
+			int numRows = create(episode);
+			return new CreateOrUpdateStatus(true, false, numRows);
+		} else {
+			// nothing
+			return new CreateOrUpdateStatus(false, true, 0);
+		}
 	}
 
 	public Show getShowFromEpisode(Episode ep) throws SQLException {

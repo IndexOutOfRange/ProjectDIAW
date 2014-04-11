@@ -1,5 +1,6 @@
 package com.steto.diaw.service;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -11,6 +12,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
+import java.util.zip.GZIPInputStream;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpStatus;
@@ -83,34 +85,52 @@ public class ParseGetEpisodesService extends RoboIntentService {
 				if (myWeb.getStatusCode() == HttpStatus.SC_OK) {
 					mRetryCount = 0;
 					// parsing des données JSON
-					InputStream response = myWeb.getResponseBody();
-					ShowParser myParser = new ShowParser();
-					Results res = myParser.parse(response);
-					allEp = res == null || res.results == null ? null : Arrays.asList(res.results);
-
-					Ln.d("on a parse : " + allEp.size() + " episodes");
-					episodeAlreadyGetCount += allEp.size();
-					episodeToGetCount = res.count;
-					responseCode = myParser.getStatusCode();
-
-					// enregistrement en BDD
+					InputStream responseGziped = myWeb.getResponseBody();
+					GZIPInputStream response = null;
 					try {
-						EpisodeDao epDAO = mDatabaseHelper.getDao(Episode.class);
-						ShowDao showDAO = mDatabaseHelper.getDao(Show.class);
-						int nbCreated = epDAO.createOrUpdate(allEp);
-						Ln.d(nbCreated + " episodes créés en base");
-						for (Episode current : allEp) {
-							current.setSeen(true);
-							epDAO.update(current);
-							Show currentShow = new Show(current.getShowName());
-							showDAO.createIfNotExists(currentShow);
+						response = new GZIPInputStream(new BufferedInputStream(responseGziped));
+
+						ShowParser myParser = new ShowParser();
+						Results res = myParser.parse(response);
+						allEp = res == null || res.results == null ? new ArrayList<Episode>() : Arrays.asList(res.results);
+
+						Ln.d("on a parse : " + allEp.size() + " episodes");
+						episodeToGetCount = allEp.size();
+						episodeAlreadyGetCount += episodeToGetCount;
+						responseCode = myParser.getStatusCode();
+
+						// enregistrement en BDD
+						try {
+							EpisodeDao epDAO = mDatabaseHelper.getDao(Episode.class);
+							ShowDao showDAO = mDatabaseHelper.getDao(Show.class);
+							List<Episode> episodeListSyncedDatabase = epDAO.createFromWebService(allEp);
+							Ln.d(episodeListSyncedDatabase.size() + " episodes créés en base");
+							for (int cpt = 0; cpt < allEp.size(); cpt++) {
+								Episode episodeBase = episodeListSyncedDatabase.get(cpt);
+								Episode episodeWeb = allEp.get(cpt);
+								episodeBase.setSeen(true);
+								episodeBase.setUpdatedAt(episodeWeb.getUpdatedAt());
+								episodeBase.setObjectId(episodeWeb.getObjectId());
+								epDAO.update(episodeBase);
+								Show currentShow = new Show(episodeBase.getShowName());
+								showDAO.createIfNotExists(currentShow);
+							}
+							sender.send(RESULT_CODE_IN_PROGRESS, null);
+						} catch (SQLException e) {
+							responseCode = DatabaseHelper.ERROR_BDD;
+							Ln.e(e);
 						}
-					} catch (SQLException e) {
-						responseCode = DatabaseHelper.ERROR_BDD;
+
+					} catch (IOException e) {
 						Ln.e(e);
 					}
-
-					sender.send(RESULT_CODE_IN_PROGRESS, null);
+					finally {
+						try {
+							response.close();
+						} catch (IOException e) {
+							Ln.e(e);
+						}
+					}
 				} else {
 					mRetryCount++;
 					try {
@@ -126,7 +146,7 @@ public class ParseGetEpisodesService extends RoboIntentService {
 				epDAO = mDatabaseHelper.getDao(Episode.class);
 				allEp = epDAO.queryForAllSeen();
 			} catch (SQLException e) {
-				e.printStackTrace();
+				Ln.e(e);
 			}
 			// mise à jour de la date de MAJ
 			mPreferences.edit().putLong(Tools.SHARED_PREF_LAST_UPDATE, (new Date()).getTime()).commit();

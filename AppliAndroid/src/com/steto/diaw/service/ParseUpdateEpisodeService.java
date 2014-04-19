@@ -1,5 +1,6 @@
 package com.steto.diaw.service;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -7,32 +8,33 @@ import java.util.List;
 
 import org.apache.http.HttpStatus;
 
-import roboguice.service.RoboIntentService;
-import android.content.Intent;
+import roboguice.util.Ln;
 import android.os.Bundle;
-import android.os.ResultReceiver;
 
 import com.google.inject.Inject;
 import com.steto.diaw.dao.DatabaseHelper;
 import com.steto.diaw.dao.EpisodeDao;
 import com.steto.diaw.model.Episode;
-import com.steto.diaw.web.ParseConnector;
-import com.steto.diaw.web.ShowConnector;
+import com.steto.diaw.network.Response;
+import com.steto.diaw.network.connector.IHttpsConnector;
+import com.steto.diaw.network.connector.ParseConnector;
+import com.steto.diaw.service.model.AbstractIntentService;
 
-/**
- * Created by Benjamin on 09/06/13.
- */
-public class ParseUpdateEpisodeService extends RoboIntentService {
+public class ParseUpdateEpisodeService extends AbstractIntentService {
 
-	public static final String INTENT_RESULT_RECEIVER = "INTENT_RESULT_RECEIVER";
-	public static final String INTENT_OBJECT_TO_RENAME = "INTENT_OBJECT_TO_RENAME";
-	public static final String INTENT_KEY = "INTENT_KEY";
-	public static final String INTENT_VALUE = "INTENT_VALUE";
-	public static final String RESULT_DATA = "RESULT_DATA";
-	public static final int RESULT_CODE_OK = 0;
+	public static final String EXTRA_INPUT_EPISODES_TO_UPDATE = "EXTRA_INPUT_EPISODES_TO_UPDATE";
+	public static final String EXTRA_INPUT_KEY = "EXTRA_INPUT_KEY";
+	public static final String EXTRA_INPUT_VALUE = "EXTRA_INPUT_VALUE";
+	public static final String EXTRA_OUTPUT_RESULT_DATA = "EXTRA_OUTPUT_RESULT_DATA";
 
 	@Inject
 	private DatabaseHelper mDatabaseHelper;
+	private EpisodeDao mEpisodeDao;
+
+	private List<Episode> mEpisodeToUpdateList;
+	private int mIndex = 0;
+	private String mNewValue;
+	private String mKeyOfNewValue;
 
 	public ParseUpdateEpisodeService() {
 		super("ParseUpdateEpisodeService");
@@ -42,54 +44,84 @@ public class ParseUpdateEpisodeService extends RoboIntentService {
 		super(name);
 	}
 
-	public String createUpdate(String key, String value) {
+	@SuppressWarnings("unchecked")
+	@Override
+	protected void processInputExtras(Bundle bundle) {
+		super.processInputExtras(bundle);
+		mEpisodeToUpdateList = (List<Episode>) bundle.getSerializable(EXTRA_INPUT_EPISODES_TO_UPDATE);
+		mKeyOfNewValue = bundle.getString(EXTRA_INPUT_KEY);
+		mNewValue = bundle.getString(EXTRA_INPUT_VALUE);
+	}
+
+	public String createUpdateBody(String key, String value) {
 		return "{\"" + key + "\": \"" + value + "\" }";
 	}
 
 	@Override
-	protected void onHandleIntent(Intent intent) {
-		ResultReceiver sender = (ResultReceiver) intent.getExtras().get(INTENT_RESULT_RECEIVER);
-		@SuppressWarnings("unchecked")
-		List<Episode> allEpisodeToUpdate = (List<Episode>) intent.getExtras().getSerializable(INTENT_OBJECT_TO_RENAME);
-		String keyOfNewValue = intent.getExtras().getString(INTENT_KEY);
-		String newValue = intent.getExtras().getString(INTENT_VALUE);
-		int responseCode = RESULT_CODE_OK;
+	protected void processRequest() {
+		String body = createUpdateBody(mKeyOfNewValue, mNewValue);
 
-		for (Episode episodeToUpdate : allEpisodeToUpdate) {
-			String body = createUpdate(keyOfNewValue, newValue);
-			ShowConnector myWeb = new ShowConnector(episodeToUpdate.getObjectId());
-			myWeb.requestFromNetwork("", ParseConnector.HTTPMethod.PUT, body);
-			if (myWeb.getStatusCode() == HttpStatus.SC_OK) {
-				// la maj ne donne que la updateDate, on refait donc un appel au serveur pour avoir exactement les mêmes données
-				myWeb.requestFromNetwork("", ParseConnector.HTTPMethod.GET, "");
-				if (myWeb.getStatusCode() == HttpStatus.SC_OK) {
-					// pas de parsing des données JSON car le JSON donne que la updateDate
-
-					try {
-						EpisodeDao epDao = mDatabaseHelper.getDao(Episode.class);
-						epDao.updateEpisode(episodeToUpdate, keyOfNewValue, newValue);
-					} catch (SQLException e) {
-						responseCode = DatabaseHelper.ERROR_BDD;
-						e.printStackTrace();
+		for (mIndex = 0; mIndex < mEpisodeToUpdateList.size(); mIndex++) {
+			Episode episodeToUpdate = mEpisodeToUpdateList.get(mIndex);
+			Response response = null;
+			try {
+				response = putResponse(body);
+				if (response.getStatusCode() == HttpStatus.SC_OK) {
+					// la maj ne donne que la updateDate, on refait donc un appel au serveur pour avoir exactement les mêmes données
+					response = getResponse();
+					if (response.getStatusCode() == HttpStatus.SC_OK) {
+						// pas de parsing des données JSON car le JSON donne que la updateDate
+						try {
+							EpisodeDao episodeDao = mDatabaseHelper.getDao(Episode.class);
+							episodeDao.updateEpisode(episodeToUpdate, mKeyOfNewValue, mNewValue);
+						} catch (SQLException e) {
+							Ln.e(e.getCause());
+							mServiceStatusCode = AbstractIntentService.DATABASE_ERROR;
+							setServiceResponseCode(ServiceResponseCode.KO);
+							return;
+						}
 					}
+				} else {
+					mServiceStatusCode = AbstractIntentService.HTTP_ERROR;
+					setServiceResponseCode(ServiceResponseCode.KO);
+					return;
 				}
-			} else {
-				responseCode = myWeb.getStatusCode();
+			} catch (IOException e) {
+				Ln.e(e.getCause());
+				mServiceStatusCode = AbstractIntentService.NETWORK_ERROR;
+				setServiceResponseCode(ServiceResponseCode.KO);
+				return;
 			}
 		}
+	}
 
+	@Override
+	protected void fillBundleResponse(Bundle bundle) {
 		List<Episode> allEp = new ArrayList<Episode>();
 		try {
-			EpisodeDao epDao = mDatabaseHelper.getDao(Episode.class);
-			allEp = epDao.queryForAllSeen();
+			if (mEpisodeDao == null) {
+				mEpisodeDao = mDatabaseHelper.getDao(Episode.class);
+			}
+			allEp = mEpisodeDao.queryForAllSeen();
 		} catch (SQLException e) {
-			responseCode = DatabaseHelper.ERROR_BDD;
-			e.printStackTrace();
+			mServiceStatusCode = AbstractIntentService.DATABASE_ERROR;
+			setServiceResponseCode(ServiceResponseCode.KO);
+			Ln.e(e);
 		}
 
 		// retour à l'appelant
-		Bundle ret = new Bundle();
-		ret.putSerializable(RESULT_DATA, (Serializable) allEp);
-		sender.send(responseCode, ret);
+		bundle.putSerializable(EXTRA_OUTPUT_RESULT_DATA, (Serializable) allEp);
+
 	}
+
+	@Override
+	protected String getQuery() {
+		return "/1/classes/Show/" + mEpisodeToUpdateList.get(mIndex).getObjectId();
+	}
+
+	@Override
+	protected IHttpsConnector getConnector() {
+		return new ParseConnector();
+	}
+
 }

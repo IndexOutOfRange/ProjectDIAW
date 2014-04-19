@@ -206,10 +206,10 @@ public class EpisodesSeenActivity extends DrawerActivity {
 						Intent intent = new Intent(EpisodesSeenActivity.this, ParseUpdateEpisodeService.class);
 						List<Episode> episodeToRename = new ArrayList<Episode>();
 						episodeToRename.add(episode);
-						intent.putExtra(ParseUpdateEpisodeService.INTENT_OBJECT_TO_RENAME, (Serializable) episodeToRename);
-						intent.putExtra(ParseUpdateEpisodeService.INTENT_KEY, Episode.COLUMN_SHOWNAME);
-						intent.putExtra(ParseUpdateEpisodeService.INTENT_VALUE, newName);
-						intent.putExtra(ParseUpdateEpisodeService.INTENT_RESULT_RECEIVER, mRenameEpisodeResultReceiver);
+						intent.putExtra(ParseUpdateEpisodeService.EXTRA_INPUT_EPISODES_TO_UPDATE, (Serializable) episodeToRename);
+						intent.putExtra(ParseUpdateEpisodeService.EXTRA_INPUT_KEY, Episode.COLUMN_SHOWNAME);
+						intent.putExtra(ParseUpdateEpisodeService.EXTRA_INPUT_VALUE, newName);
+						intent.putExtra(ParseUpdateEpisodeService.EXTRA_INPUT_RESULT_RECEIVER, mRenameEpisodeResultReceiver);
 						startService(intent);
 					}
 				})
@@ -237,9 +237,9 @@ public class EpisodesSeenActivity extends DrawerActivity {
 			mUpdateInProgress = false;
 			invalidateOptionsMenu();
 
-			if (resultCode == ParseUpdateEpisodeService.RESULT_CODE_OK) {
+			if (resultCode == ServiceResponseCode.OK.value) {
 				mAllEp.clear();
-				mAllEp.addAll((List<Episode>) resultData.get(ParseUpdateEpisodeService.RESULT_DATA));
+				mAllEp.addAll((List<Episode>) resultData.get(ParseUpdateEpisodeService.EXTRA_OUTPUT_RESULT_DATA));
 				mAdapter.notifyDataSetChanged();
 				Toast.makeText(EpisodesSeenActivity.this, "Renommage réalisée", Toast.LENGTH_LONG).show();
 			} else {

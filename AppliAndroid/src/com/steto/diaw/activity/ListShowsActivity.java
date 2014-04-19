@@ -39,6 +39,7 @@ import com.steto.diaw.dao.ShowDao;
 import com.steto.diaw.model.Episode;
 import com.steto.diaw.model.Show;
 import com.steto.diaw.service.ParseUpdateEpisodeService;
+import com.steto.diaw.service.model.AbstractIntentService.ServiceResponseCode;
 import com.steto.projectdiaw.R;
 
 public class ListShowsActivity extends DrawerActivity {
@@ -166,7 +167,7 @@ public class ListShowsActivity extends DrawerActivity {
 					mUpdateInProgress = false;
 					invalidateOptionsMenu();
 
-					if (resultCode == ParseUpdateEpisodeService.RESULT_CODE_OK) {
+					if (resultCode == ServiceResponseCode.OK.value) {
 						new LoadShowTask().execute();
 						Toast.makeText(ListShowsActivity.this, "Renommage réalisée", Toast.LENGTH_LONG).show();
 					} else {
@@ -198,10 +199,10 @@ public class ListShowsActivity extends DrawerActivity {
 							// service
 							String newName = nameShowEditText.getText().toString();
 							Intent intent = new Intent(ListShowsActivity.this, ParseUpdateEpisodeService.class);
-							intent.putExtra(ParseUpdateEpisodeService.INTENT_OBJECT_TO_RENAME, (Serializable) allEpisode);
-							intent.putExtra(ParseUpdateEpisodeService.INTENT_KEY, Episode.COLUMN_SHOWNAME);
-							intent.putExtra(ParseUpdateEpisodeService.INTENT_VALUE, newName);
-							intent.putExtra(ParseUpdateEpisodeService.INTENT_RESULT_RECEIVER, mRenameEpisodeResultReceiver);
+							intent.putExtra(ParseUpdateEpisodeService.EXTRA_INPUT_EPISODES_TO_UPDATE, (Serializable) allEpisode);
+							intent.putExtra(ParseUpdateEpisodeService.EXTRA_INPUT_KEY, Episode.COLUMN_SHOWNAME);
+							intent.putExtra(ParseUpdateEpisodeService.EXTRA_INPUT_VALUE, newName);
+							intent.putExtra(ParseUpdateEpisodeService.EXTRA_INPUT_RESULT_RECEIVER, mRenameEpisodeResultReceiver);
 							startService(intent);
 						} catch (SQLException e) {
 							e.printStackTrace();

@@ -17,16 +17,16 @@ import com.steto.diaw.dao.EpisodeDao;
 public class Episode implements Serializable, Comparable<Episode> {
 
 	private static final long serialVersionUID = 1L;
-	public static final String COLUMN_SHOWNAME = "ShowName";
-	public static final String COLUMN_OBJECT_ID = "ObjectId";
-	public static final String COLUMN_UPDATED_AT = "UpdatedAt";
-	public static final String COLUMN_SEEN = "Seen";
-	public static final String COLUMN_EPISODE_NUMBER = "EpisodeNumber";
-	public static final String COLUMN_SEASON_NUMBER = "SeasonNumber";
+	public static final String COLUMN_SHOWNAME = "showName";
+	public static final String COLUMN_OBJECT_ID = "objectId";
+	public static final String COLUMN_UPDATED_AT = "updatedAt";
+	public static final String COLUMN_SEEN = "seen";
+	public static final String COLUMN_EPISODE_NUMBER = "episodeNumber";
+	public static final String COLUMN_SEASON_NUMBER = "seasonNumber";
 	public static final String COLUMN_ID = "ID";
-	public static final String COLUMN_EPISODE_NAME = "EpisodeName";
-	public static final String COLUMN_FIRST_AIRED = "FirstAired";
-	public static final String COLUMN_OVERVIEW = "Overview";
+	public static final String COLUMN_EPISODE_NAME = "episodeName";
+	public static final String COLUMN_FIRST_AIRED = "firstAired";
+	public static final String COLUMN_OVERVIEW = "overview";
 
 	@DatabaseField(id = true, useGetSet = true, columnName = COLUMN_ID)
 	@JsonIgnore

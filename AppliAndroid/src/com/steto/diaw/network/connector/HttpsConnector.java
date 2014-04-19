@@ -110,7 +110,7 @@ public class HttpsConnector implements IHttpsConnector {
 			Ln.v("body = \"" + bodyRecupere + "\"");
 
 		} catch (IOException e){
-			Ln.e(e.getMessage(), e);
+			Ln.e(e.getCause());
 			throw e;
 		}
 		return response;
@@ -125,7 +125,6 @@ public class HttpsConnector implements IHttpsConnector {
 	// ------------------------------
 	protected void addHeaders(URLConnection urlConnection) {
 		urlConnection.setRequestProperty("Accept-Encoding", GZIP);
-		// urlConnection.setRequestProperty("Content-type", "lpc-signature/brut");
 		// https://code.google.com/p/google-http-java-client/issues/detail?id=213
 		urlConnection.setRequestProperty("Connection", "close");
 	}

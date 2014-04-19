@@ -81,7 +81,7 @@ public class ParseUpdateEpisodeService extends RoboIntentService {
 		List<Episode> allEp = new ArrayList<Episode>();
 		try {
 			EpisodeDao epDao = mDatabaseHelper.getDao(Episode.class);
-			allEp = epDao.queryForAll();
+			allEp = epDao.queryForAllSeen();
 		} catch (SQLException e) {
 			responseCode = DatabaseHelper.ERROR_BDD;
 			e.printStackTrace();

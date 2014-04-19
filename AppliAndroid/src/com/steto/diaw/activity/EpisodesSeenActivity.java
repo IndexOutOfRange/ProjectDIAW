@@ -33,7 +33,7 @@ import com.steto.diaw.dao.DatabaseHelper;
 import com.steto.diaw.dao.EpisodeDao;
 import com.steto.diaw.model.Episode;
 import com.steto.diaw.service.ParseDeleteEpisodeService;
-import com.steto.diaw.service.ParseGetEpisodesService;
+import com.steto.diaw.service.ParseGetEpisodeService;
 import com.steto.diaw.service.ParseUpdateEpisodeService;
 import com.steto.diaw.service.model.AbstractIntentService.ServiceResponseCode;
 import com.steto.diaw.tools.Tools;
@@ -161,10 +161,10 @@ public class EpisodesSeenActivity extends DrawerActivity {
 
 	private void getShowsFromNetwork() {
 		String login = mSharedPreferences.getString(Tools.SHARED_PREF_LOGIN, "");
-		Intent intent = new Intent(this, ParseGetEpisodesService.class);
-		intent.putExtra(ParseGetEpisodesService.INTENT_LOGIN, login);
-		intent.putExtra(ParseGetEpisodesService.INTENT_FORCE_UPDATE, true);
-		intent.putExtra(ParseGetEpisodesService.INTENT_RESULT_RECEIVER, mShowResultReceiver);
+		Intent intent = new Intent(this, ParseGetEpisodeService.class);
+		intent.putExtra(ParseGetEpisodeService.EXTRA_INPUT_LOGIN, login);
+		intent.putExtra(ParseGetEpisodeService.EXTRA_INPUT_FORCE_UPDATE, true);
+		intent.putExtra(ParseGetEpisodeService.EXTRA_INPUT_RESULT_RECEIVER, mShowResultReceiver);
 		startService(intent);
 	}
 
@@ -259,14 +259,14 @@ public class EpisodesSeenActivity extends DrawerActivity {
 		protected void onReceiveResult(int resultCode, Bundle resultData) {
 			super.onReceiveResult(resultCode, resultData);
 			Ln.i("onResult");
-			if (resultCode == ParseGetEpisodesService.RESULT_CODE_OK) {
-				List<Episode> episodes = (List<Episode>) resultData.get(ParseGetEpisodesService.RESULT_DATA);
+			if (resultCode == ServiceResponseCode.OK.value) {
+				List<Episode> episodes = (List<Episode>) resultData.get(ParseGetEpisodeService.EXTRA_OUTPUT_EPISODE_LIST);
 				if (episodes.size() != 0) {
 					mAllEp.clear();
 					mAllEp.addAll(episodes);
 				}
 				processUpdateListEpisodes();
-			} else if (resultCode == ParseGetEpisodesService.RESULT_CODE_IN_PROGRESS) {
+			} else if (resultCode == ParseGetEpisodeService.RESULT_CODE_IN_PROGRESS) {
 				Toast.makeText(EpisodesSeenActivity.this, getString(R.string.msg_work_in_progress), Toast.LENGTH_SHORT).show();
 			} else {
 				Toast.makeText(EpisodesSeenActivity.this, getString(R.string.msg_erreur_reseau), Toast.LENGTH_SHORT).show();

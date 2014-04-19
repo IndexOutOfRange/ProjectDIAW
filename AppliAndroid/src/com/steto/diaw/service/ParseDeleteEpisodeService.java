@@ -53,7 +53,7 @@ public class ParseDeleteEpisodeService extends AbstractIntentService {
 		try {
 			mEpisodeDao = mDatabaseHelper.getDao(Episode.class);
 		} catch (SQLException e) {
-			mServiceStatusCode = AbstractIntentService.BDD_ERROR;
+			mServiceStatusCode = AbstractIntentService.DATABASE_ERROR;
 			setServiceResponseCode(ServiceResponseCode.KO);
 			Ln.e(e);
 			return;
@@ -66,7 +66,7 @@ public class ParseDeleteEpisodeService extends AbstractIntentService {
 				response = deleteResponse(episodeToDelete.getObjectId(), null);
 			} catch (IOException e) {
 				Ln.e(e);
-				mServiceStatusCode = AbstractIntentService.RESEAU_ERROR;
+				mServiceStatusCode = AbstractIntentService.NETWORK_ERROR;
 				setServiceResponseCode(ServiceResponseCode.KO);
 				return;
 			}
@@ -76,7 +76,7 @@ public class ParseDeleteEpisodeService extends AbstractIntentService {
 					mEpisodeDao.delete(episodeToDelete);
 				} catch (SQLException e) {
 					mResultFail.add(episodeToDelete);
-					mServiceStatusCode = AbstractIntentService.BDD_ERROR;
+					mServiceStatusCode = AbstractIntentService.DATABASE_ERROR;
 					setServiceResponseCode(ServiceResponseCode.KO);
 					Ln.e(e);
 				}
@@ -97,7 +97,7 @@ public class ParseDeleteEpisodeService extends AbstractIntentService {
 			}
 			allEp = mEpisodeDao.queryForAllSeen();
 		} catch (SQLException e) {
-			mServiceStatusCode = AbstractIntentService.BDD_ERROR;
+			mServiceStatusCode = AbstractIntentService.DATABASE_ERROR;
 			setServiceResponseCode(ServiceResponseCode.KO);
 			Ln.e(e);
 		}

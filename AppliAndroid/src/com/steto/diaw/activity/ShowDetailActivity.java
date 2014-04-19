@@ -35,7 +35,6 @@ import com.steto.diaw.model.Episode;
 import com.steto.diaw.model.Season;
 import com.steto.diaw.model.Show;
 import com.steto.diaw.service.BannerService;
-import com.steto.diaw.service.ParseGetEpisodesService;
 import com.steto.diaw.service.TVDBService;
 import com.steto.projectdiaw.R;
 
@@ -357,7 +356,7 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 			Ln.i("onResult");
 			setProgressBarIndeterminateVisibility(false);
 			mBannerIsDownloading = false;
-			if (resultCode == ParseGetEpisodesService.RESULT_CODE_OK) {
+			if (resultCode == BannerService.RESULT_CODE_OK) {
 				Bitmap banner = (Bitmap) resultData.getParcelable(BannerService.OUTPUT_BITMAP);
 				mShow.setBanner(banner);
 				refreshLayout();
@@ -379,7 +378,7 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 			super.onReceiveResult(resultCode, resultData);
 			Ln.i("onResult");
 			setProgressBarIndeterminateVisibility(false);
-			if (resultCode == ParseGetEpisodesService.RESULT_CODE_OK) {
+			if (resultCode == TVDBService.RESULT_CODE_OK) {
 				List<Show> response = (List<Show>) resultData.get(TVDBService.OUTPUT_DATA);
 				if (response != null && !response.isEmpty()) {
 					mShow = response.get(0);

@@ -30,7 +30,7 @@
     <string name="pref_sync_number_episode_summary">Combien d\'épisodes voulez-vous récupérer par mise-à-jour ?</string>
     
     <!-- A RANGE / WIP / TO DELETE -->
-	<string name="msg_work_in_progress">pagination : work in progress</string>
+	<string name="msg_work_in_progress">téléchargement en cours</string>
 	<string name="search_in_shows">Recherche parmis les séries</string>
 	<string name="search_show_hint">Rechercher une série</string>
 

@@ -15,7 +15,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.inject.Inject;
-import com.steto.diaw.service.ParseGetEpisodesService;
+import com.steto.diaw.service.ParseGetEpisodeService;
+import com.steto.diaw.service.model.AbstractIntentService.ServiceResponseCode;
 import com.steto.diaw.tools.Tools;
 import com.steto.projectdiaw.R;
 
@@ -46,9 +47,9 @@ public class LoginActivity extends RoboActivity {
 	}
 
 	private void getShowsFromNetwork(String login) {
-		Intent in = new Intent(this, ParseGetEpisodesService.class);
-		in.putExtra(ParseGetEpisodesService.INTENT_LOGIN, login);
-		in.putExtra(ParseGetEpisodesService.INTENT_RESULT_RECEIVER, mShowReceiver);
+		Intent in = new Intent(this, ParseGetEpisodeService.class);
+		in.putExtra(ParseGetEpisodeService.EXTRA_INPUT_LOGIN, login);
+		in.putExtra(ParseGetEpisodeService.EXTRA_INPUT_RESULT_RECEIVER, mShowReceiver);
 		startService(in);
 	}
 
@@ -79,12 +80,10 @@ public class LoginActivity extends RoboActivity {
 		protected void onReceiveResult(int resultCode, Bundle resultData) {
 			super.onReceiveResult(resultCode, resultData);
 
-			if (resultCode == ParseGetEpisodesService.RESULT_CODE_OK) {
-				Intent in = new Intent(LoginActivity.this, EpisodesSeenActivity.class);
-				in.putExtra(EpisodesSeenActivity.INTENT_LIST_EPISODE, resultData.getSerializable(ParseGetEpisodesService.RESULT_DATA));
-				startActivity(in);
+			if (resultCode == ServiceResponseCode.OK.value) {
+				startActivity(new Intent(LoginActivity.this, EpisodesSeenActivity.class));
 				finish();
-			} else if (resultCode == ParseGetEpisodesService.RESULT_CODE_IN_PROGRESS) {
+			} else if (resultCode == ParseGetEpisodeService.RESULT_CODE_IN_PROGRESS) {
 				Toast.makeText(LoginActivity.this, getString(R.string.msg_work_in_progress), Toast.LENGTH_SHORT).show();
 			} else {
 				Toast.makeText(LoginActivity.this, getString(R.string.msg_erreur_reseau), Toast.LENGTH_SHORT).show();

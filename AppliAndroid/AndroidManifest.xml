@@ -55,7 +55,7 @@
         <activity android:name="com.steto.diaw.activity.AmbiguityShow" />
         <activity android:name="com.steto.diaw.activity.DatabaseActivity" />
 
-        <service android:name="com.steto.diaw.service.ParseGetEpisodesService" />
+        <service android:name="com.steto.diaw.service.ParseGetEpisodeService" />
         <service android:name="com.steto.diaw.service.ParseUpdateEpisodeService" />
         <service android:name="com.steto.diaw.service.ParseDeleteEpisodeService" />
         <service android:name="com.steto.diaw.service.TVDBService" />

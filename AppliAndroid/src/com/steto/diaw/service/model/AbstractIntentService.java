@@ -20,7 +20,6 @@ import android.os.Bundle;
 import android.os.ResultReceiver;
 
 import com.steto.diaw.network.Response;
-import com.steto.diaw.network.connector.HttpsConnector;
 import com.steto.diaw.network.connector.IHttpsConnector;
 import com.steto.diaw.service.exception.NotConnectedException;
 import com.steto.diaw.tools.NaiveTrustManager;
@@ -42,15 +41,14 @@ public abstract class AbstractIntentService extends RoboIntentService {
 	 */
 	public static final int NO_ERROR = 0;
 	public static final int NOT_CONNECTED_ERROR = 1;
-	public static final int RESEAU_ERROR = 2;
+	public static final int NETWORK_ERROR = 2;
 	public static final int PARSING_ERROR = 3;
-	public static final int BDD_ERROR = 4;
+	public static final int DATABASE_ERROR = 4;
 	public static final int HTTP_ERROR = 5;
 
 	public static final int WAIT_INTERRUPTED = -304;
 
 	public static final String EXTRA_INPUT_RESULT_RECEIVER = "EXTRA_INPUT_RESULT_RECEIVER";
-	public static final String EXTRA_OUTPUT_CERTIMOBILE_ERROR_RESPONSECODE = "EXTRA_OUTPUT_CERTIMOBILE_ERROR_RESPONSECODE";
 	public static final String EXTRA_OUTPUT_HTTP_RESPONSECODE = "EXTRA_OUTPUT_HTTP_RESPONSECODE";
 	public static final String EXTRA_OUTPUT_INTENT = "EXTRA_OUTPUT_INTENT";
 	public static final String EXTRA_OUTPUT_DETAILED_RESULT_CODE = "EXTRA_OUTPUT_DETAILED_RESULT_CODE";
@@ -121,19 +119,19 @@ public abstract class AbstractIntentService extends RoboIntentService {
 	}
 
 	protected final Response getResponse() throws IOException {
-		HttpsConnector connector = new HttpsConnector();
+		IHttpsConnector connector = getConnector();
 		Response response = connector.getData(getQuery());
 		return processResponse(response);
 	}
 
 	protected final Response postResponse(String content) throws IOException {
-		HttpsConnector connector = new HttpsConnector();
+		IHttpsConnector connector = getConnector();
 		Response response = connector.postData(getQuery(), content);
 		return processResponse(response);
 	}
 
 	protected final Response putResponse(String content) throws IOException {
-		HttpsConnector connector = new HttpsConnector();
+		IHttpsConnector connector = getConnector();
 		Response response = connector.putData(getQuery(), content);
 		return processResponse(response);
 	}

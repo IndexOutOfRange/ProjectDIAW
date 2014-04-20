@@ -129,7 +129,7 @@ public class ListShowsActivity extends DrawerActivity {
 
 	@Override
 	protected void manageIconsInActionBar(Menu menu, boolean drawerOpen) {
-		// No menu > nothing
+		menu.findItem(R.id.menu_search).setVisible(!drawerOpen);
 	}
 
 	@Override
@@ -270,29 +270,36 @@ public class ListShowsActivity extends DrawerActivity {
 
 		@Override
 		public void onDeleteClicked() {
-
+			// TODO a implémenter
+			Toast.makeText(ListShowsActivity.this, "fonction pas encore implémentée", Toast.LENGTH_SHORT).show();
 		}
 	}
 
 	private final class LoadShowTask extends AsyncTask<Void, Integer, Void> {
+		private List<Show> showAsyncAll;
+		private List<Show> showAsyncVisibile;
+		
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			showAsyncAll = new ArrayList<Show>();
+			showAsyncVisibile = new ArrayList<Show>();
+		}
 
 		@Override
 		protected Void doInBackground(Void... voids) {
 			try {
-				mAllShows.clear();
-				mShowsVisible.clear();
-
-				mAllShows.addAll(((ShowDao) mDatabaseHelper.getDao(Show.class)).queryForAll());
+				showAsyncAll.addAll(((ShowDao) mDatabaseHelper.getDao(Show.class)).queryForAll());
 				if (TextUtils.isEmpty(mQuery)) {
-					for (Show show : mAllShows) {
+					for (Show show : showAsyncAll) {
 						show.setNumberEpisodesSaw(((EpisodeDao) mDatabaseHelper.getDao(Episode.class)).countAllEpisodeFromShowNameSeen(show.getShowName()));
 					}
-					mShowsVisible.addAll(mAllShows);
+					showAsyncVisibile.addAll(showAsyncAll);
 				} else {
-					for (Show show : mAllShows) {
+					for (Show show : showAsyncAll) {
 						show.setNumberEpisodesSaw(((EpisodeDao) mDatabaseHelper.getDao(Episode.class)).countAllEpisodeFromShowNameSeen(show.getShowName()));
 						if (show.getShowName().toLowerCase(Locale.getDefault()).contains(mQuery.toLowerCase(Locale.getDefault()))) {
-							mShowsVisible.add(show);
+							showAsyncVisibile.add(show);
 						}
 					}
 				}
@@ -304,6 +311,10 @@ public class ListShowsActivity extends DrawerActivity {
 
 		@Override
 		protected void onPostExecute(Void result) {
+			mAllShows.clear();
+			mShowsVisible.clear();
+			mAllShows.addAll(showAsyncAll);
+			mShowsVisible.addAll(showAsyncVisibile);
 			mAdapter.notifyDataSetChanged();
 			if (TextUtils.isEmpty(mQuery)) {
 				mTvSummary.setText("> " + mAllShows.size() + " séries suivies");

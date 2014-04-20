@@ -39,6 +39,11 @@ public class HttpsConnector implements IHttpsConnector {
 	private static final int CONNECTION_READ_TIMEOUT = 15000;
 
 	private static final String GZIP = "gzip";
+	
+	/**
+	 * show the response from the server
+	 */
+	protected boolean mShowResponseServerBody = true;
 
 	@Override
 	public Response getData(String url) throws IOException {
@@ -103,12 +108,12 @@ public class HttpsConnector implements IHttpsConnector {
 				response.setBody(new ByteArrayInputStream("body is null".getBytes("UTF-8")));
 			}
 
-			String bodyRecupere = IOUtils.toString(response.getBody());
-			response.setBody(new ByteArrayInputStream(bodyRecupere.getBytes()));
-
 			Ln.d("reponse a l'url = \"" + urlConnection.getURL().toString() + "\" response code " + response.getStatusCode() + " (" + urlConnection.getResponseMessage() + ")");
-			Ln.v("body = \"" + bodyRecupere + "\"");
-
+			if(mShowResponseServerBody) {
+				String bodyRecupere = IOUtils.toString(response.getBody());
+				response.setBody(IOUtils.toInputStream(bodyRecupere));
+				Ln.v("body = " + bodyRecupere);
+			}
 		} catch (IOException e){
 			Ln.e(e.getCause());
 			throw e;

@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AbsListView;
 
@@ -18,10 +19,10 @@ public class TranslucideActionBarHelper {
 	}
 
 	public void initActionBar(Activity activity, String title, String subtitle, boolean displayHomeAsUp, int ressourceAB) {
-		if (!"".equals(title)) {
+		if (!TextUtils.isEmpty(title)) {
 			mActionBar.setTitle(title);
 		}
-		if (!"".equals(subtitle)) {
+		if (!TextUtils.isEmpty(subtitle)) {
 			mActionBar.setSubtitle(subtitle);
 		}
 		mActionBar.setDisplayHomeAsUpEnabled(displayHomeAsUp);
@@ -78,8 +79,6 @@ public class TranslucideActionBarHelper {
 			}
 		}
 	};
-
-	/* TODO faire le meme traitement pour les ScrollView */
 
 	private void onNewScroll(int scrollPosition) {
 		if (mActionBar == null) {

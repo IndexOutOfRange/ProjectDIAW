@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.steto.diaw.adapter.ListShowAdapter;
 import com.steto.diaw.model.Show;
 import com.steto.diaw.service.TVDBService;
+import com.steto.diaw.service.model.AbstractIntentService.ServiceResponseCode;
 import com.steto.projectdiaw.R;
 
 @ContentView(R.layout.activity_ambiguity_show)
@@ -50,8 +51,8 @@ public class AmbiguityShow extends RoboListActivity {
 
 	private void launchSerieService(Show show, ResultReceiver resultReceiver) {
 		Intent intent = new Intent(this, TVDBService.class);
-		intent.putExtra(TVDBService.INPUT_SERIE, show);
-		intent.putExtra(TVDBService.INPUT_RESULTRECEIVER, resultReceiver);
+		intent.putExtra(TVDBService.EXTRA_INPUT_SHOW, show);
+		intent.putExtra(TVDBService.EXTRA_INPUT_RESULT_RECEIVER, resultReceiver);
 		startService(intent);
 	}
 
@@ -89,8 +90,8 @@ public class AmbiguityShow extends RoboListActivity {
 		protected void onReceiveResult(int resultCode, Bundle resultData) {
 			super.onReceiveResult(resultCode, resultData);
 			setProgressBarIndeterminateVisibility(false);
-			if (resultCode == TVDBService.RESULT_CODE_OK) {
-				List<Show> response = (List<Show>) resultData.get(TVDBService.OUTPUT_DATA);
+			if (resultCode == ServiceResponseCode.OK.value) {
+				List<Show> response = (List<Show>) resultData.get(TVDBService.EXTRA_OUTPUT_DATA);
 				if (response != null && !response.isEmpty()) {
 					Show show = response.get(0);
 					Intent data = new Intent();

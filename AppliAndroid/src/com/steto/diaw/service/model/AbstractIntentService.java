@@ -90,7 +90,7 @@ public abstract class AbstractIntentService extends RoboIntentService {
 	protected abstract IHttpsConnector getConnector();
 
 	@Override
-	protected void onHandleIntent(Intent intent) {
+	protected final void onHandleIntent(Intent intent) {
 		Ln.d("lancement de l'intent service " + getClass().getSimpleName());
 		initDefaultSSLFactory();
 		mResponseBundle.putParcelable(EXTRA_OUTPUT_INTENT, intent);

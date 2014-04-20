@@ -28,8 +28,6 @@ public class SplashScreen extends RoboActivity {
 			startActivity(intent);
 			finish();
 		} else {
-			// TODO to delete if Sync is ok
-			// getShowsFromNetwork();
 			Intent intent = new Intent(SplashScreen.this, EpisodesSeenActivity.class);
 			startActivity(intent);
 			finish();

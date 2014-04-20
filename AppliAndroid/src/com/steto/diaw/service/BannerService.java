@@ -1,66 +1,91 @@
 package com.steto.diaw.service;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 import org.apache.http.HttpStatus;
 
-import roboguice.service.RoboIntentService;
-import android.content.Intent;
+import roboguice.util.Ln;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.ResultReceiver;
 
 import com.google.inject.Inject;
 import com.steto.diaw.dao.DatabaseHelper;
 import com.steto.diaw.model.Show;
-import com.steto.diaw.web.BannerConnector;
-import com.steto.diaw.web.WebConnector;
+import com.steto.diaw.network.Response;
+import com.steto.diaw.network.connector.BannerConnector;
+import com.steto.diaw.network.connector.IHttpsConnector;
+import com.steto.diaw.service.model.AbstractIntentService;
 
-/**
- * Created by Stephane on 02/06/13.
- */
-public class BannerService extends RoboIntentService {
+public class BannerService extends AbstractIntentService {
 
 	private static final String NAME = "BannerService";
-	public static final String INPUT_SERIE = "INPUT_SERIE";
-	public static final String INPUT_RECEIVER = "INPUT_RECEIVER";
-	public static final String OUTPUT_BITMAP = "OUTPUT_BITMAP";
-	public static final int RESULT_CODE_OK = 0;
+	public static final String EXTRA_INPUT_SHOW = "EXTRA_INPUT_SHOW";
+	public static final String EXTRA_OUTPUT_BITMAP = "EXTRA_OUTPUT_BITMAP";
 
 	@Inject
 	private DatabaseHelper mDatabaseHelper;
+	private Show mShow;
+	private Bitmap mBitmap;
 
 	public BannerService() {
 		super(NAME);
 	}
 
 	@Override
-	protected void onHandleIntent(Intent intent) {
-		Show show = (Show) intent.getExtras().get(INPUT_SERIE);
-		ResultReceiver caller = (ResultReceiver) intent.getExtras().get(INPUT_RECEIVER);
-		int resultCode = RESULT_CODE_OK;
-		Bitmap bmp = null;
-		if (show.getBanner() == null) {
-			BannerConnector myWeb = new BannerConnector();
-			myWeb.requestFromNetwork(show.getBannerURL(), WebConnector.HTTPMethod.GET, null);
-			if (myWeb.getStatusCode() == HttpStatus.SC_OK) {
-				bmp = BitmapFactory.decodeStream(myWeb.getResponseBody());
-				show.setBanner(bmp);
-				try {
-					mDatabaseHelper.getDao(Show.class).update(show);
-				} catch (SQLException e) {
-					resultCode = DatabaseHelper.ERROR_BDD;
-					e.printStackTrace();
+	protected void processInputExtras(Bundle bundle) {
+		super.processInputExtras(bundle);
+		mShow = (Show) bundle.get(EXTRA_INPUT_SHOW);
+	}
+
+	@Override
+	protected void processRequest() {
+		if (mShow.getBanner() == null) {
+			try {
+				Response response = getResponse();
+				if (response.getStatusCode() == HttpStatus.SC_OK) {
+					mBitmap = BitmapFactory.decodeStream(response.getBody());
+					if(mBitmap != null) {
+						mShow.setBanner(mBitmap);
+					} else {
+						Ln.e("bitmap decodeStream returned null");
+						setServiceResponseCode(ServiceResponseCode.KO);
+						mServiceStatusCode = AbstractIntentService.PARSING_ERROR;
+					}
+					try {
+						mDatabaseHelper.getDao(Show.class).update(mShow);
+					} catch (SQLException e) {
+						Ln.e(e);
+						setServiceResponseCode(ServiceResponseCode.KO);
+						mServiceStatusCode = AbstractIntentService.DATABASE_ERROR;
+					}
+				} else {
+					setServiceResponseCode(ServiceResponseCode.KO);
+					mServiceStatusCode = AbstractIntentService.HTTP_ERROR;
 				}
-			} else {
-				resultCode = myWeb.getStatusCode();
+			} catch (IOException e) {
+				Ln.e(e);
+				setServiceResponseCode(ServiceResponseCode.KO);
+				mServiceStatusCode = AbstractIntentService.NETWORK_ERROR;
 			}
 		} else {
-			bmp = show.getBannerAsBitmap();
+			mBitmap = mShow.getBannerAsBitmap();
 		}
-		Bundle ret = new Bundle();
-		ret.putParcelable(OUTPUT_BITMAP, bmp);
-		caller.send(resultCode, ret);
+	}
+	
+	@Override
+	protected void fillBundleResponse(Bundle bundle) {
+		bundle.putParcelable(EXTRA_OUTPUT_BITMAP, mBitmap);
+	}
+
+	@Override
+	protected String getQuery() {
+		return mShow.getBannerURL();
+	}
+
+	@Override
+	protected IHttpsConnector getConnector() {
+		return new BannerConnector();
 	}
 }

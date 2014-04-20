@@ -1,37 +1,34 @@
 package com.steto.diaw.service;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpStatus;
 
-import roboguice.service.RoboIntentService;
-import android.content.Intent;
+import roboguice.util.Ln;
 import android.os.Bundle;
-import android.os.ResultReceiver;
 
 import com.steto.diaw.model.Show;
+import com.steto.diaw.network.Response;
+import com.steto.diaw.network.connector.IHttpsConnector;
 import com.steto.diaw.parser.AbstractParser;
 import com.steto.diaw.parser.IMDBParser;
-import com.steto.diaw.web.IMDBConnector;
+import com.steto.diaw.service.model.AbstractIntentService;
 import com.steto.diaw.web.QueryString;
-import com.steto.diaw.web.WebConnector;
 
 /**
- * Created by Stephane on 09/06/13.
+ * unused 
+ *
  */
-public class IMDBService extends RoboIntentService {
-
-	public static final int RESULT_CODE_OK = 0;
+@Deprecated
+public class IMDBService extends AbstractIntentService {
 
 	private static String IMDB_SERVICE = "IMDB_SERVICE";
-	public static String SERVICE_INPUT_TITLE = "SERVICE_INPUT_TITLE";
-	public static String SERVICE_INPUT_RECEIVER = "SERVICE_INPUT_RECEIVER";
-	public static String SERVICE_OUTPUT_DATA = "SERVICE_OUTPUT_DATA";
+	
+	public static String EXTRA_INPUT_TITLE = "SERVICE_INPUT_TITLE";
+	public static String EXTRA_OUTPUT_DATA = "SERVICE_OUTPUT_DATA";
 
 	// QUERY CONSTANTS rien d'interessant...
 	private static String QUERY_TITLE = "title";
@@ -63,20 +60,60 @@ public class IMDBService extends RoboIntentService {
 
 	private Integer mSearchOffset = 0;
 
-	// http://imdbapi.org/?title=South&type=xml&plot=none&episode=0&limit=10&yg=0&mt=TVS&lang=en-US&offset=0&aka=simple&release=simple&business=0&tech=0
+	private String mTitle;
+
+	private List<Show> mListShow = new ArrayList<Show>();;
+
 	public IMDBService() {
 		super(IMDB_SERVICE);
 	}
+	@Override
+	protected void processInputExtras(Bundle bundle) {
+		super.processInputExtras(bundle);
+		
+		mTitle = bundle.getString(EXTRA_INPUT_TITLE);
+
+	}
+	@Override
+	protected void processRequest() {
+		try {
+			Response response = getResponse();
+			if (response.getStatusCode() == HttpStatus.SC_OK) {
+				IMDBParser imdbParser = new IMDBParser();
+				mListShow = imdbParser.parse(response.getBody());
+				if (imdbParser.getStatusCode() != AbstractParser.PARSER_OK) {
+					setServiceResponseCode(ServiceResponseCode.KO);
+					mServiceStatusCode = AbstractIntentService.PARSING_ERROR;
+					mListShow = null;
+				}
+			} else {
+				setServiceResponseCode(ServiceResponseCode.KO);
+				mServiceStatusCode = AbstractIntentService.HTTP_ERROR;
+			}
+		} catch (IOException e) {
+			Ln.e(e);
+			setServiceResponseCode(ServiceResponseCode.KO);
+			mServiceStatusCode = AbstractIntentService.NETWORK_ERROR;
+		}
+	}
 
 	@Override
-	protected void onHandleIntent(Intent intent) {
+	protected void fillBundleResponse(Bundle bundle) {
+		bundle.putSerializable(EXTRA_OUTPUT_DATA, (Serializable) mListShow);		
+	}
 
-		int resultCode = 0;
-		List<Show> parsed = new ArrayList<Show>();
+	@Override
+	protected String getQuery() {
+		return getQueryString(mTitle).toString();
+	}
 
-		String title = (String) intent.getExtras().get(SERVICE_INPUT_TITLE);
-		ResultReceiver caller = (ResultReceiver) intent.getExtras().get(SERVICE_INPUT_RECEIVER);
+	@Override
+	protected IHttpsConnector getConnector() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
+	private QueryString getQueryString(String title) {
 		QueryString myQuery = new QueryString();
 		myQuery.add(QUERY_TITLE, title);
 		myQuery.add(QUERY_TYPE, QUERY_TYPE_VALUE);
@@ -91,28 +128,6 @@ public class IMDBService extends RoboIntentService {
 		myQuery.add(QUERY_RELEASE_DATE, QUERY_RELEASE_DATE_VALUE);
 		myQuery.add(QUERY_BUSINESS, QUERY_BUSINESS_VALUE);
 		myQuery.add(QUERY_TECH, QUERY_TECH_VALUE);
-
-		IMDBConnector myWeb = new IMDBConnector();
-		myWeb.requestFromNetwork(myQuery.toString(), WebConnector.HTTPMethod.GET, null);
-		if (myWeb.getStatusCode() == HttpStatus.SC_OK) {
-			InputStream in = myWeb.getResponseBody();
-			try {
-				String tmp = IOUtils.toString(in);
-				in = IOUtils.toInputStream(tmp);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			IMDBParser myParser = new IMDBParser();
-			parsed = myParser.parse(in);
-			if (myParser.getStatusCode() != AbstractParser.PARSER_OK) {
-				resultCode = myParser.getStatusCode();
-			}
-		} else {
-			resultCode = myWeb.getStatusCode();
-		}
-		Bundle bund = new Bundle();
-		bund.putSerializable(SERVICE_OUTPUT_DATA, (Serializable) parsed);
-		caller.send(resultCode, bund);
-
+		return myQuery;
 	}
 }

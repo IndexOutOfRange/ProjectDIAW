@@ -36,6 +36,7 @@ import com.steto.diaw.model.Season;
 import com.steto.diaw.model.Show;
 import com.steto.diaw.service.BannerService;
 import com.steto.diaw.service.TVDBService;
+import com.steto.diaw.service.model.AbstractIntentService.ServiceResponseCode;
 import com.steto.projectdiaw.R;
 
 @ContentView(R.layout.activity_show_detail)
@@ -73,8 +74,13 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 		readDatabase();
 		mActionBarTranslucideHelper.initActionBar(this, mShow.getShowName(), "", true, R.drawable.ab_solid_dark_holo);
 
-		processDataInLayout();
+		initializeLayoutList();
 		mActionBarTranslucideHelper.setOnScrollChangedListener(getExpandableListView());
+		
+		if (mShow.isTVDBConnected()) {
+			setProgressBarIndeterminateVisibility(false);
+			initializeData();
+		}
 	}
 
 	@Override
@@ -165,10 +171,9 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 
 					@Override
 					public void onClick(DialogInterface dialog, int id) {
-						String showNameBeforeRename = mShow.getShowName();
 						mShow.setShowName(nameShowEditText.getText().toString());
 						setProgressBarIndeterminateVisibility(true);
-						launchSerieService(showNameBeforeRename);
+						launchSerieService();
 					}
 				})
 				.setNegativeButton(R.string.btn_annuler, new DialogInterface.OnClickListener() {
@@ -247,35 +252,58 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 			Ln.e(e);
 			Toast.makeText(this, "Erreur lors de la récupération des episodes de la serie", Toast.LENGTH_SHORT).show();
 		}
-
 		setProgressBarIndeterminateVisibility(true);
 		launchSerieService();
 		launchBannerService();
 	}
 
 	private void launchSerieService() {
-		launchSerieService(null);
-	}
-
-	private void launchSerieService(String explicitShowName) {
-		Intent intent = new Intent(this, TVDBService.class);
-		intent.putExtra(TVDBService.INPUT_SERIE, mShow);
-		intent.putExtra(TVDBService.INPUT_REAL_NAME, explicitShowName != null ? explicitShowName : null);
-		intent.putExtra(TVDBService.INPUT_RESULTRECEIVER, mShowResultReceiver);
-		startService(intent);
+		if (!mShow.isTVDBConnected()) {
+			Intent intent = new Intent(this, TVDBService.class);
+			intent.putExtra(TVDBService.EXTRA_INPUT_SHOW, mShow);
+			intent.putExtra(TVDBService.EXTRA_INPUT_RESULT_RECEIVER, mShowResultReceiver);
+			startService(intent);
+		}
 	}
 
 	private void launchBannerService() {
 		if (mShow.getBannerURL() != null && mShow.getBanner() == null && !mBannerIsDownloading) {
 			mBannerIsDownloading = true;
 			Intent intent = new Intent(this, BannerService.class);
-			intent.putExtra(BannerService.INPUT_SERIE, mShow);
-			intent.putExtra(BannerService.INPUT_RECEIVER, mBannerResultReceiver);
+			intent.putExtra(BannerService.EXTRA_INPUT_SHOW, mShow);
+			intent.putExtra(BannerService.EXTRA_INPUT_RESULT_RECEIVER, mBannerResultReceiver);
 			startService(intent);
 		}
 	}
 
-	private void processDataInLayout() {
+	private void initializeData() {
+		try {
+			ShowDao showDao = mDatabaseHelper.getDao(Show.class);
+			List<Season> list = showDao.getSeasonsFromShow(mShow);
+			if (list != null && !list.isEmpty()) {
+				mListSeasons.clear();
+				mListSeasons.addAll(list);
+				mAdapter.notifyDataSetChanged();
+
+				if (mShow.getNumberSeasons() == 0) {
+					int nbSeason = mListSeasons.size();
+					if (mListSeasons.get(0).getNumber() == 0) {
+						nbSeason--;
+					}
+					mShow.setNumberSeasons(nbSeason);
+					showDao.update(mShow);
+				}
+			}
+		} catch (SQLException e) {
+			Ln.e(e);
+			Toast.makeText(getApplicationContext(), "Erreur lors de la récupération des episodes de la serie", Toast.LENGTH_SHORT).show();
+		}
+
+		refreshLayout();
+		launchBannerService();
+	}
+
+	private void initializeLayoutList() {
 		// List
 		mAdapter = new SeasonWithEpisodesExpandableAdapter(this, mListSeasons);
 		mHeaderContainer = getLayoutInflater().inflate(R.layout.header_show, null);
@@ -356,10 +384,12 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 			Ln.i("onResult");
 			setProgressBarIndeterminateVisibility(false);
 			mBannerIsDownloading = false;
-			if (resultCode == BannerService.RESULT_CODE_OK) {
-				Bitmap banner = (Bitmap) resultData.getParcelable(BannerService.OUTPUT_BITMAP);
-				mShow.setBanner(banner);
-				refreshLayout();
+			if (resultCode == ServiceResponseCode.OK.value) {
+				Bitmap banner = (Bitmap) resultData.getParcelable(BannerService.EXTRA_OUTPUT_BITMAP);
+				if (banner != null) {
+					mShow.setBanner(banner);
+					refreshLayout();
+				}
 			} else {
 				Toast.makeText(ShowDetailActivity.this, getString(R.string.msg_erreur_reseau), Toast.LENGTH_SHORT).show();
 			}
@@ -378,43 +408,22 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 			super.onReceiveResult(resultCode, resultData);
 			Ln.i("onResult");
 			setProgressBarIndeterminateVisibility(false);
-			if (resultCode == TVDBService.RESULT_CODE_OK) {
-				List<Show> response = (List<Show>) resultData.get(TVDBService.OUTPUT_DATA);
-				if (response != null && !response.isEmpty()) {
-					mShow = response.get(0);
-
-					try {
-						ShowDao showDao = mDatabaseHelper.getDao(Show.class);
-						List<Season> list = showDao.getSeasonsFromShow(mShow);
-						if (list != null && !list.isEmpty()) {
-							mListSeasons.clear();
-							mListSeasons.addAll(list);
-							mAdapter.notifyDataSetChanged();
-
-							if (mShow.getNumberSeasons() == 0) {
-								int nbSeason = mListSeasons.size();
-								if (mListSeasons.get(0).getNumber() == 0) {
-									nbSeason--;
-								}
-								mShow.setNumberSeasons(nbSeason);
-								showDao.update(mShow);
-							}
-						}
-					} catch (SQLException e) {
-						Ln.e(e);
-						Toast.makeText(getApplicationContext(), "Erreur lors de la récupération des episodes de la serie", Toast.LENGTH_SHORT).show();
+			if (resultCode == ServiceResponseCode.OK.value) {
+				boolean ambiguity = resultData.getBoolean(TVDBService.EXTRA_OUTPUT_AMBIGUITY);
+				if (ambiguity) {
+					List<Show> response = (List<Show>) resultData.get(TVDBService.EXTRA_OUTPUT_DATA);
+					if (response != null && !response.isEmpty()) {
+						resolveAmbiguity(response);
+					} else {
+						Toast.makeText(ShowDetailActivity.this, "Aucune serie ne correspond à ce nom.", Toast.LENGTH_SHORT).show();
+						searchSerieWithAnotherName();
 					}
-
-					refreshLayout();
-					launchBannerService();
-				}
-			} else if (resultCode == TVDBService.RESULT_CODE_AMBIGUITY) {
-				List<Show> response = (List<Show>) resultData.get(TVDBService.OUTPUT_DATA);
-				if (response != null && !response.isEmpty()) {
-					resolveAmbiguity(response);
 				} else {
-					Toast.makeText(ShowDetailActivity.this, "Aucune serie ne correspond à ce nom.", Toast.LENGTH_SHORT).show();
-					searchSerieWithAnotherName();
+					List<Show> response = (List<Show>) resultData.get(TVDBService.EXTRA_OUTPUT_DATA);
+					if (response != null && !response.isEmpty()) {
+						mShow = response.get(0);
+						initializeData();
+					}
 				}
 			} else {
 				Toast.makeText(ShowDetailActivity.this, "Unable to get result from service", Toast.LENGTH_SHORT).show();
@@ -436,6 +445,8 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 				setProgressBarIndeterminate(true);
 				String newName = nameShowEditText.getText().toString();
 				// rename all tv shows in this activity
+
+				// FIXME should call ParseUpdateEpisodeService...
 
 				ShowDao dao = mDatabaseHelper.getDao(Show.class);
 				dao.renameShow(mShow, newName);

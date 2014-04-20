@@ -13,5 +13,6 @@
 	<dimen name="text_normal">14sp</dimen>
 	<dimen name="text_big">16sp</dimen>
 	<dimen name="text_enormous">20sp</dimen>
+	<dimen name="text_very_enormous">36sp</dimen>
 
 </resources>

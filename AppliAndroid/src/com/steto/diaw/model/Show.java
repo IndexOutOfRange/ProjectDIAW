@@ -54,7 +54,7 @@ public class Show implements Serializable, Comparable<Show> {
 
 	@DatabaseField(columnName = COLUMN_EPISODE_NUMBER)
 	private int mNumberEpisodes;
-	
+
 	private int mNumberEpisodesSaw = 0;
 
 	@DatabaseField(columnName = COLUMN_TVDB_ID)

@@ -7,8 +7,7 @@ import java.net.MalformedURLException;
 public class BannerConnector extends HttpsConnector {
 
 	private static final String DNS = "http://thetvdb.com/banners";
-	
-	
+
 	public BannerConnector() {
 		// showing the response from the webserver is not usefull
 		mShowResponseServerBody = false;

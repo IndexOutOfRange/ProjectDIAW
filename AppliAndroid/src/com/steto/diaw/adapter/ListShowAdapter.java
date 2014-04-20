@@ -16,11 +16,12 @@ public class ListShowAdapter extends AbstractSelectableItemListAdapter<Show> {
 	public ListShowAdapter(Context ctx, List<Show> all) {
 		this(ctx, all, false);
 	}
+
 	public ListShowAdapter(Context ctx, List<Show> all, boolean showSummary) {
 		super(ctx, all);
 		this.ambitguity = showSummary;
 	}
-	
+
 	@Override
 	public View getView(int i, View view, ViewGroup viewGroup) {
 		ListItemViewShow current;

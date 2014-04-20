@@ -19,14 +19,13 @@ import com.steto.diaw.service.model.AbstractIntentService;
 import com.steto.diaw.web.QueryString;
 
 /**
- * unused 
- *
+ * unused
  */
 @Deprecated
 public class IMDBService extends AbstractIntentService {
 
 	private static String IMDB_SERVICE = "IMDB_SERVICE";
-	
+
 	public static String EXTRA_INPUT_TITLE = "SERVICE_INPUT_TITLE";
 	public static String EXTRA_OUTPUT_DATA = "SERVICE_OUTPUT_DATA";
 
@@ -67,13 +66,15 @@ public class IMDBService extends AbstractIntentService {
 	public IMDBService() {
 		super(IMDB_SERVICE);
 	}
+
 	@Override
 	protected void processInputExtras(Bundle bundle) {
 		super.processInputExtras(bundle);
-		
+
 		mTitle = bundle.getString(EXTRA_INPUT_TITLE);
 
 	}
+
 	@Override
 	protected void processRequest() {
 		try {
@@ -99,7 +100,7 @@ public class IMDBService extends AbstractIntentService {
 
 	@Override
 	protected void fillBundleResponse(Bundle bundle) {
-		bundle.putSerializable(EXTRA_OUTPUT_DATA, (Serializable) mListShow);		
+		bundle.putSerializable(EXTRA_OUTPUT_DATA, (Serializable) mListShow);
 	}
 
 	@Override

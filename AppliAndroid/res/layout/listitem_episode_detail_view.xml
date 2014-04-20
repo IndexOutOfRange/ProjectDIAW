@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/listitem_episode_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/card_background"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="@dimen/normal" >
+
+    <TextView
+        android:id="@+id/listitem_episode_number"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginRight="12dp"
+        android:gravity="center_vertical"
+        android:textColor="@color/gris_tres_fonce"
+        android:textSize="@dimen/text_very_enormous"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/listitem_episode_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_big" />
+
+        <TextView
+            android:id="@+id/listitem_episode_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/gris_tres_fonce" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/listitem_episode_seen"
+        android:layout_width="6dp"
+        android:layout_height="32dp"
+        android:layout_marginLeft="6dp"
+        android:background="@color/gris_fonce" />
+
+</LinearLayout>

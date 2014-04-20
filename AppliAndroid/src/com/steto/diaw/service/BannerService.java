@@ -46,7 +46,7 @@ public class BannerService extends AbstractIntentService {
 				Response response = getResponse();
 				if (response.getStatusCode() == HttpStatus.SC_OK) {
 					mBitmap = BitmapFactory.decodeStream(response.getBody());
-					if(mBitmap != null) {
+					if (mBitmap != null) {
 						mShow.setBanner(mBitmap);
 					} else {
 						Ln.e("bitmap decodeStream returned null");
@@ -73,7 +73,7 @@ public class BannerService extends AbstractIntentService {
 			mBitmap = mShow.getBannerAsBitmap();
 		}
 	}
-	
+
 	@Override
 	protected void fillBundleResponse(Bundle bundle) {
 		bundle.putParcelable(EXTRA_OUTPUT_BITMAP, mBitmap);

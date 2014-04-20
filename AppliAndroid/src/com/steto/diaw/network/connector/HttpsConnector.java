@@ -39,7 +39,7 @@ public class HttpsConnector implements IHttpsConnector {
 	private static final int CONNECTION_READ_TIMEOUT = 15000;
 
 	private static final String GZIP = "gzip";
-	
+
 	/**
 	 * show the response from the server
 	 */
@@ -69,26 +69,27 @@ public class HttpsConnector implements IHttpsConnector {
 		Response response = new Response();
 		HttpURLConnection urlConnection = null;
 
-		try{
+		try {
 			urlConnection = createUrlConnection(url);
 			urlConnection.setConnectTimeout(CONNECTION_CONNECT_TIMEOUT);
 			urlConnection.setReadTimeout(CONNECTION_READ_TIMEOUT);
 			addHeaders(urlConnection);
 			urlConnection.setRequestMethod(method.name);
-			
+
 			Ln.d("appel a l'url : \"" + urlConnection.getURL().toString() + "\"");
-			
+
 			if (method != HttpMethod.GET && !TextUtils.isEmpty(content)) {
 				Ln.i("writing content:" + content);
 				urlConnection.setDoOutput(true);
 				try {
 					IOUtils.write(content, urlConnection.getOutputStream());
-				} finally {
+				}
+				finally {
 					IOUtils.closeQuietly(urlConnection.getOutputStream());
 				}
 			}
 
-			response.setStatusCode(urlConnection.getResponseCode()); 
+			response.setStatusCode(urlConnection.getResponseCode());
 			response.setHeaders(urlConnection.getHeaderFields());
 
 			InputStream inputstream;
@@ -98,23 +99,24 @@ public class HttpsConnector implements IHttpsConnector {
 				inputstream = urlConnection.getErrorStream();
 			}
 
-			if(inputstream != null){
-				if(GZIP.equals(urlConnection.getContentEncoding())){
+			if (inputstream != null) {
+				if (GZIP.equals(urlConnection.getContentEncoding())) {
 					response.setBody(new GZIPInputStream(inputstream));
-				}else{
+				} else {
 					response.setBody(inputstream);
 				}
-			}else{
+			} else {
 				response.setBody(new ByteArrayInputStream("body is null".getBytes("UTF-8")));
 			}
 
-			Ln.d("reponse a l'url = \"" + urlConnection.getURL().toString() + "\" response code " + response.getStatusCode() + " (" + urlConnection.getResponseMessage() + ")");
-			if(mShowResponseServerBody) {
+			Ln.d("reponse a l'url = \"" + urlConnection.getURL().toString() + "\" response code " + response.getStatusCode() + " ("
+					+ urlConnection.getResponseMessage() + ")");
+			if (mShowResponseServerBody) {
 				String bodyRecupere = IOUtils.toString(response.getBody());
 				response.setBody(IOUtils.toInputStream(bodyRecupere));
 				Ln.v("body = " + bodyRecupere);
 			}
-		} catch (IOException e){
+		} catch (IOException e) {
 			Ln.e(e.getCause());
 			throw e;
 		}

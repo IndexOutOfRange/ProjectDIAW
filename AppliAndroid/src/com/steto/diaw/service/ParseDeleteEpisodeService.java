@@ -92,7 +92,7 @@ public class ParseDeleteEpisodeService extends AbstractIntentService {
 	protected void fillBundleResponse(Bundle bundle) {
 		List<Episode> allEp = new ArrayList<Episode>();
 		try {
-			if(mEpisodeDao == null) {
+			if (mEpisodeDao == null) {
 				mEpisodeDao = mDatabaseHelper.getDao(Episode.class);
 			}
 			allEp = mEpisodeDao.queryForAllSeen();

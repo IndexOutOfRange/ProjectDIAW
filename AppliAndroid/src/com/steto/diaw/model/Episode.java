@@ -64,7 +64,7 @@ public class Episode implements Serializable, Comparable<Episode> {
 
 	@Element(name = "Overview", required = false)
 	@DatabaseField(columnName = COLUMN_OVERVIEW)
-	private String mOverview= "";
+	private String mOverview = "";
 
 	public Episode() {}
 

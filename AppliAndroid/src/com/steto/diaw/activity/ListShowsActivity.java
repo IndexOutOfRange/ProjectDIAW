@@ -276,9 +276,10 @@ public class ListShowsActivity extends DrawerActivity {
 	}
 
 	private final class LoadShowTask extends AsyncTask<Void, Integer, Void> {
+
 		private List<Show> showAsyncAll;
 		private List<Show> showAsyncVisibile;
-		
+
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();

@@ -2,6 +2,8 @@
 <resources>
 
 	<color name="transparent">#00000000</color>
+	<color name="transparent_gris">#44DDDDDD</color>
+	<color name="transparent_holo_blue">#4433b5e5</color>
 	<color name="noir">#000000</color>
 	<color name="gris">#DDDDDD</color>
 	<color name="gris_fonce">#CCCCCC</color>

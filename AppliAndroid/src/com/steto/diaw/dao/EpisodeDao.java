@@ -48,7 +48,7 @@ public class EpisodeDao extends BaseDaoImpl<Episode, String> {
 		nameArg.setValue(name);
 		return query(prepare);
 	}
-	
+
 	public List<Episode> getAllEpisodeFromShowNameSeen(String name) throws SQLException {
 		SelectArg nameArg = new SelectArg();
 		QueryBuilder<Episode, String> queryBuilder = queryBuilder();
@@ -71,6 +71,7 @@ public class EpisodeDao extends BaseDaoImpl<Episode, String> {
 		PreparedQuery<Episode> prepare = queryBuilder.prepare();
 		return (int) countOf(prepare);
 	}
+
 	/**
 	 * @param allEp la liste des episodes à ajouter
 	 * @return les épisodes correspondant dans la base
@@ -87,7 +88,7 @@ public class EpisodeDao extends BaseDaoImpl<Episode, String> {
 		}
 		return episodeInDatabaseList;
 	}
-	
+
 	public CreateOrUpdateStatus createFromWebService(Episode episode) throws SQLException {
 		if (episode == null) {
 			return new CreateOrUpdateStatus(false, false, 0);

@@ -76,7 +76,7 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 
 		initializeLayoutList();
 		mActionBarTranslucideHelper.setOnScrollChangedListener(getExpandableListView());
-		
+
 		if (mShow.isTVDBConnected()) {
 			setProgressBarIndeterminateVisibility(false);
 			initializeData();

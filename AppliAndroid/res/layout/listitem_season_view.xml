@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/listitem_season_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/selector_season"
+    android:orientation="vertical"
+    android:layout_marginTop="@dimen/very_small"
+    android:padding="@dimen/small" >
+
+    <TextView
+        android:id="@+id/listitem_season_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="marquee"
+        android:textAllCaps="true"
+        android:textSize="@dimen/text_big"
+        android:text="@string/hint_show_title" />
+
+</LinearLayout>

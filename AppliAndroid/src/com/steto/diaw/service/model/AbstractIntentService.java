@@ -157,7 +157,7 @@ public abstract class AbstractIntentService extends RoboIntentService {
 			mResultReceiver.send(getServiceResponseCode().value, mResponseBundle);
 		}
 	}
-	
+
 	private void initDefaultSSLFactory() {
 		SSLContext sSSLContext;
 		try {

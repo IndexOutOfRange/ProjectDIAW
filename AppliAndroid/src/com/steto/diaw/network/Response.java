@@ -26,8 +26,8 @@ public class Response {
 	public void setBody(InputStream body) {
 		this.mBody = body;
 	}
-	
-	public void setBody(String string){
+
+	public void setBody(String string) {
 		this.mBody = new ByteArrayInputStream(string.getBytes());
 	}
 

@@ -10,6 +10,6 @@ public class DiawApplication extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		RoboGuice.setBaseApplicationInjector(this, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(this), new DiawModule());
+		RoboGuice.setBaseApplicationInjector(this, Stage.PRODUCTION, RoboGuice.newDefaultRoboModule(this), new DiawModule());
 	}
 }

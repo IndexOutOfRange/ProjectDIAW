@@ -42,6 +42,9 @@ public class AmbiguityShow extends RoboListActivity {
 		List<Show> allSuggestedShow = (List<Show>) getIntent().getExtras().get(INPUT_POTENTIAL_SHOW);
 		mShow = (Show) getIntent().getExtras().get(INPUT_AMBIGUOUS_SHOW);
 		mList = (ListView) findViewById(android.R.id.list);
+		
+		getActionBar().setTitle(String.format(getString(R.string.activity_ambiguity_format), mShow.getShowName()));
+		
 		setAllSuggestedShow(allSuggestedShow);
 		// initIMDBReceiver();
 		initSerieServiceReceiver();

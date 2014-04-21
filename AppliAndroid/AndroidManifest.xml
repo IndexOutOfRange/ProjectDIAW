@@ -52,7 +52,9 @@
         <activity
             android:name="com.steto.diaw.activity.ShowDetailActivity"
             android:theme="@style/AppTheme.TranslucentActionBar" />
-        <activity android:name="com.steto.diaw.activity.AmbiguityShow" />
+        <activity
+            android:name="com.steto.diaw.activity.AmbiguityShow"
+            android:label="@string/activity_ambiguity" />
         <activity android:name="com.steto.diaw.activity.DatabaseActivity" />
 
         <service android:name="com.steto.diaw.service.ParseGetEpisodeService" />
@@ -69,7 +71,7 @@
         as an attachment point for the SyncAdapter. See res/xml/syncadapter.xml and SyncService.java.
 
         Since this ContentProvider is not exported, it will not be accessible outside of this app's
-        package.
+        package.
         -->
         <provider
             android:name="com.steto.diaw.provider.EpisodeProvider"

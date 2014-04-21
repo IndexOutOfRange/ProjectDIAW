@@ -7,7 +7,7 @@
     <string name="activity_title_home">Derniers épisodes</string>
     <string name="activity_title_login">Connection DIAW</string>
     <string name="activity_ambiguity">Recherche série</string>
-    <string name="activity_ambiguity_format">Recherche de la série %s</string>
+    <string name="activity_ambiguity_format_s">Recherche de la série %s</string>
 
     <!-- General -->
     <string name="no_data">Pas de données</string>
@@ -36,7 +36,7 @@
 	<string name="search_in_shows">Recherche parmis les séries</string>
 	<string name="search_show_hint">Rechercher une série</string>
 	
-	<string name="episode_seen_total_format">%1$d épisodes vus sur un total de %2$d épisodes</string>
-	<string name="show_without_data_format">%1$d épisodes vus - veuillez synchroniser la série.</string>
+	<string name="episode_seen_total_format_d_d">%1$d épisodes vus sur un total de %2$d épisodes</string>
+	<string name="show_without_data_format_d">%1$d épisodes vus - veuillez synchroniser la série.</string>
 
 </resources>

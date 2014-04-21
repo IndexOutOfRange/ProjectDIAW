@@ -46,9 +46,9 @@ public class ListItemViewShow extends LinearLayout {
 			mInfoTextView.setText(show.getResume());
 		} else {
 			if(show.getNumberEpisodes() == 0) {
-				mInfoTextView.setText(String.format(getResources().getString(R.string.show_without_data_format), show.getNumberEpisodesSaw()));			
+				mInfoTextView.setText(String.format(getResources().getString(R.string.show_without_data_format_d), show.getNumberEpisodesSaw()));			
 			} else {
-				mInfoTextView.setText(String.format(getResources().getString(R.string.episode_seen_total_format), show.getNumberEpisodesSaw(), show.getNumberEpisodes()));				
+				mInfoTextView.setText(String.format(getResources().getString(R.string.episode_seen_total_format_d_d), show.getNumberEpisodesSaw(), show.getNumberEpisodes()));				
 			}
 		}
 	}

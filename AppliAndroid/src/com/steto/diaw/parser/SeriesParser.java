@@ -1,13 +1,11 @@
 package com.steto.diaw.parser;
 
-import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.commons.io.IOUtils;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 
-import android.util.Log;
+import roboguice.util.Ln;
 
 import com.steto.diaw.model.TVDBContainerData;
 
@@ -17,23 +15,14 @@ import com.steto.diaw.model.TVDBContainerData;
 public class SeriesParser extends AbstractParser {
 
 	public TVDBContainerData parse(InputStream in) {
-		InputStream inin = in;
-		try {
-			String tmp = IOUtils.toString(in);
-			Log.i("parse", tmp);
-			inin = IOUtils.toInputStream(tmp);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
 		TVDBContainerData current = null;
 		Serializer serializer = new Persister();
 
 		try {
-			current = serializer.read(TVDBContainerData.class, inin);
+			current = serializer.read(TVDBContainerData.class, in);
 		} catch (Exception e) {
+			Ln.e(e);
 			setStatusCode(PARSER_GENERAL_EXCEPTION);
-			e.printStackTrace();
 		}
 		return current;
 	}

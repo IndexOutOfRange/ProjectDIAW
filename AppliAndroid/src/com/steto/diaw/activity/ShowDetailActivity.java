@@ -36,6 +36,7 @@ import com.steto.diaw.model.Season;
 import com.steto.diaw.model.Show;
 import com.steto.diaw.service.BannerService;
 import com.steto.diaw.service.TVDBService;
+import com.steto.diaw.service.model.AbstractIntentService;
 import com.steto.diaw.service.model.AbstractIntentService.ServiceResponseCode;
 import com.steto.projectdiaw.R;
 
@@ -412,21 +413,20 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 				boolean ambiguity = resultData.getBoolean(TVDBService.EXTRA_OUTPUT_AMBIGUITY);
 				if (ambiguity) {
 					List<Show> response = (List<Show>) resultData.get(TVDBService.EXTRA_OUTPUT_DATA);
-					if (response != null && !response.isEmpty()) {
-						resolveAmbiguity(response);
-					} else {
-						Toast.makeText(ShowDetailActivity.this, "Aucune serie ne correspond à ce nom.", Toast.LENGTH_SHORT).show();
-						searchSerieWithAnotherName();
-					}
+					resolveAmbiguity(response);
 				} else {
 					List<Show> response = (List<Show>) resultData.get(TVDBService.EXTRA_OUTPUT_DATA);
-					if (response != null && !response.isEmpty()) {
-						mShow = response.get(0);
-						initializeData();
-					}
+					mShow = response.get(0);
+					initializeData();
 				}
 			} else {
-				Toast.makeText(ShowDetailActivity.this, "Unable to get result from service", Toast.LENGTH_SHORT).show();
+				int detailedResultCode = resultData.getInt(AbstractIntentService.EXTRA_OUTPUT_DETAILED_RESULT_CODE);
+				if (detailedResultCode == AbstractIntentService.PARSING_ERROR) {
+					Toast.makeText(ShowDetailActivity.this, R.string.no_result_for_showname, Toast.LENGTH_SHORT).show();
+					searchSerieWithAnotherName();
+				} else {
+					Toast.makeText(ShowDetailActivity.this, "Unable to get result from service", Toast.LENGTH_SHORT).show();
+				}
 			}
 		}
 	}

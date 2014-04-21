@@ -367,6 +367,8 @@ public class EpisodesSeenActivity extends DrawerActivity {
 
 	private class LoadEpisodesFromDatabaseTask extends AsyncTask<Void, Integer, Void> {
 
+		private List<Episode> mEpisodeListFromDataBase;
+
 		@Override
 		protected void onPreExecute() {
 			mUpdateInProgress = true;
@@ -375,19 +377,19 @@ public class EpisodesSeenActivity extends DrawerActivity {
 
 		@Override
 		protected Void doInBackground(Void... voids) {
-			List<Episode> episodeListFromDataBase = new ArrayList<Episode>();
+			mEpisodeListFromDataBase = new ArrayList<Episode>();
 			try {
-				episodeListFromDataBase = ((EpisodeDao) mDatabaseHelper.getDao(Episode.class)).queryForAllSeen();
+				mEpisodeListFromDataBase = ((EpisodeDao) mDatabaseHelper.getDao(Episode.class)).queryForAllSeen();
 			} catch (SQLException e) {
 				Ln.e(e);
 			}
-			mAllEp.clear();
-			mAllEp.addAll(episodeListFromDataBase);
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
+			mAllEp.clear();
+			mAllEp.addAll(mEpisodeListFromDataBase);
 			mAdapter.notifyDataSetChanged();
 			mUpdateInProgress = false;
 			invalidateOptionsMenu();

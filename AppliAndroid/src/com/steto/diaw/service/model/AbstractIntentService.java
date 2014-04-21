@@ -153,6 +153,7 @@ public abstract class AbstractIntentService extends RoboIntentService {
 
 	private void sendResponse() {
 		if (mResultReceiver != null) {
+			mResponseBundle.putInt(EXTRA_OUTPUT_DETAILED_RESULT_CODE, getServiceStatusCode());
 			fillBundleResponse(mResponseBundle);
 			mResultReceiver.send(getServiceResponseCode().value, mResponseBundle);
 		}

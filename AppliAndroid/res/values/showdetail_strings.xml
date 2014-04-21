@@ -7,5 +7,6 @@
     <string name="dialog_rename_show_name">nom de la série</string>
     <string name="dialog_search_show_name">nom de la série à chercher</string>
     <string name="season_text_format">Saison %1$d (%2$d épisodes)</string>
+    <string name="no_result_for_showname">Aucune série ne correspond à ce nom.</string>
 
 </resources>

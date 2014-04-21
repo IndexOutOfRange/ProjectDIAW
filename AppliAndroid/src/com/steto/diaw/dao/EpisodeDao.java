@@ -21,6 +21,11 @@ import com.steto.diaw.model.Show;
 
 public class EpisodeDao extends BaseDaoImpl<Episode, String> {
 
+	/**
+	 * 50
+	 */
+	private static final int NUMBER_EPISODES = 50;
+
 	public EpisodeDao(ConnectionSource connection) throws SQLException {
 		super(connection, Episode.class);
 	}
@@ -125,11 +130,23 @@ public class EpisodeDao extends BaseDaoImpl<Episode, String> {
 		return create(ep);
 	}
 
-	public List<Episode> queryForAllSeen() throws SQLException {
+	public List<Episode> queryForAllSeen(long limit) throws SQLException {
 		QueryBuilder<Episode, String> queryBuilder = queryBuilder();
 		queryBuilder.where().eq(Episode.COLUMN_SEEN, true);
 		queryBuilder.orderBy(Episode.COLUMN_UPDATED_AT, false);
+		if (limit != 0) {
+			queryBuilder.limit(limit);
+		}
 		return query(queryBuilder.prepare());
+	}
+
+	/**
+	 * 
+	 * @return the last 50 (NUMBER_EPISODE) episodes with an update
+	 * @throws SQLException
+	 */
+	public List<Episode> queryForAllSeen() throws SQLException {
+		return queryForAllSeen(NUMBER_EPISODES);
 	}
 
 	public void updateEpisode(Episode episode, String keyOfNewValue, String newValue) throws SQLException {

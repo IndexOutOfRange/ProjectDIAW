@@ -6,7 +6,7 @@ import java.net.MalformedURLException;
 
 public class TVDBConnector extends HttpsConnector {
 
-	private static final String DNS = "http://thetvdb.com/api/";
+	private static final String DNS = "http://thetvdb.com/api";
 
 	@Override
 	protected HttpURLConnection createUrlConnection(String url) throws MalformedURLException, IOException {

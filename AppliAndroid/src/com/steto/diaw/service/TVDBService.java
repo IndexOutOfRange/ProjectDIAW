@@ -32,6 +32,7 @@ public class TVDBService extends AbstractIntentService {
 
 	private static final String NAME = "TVDBService";
 	private static final String SERIE_NAME_QUERY = "seriesname";
+	private static final String LANGUAGE_QUERY = "language";
 
 	public static final String EXTRA_INPUT_SHOW = "EXTRA_INPUT_SHOW";
 	public static final String EXTRA_OUTPUT_DATA = "EXTRA_OUTPUT_DATA";
@@ -85,6 +86,7 @@ public class TVDBService extends AbstractIntentService {
 		} else {
 			QueryString queryString = new QueryString();
 			queryString.add(SERIE_NAME_QUERY, mInputShow.getShowName());
+			queryString.add(LANGUAGE_QUERY, Locale.getDefault().getLanguage());
 			return "GetSeries.php" + queryString.toString();
 		}
 	}

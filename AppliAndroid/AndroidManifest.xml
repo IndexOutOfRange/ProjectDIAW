@@ -51,11 +51,16 @@
         </activity>
         <activity
             android:name="com.steto.diaw.activity.ShowDetailActivity"
-            android:theme="@style/AppTheme.TranslucentActionBar" />
+            android:theme="@style/AppTheme.TranslucentActionBar"
+            android:launchMode="singleTask" />
         <activity
             android:name="com.steto.diaw.activity.AmbiguityShow"
-            android:label="@string/activity_ambiguity" />
-        <activity android:name="com.steto.diaw.activity.DatabaseActivity" />
+            android:label="@string/activity_ambiguity"
+            android:launchMode="singleTask" />
+        <activity android:name="com.steto.diaw.activity.DatabaseActivity"
+            android:launchMode="singleTask" />
+        <activity android:name="com.steto.diaw.activity.PlanningActivity"
+            android:launchMode="singleTask" />
 
         <service android:name="com.steto.diaw.service.ParseGetEpisodeService" />
         <service android:name="com.steto.diaw.service.ParseUpdateEpisodeService" />

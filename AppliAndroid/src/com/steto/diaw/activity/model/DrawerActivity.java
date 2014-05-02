@@ -25,6 +25,7 @@ public abstract class DrawerActivity extends RoboActivity {
 
 	protected static final int DRAWER_DERNIERS_EPISODES = 0;
 	protected static final int DRAWER_MES_SERIES = 1;
+	protected static final int DRAWER_PLANNING_SERIES = 2;
 
 	@InjectView(R.id.drawer_layout)
 	private DrawerLayout mDrawerLayout;

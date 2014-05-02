@@ -140,12 +140,13 @@ public class EpisodesSeenActivity extends DrawerActivity {
 	protected void manageDrawerItemClick(int position) {
 		if (position == getSelectedItem()) {
 			return;
-		}
-		if (position == DRAWER_MES_SERIES) {
+		} else if (position == DRAWER_MES_SERIES) {
 			startActivity(new Intent(this, ListShowsActivity.class));
 			overridePendingTransition(0, 0);
-		}
-	}
+		} else if (position == DRAWER_PLANNING_SERIES) {
+			startActivity(new Intent(this, PlanningActivity.class));
+			overridePendingTransition(0, 0);
+		}	}
 
 	private void initializeListView() {
 		mList.setAdapter(mAdapter);

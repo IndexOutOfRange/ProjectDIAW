@@ -136,9 +136,11 @@ public class ListShowsActivity extends DrawerActivity {
 	protected void manageDrawerItemClick(int position) {
 		if (position == getSelectedItem()) {
 			return;
-		}
-		if (position == DRAWER_DERNIERS_EPISODES) {
+		} else if (position == DRAWER_DERNIERS_EPISODES) {
 			startActivity(new Intent(this, EpisodesSeenActivity.class));
+			overridePendingTransition(0, 0);
+		} else if (position == DRAWER_PLANNING_SERIES) {
+			startActivity(new Intent(this, PlanningActivity.class));
 			overridePendingTransition(0, 0);
 		}
 	}

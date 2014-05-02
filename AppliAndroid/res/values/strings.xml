@@ -6,6 +6,7 @@
     <string name="activity_title_list_show">Mes séries</string>
     <string name="activity_title_home">Derniers épisodes</string>
     <string name="activity_title_login">Connection DIAW</string>
+    <string name="activity_title_planning">Planning</string>
     <string name="activity_ambiguity">Recherche série</string>
     <string name="activity_ambiguity_format_s">Recherche de la série %s</string>
 

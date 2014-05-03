@@ -63,7 +63,7 @@ public class TVDBService extends AbstractIntentService {
 			mShowList = getShowsFromId();
 		} else {
 			mShowList = getShowsFromName();
-			if (mShowList != null && mShowList.size() == 1) {
+			if (mShowList != null && (mShowList.size() == 1 || showIsDoubled())) {
 				// si la "recherche" sur TVDB n'a donné qu'un seul resultat
 				mIdTvdb = mShowList.get(0).getTVDBID();
 				mShowList = getShowsFromId();
@@ -183,5 +183,11 @@ public class TVDBService extends AbstractIntentService {
 			listShow.add(mInputShow);
 		}
 		return listShow;
+	}
+	
+	private boolean showIsDoubled() {
+		boolean twoshow = mShowList.size() == 2;
+		boolean hasSameId = mShowList.get(0).getTVDBID() == mShowList.get(1).getTVDBID();
+		return twoshow && hasSameId;
 	}
 }

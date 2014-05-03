@@ -63,7 +63,6 @@ public class ListShowsActivity extends DrawerActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		super.onCreate(savedInstanceState);
-		setProgressBarIndeterminateVisibility(mUpdateInProgress);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 
 		mAdapter = new ListShowAdapter(ListShowsActivity.this, mShowsVisible);
@@ -285,6 +284,7 @@ public class ListShowsActivity extends DrawerActivity {
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
+			setProgressBarIndeterminateVisibility(true);
 			showAsyncAll = new ArrayList<Show>();
 			showAsyncVisibile = new ArrayList<Show>();
 		}
@@ -314,6 +314,7 @@ public class ListShowsActivity extends DrawerActivity {
 
 		@Override
 		protected void onPostExecute(Void result) {
+			setProgressBarIndeterminateVisibility(false);
 			mAllShows.clear();
 			mShowsVisible.clear();
 			mAllShows.addAll(showAsyncAll);

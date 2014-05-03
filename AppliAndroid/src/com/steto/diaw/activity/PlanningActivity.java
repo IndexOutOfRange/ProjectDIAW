@@ -30,9 +30,8 @@ public class PlanningActivity extends DrawerActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-		setProgressBarIndeterminateVisibility(false);
 		super.onCreate(savedInstanceState);
-
+		
 		mAdapter = new PlanningShowAdapter(this);
 		ListView listview = (ListView) mContentView.findViewById(android.R.id.list);
 		listview.setAdapter(mAdapter);

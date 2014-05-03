@@ -206,7 +206,7 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 	}
 
 	private void resolveAmbiguity(List<Show> ambiguous) {
-		Intent intent = new Intent(this, AmbiguityShow.class);
+		Intent intent = new Intent(ShowDetailActivity.this, AmbiguityShow.class);
 		intent.putExtra(AmbiguityShow.INPUT_POTENTIAL_SHOW, (Serializable) ambiguous);
 		intent.putExtra(AmbiguityShow.INPUT_AMBIGUOUS_SHOW, (Serializable) mShow);
 		startActivityForResult(intent, REQUEST_RESOLVE_AMBIGUITY);
@@ -217,7 +217,7 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 		try {
 			mShow = ((ShowDao) mDatabaseHelper.getDao(Show.class)).queryFromName(showName);
 			setProgressBarIndeterminateVisibility(true);
-			launchSerieService();
+			refreshLayout();
 			launchBannerService();
 			return true;
 		} catch (SQLException e) {

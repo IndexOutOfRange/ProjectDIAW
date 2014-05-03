@@ -52,10 +52,10 @@ public class AmbiguityShow extends RoboListActivity {
 		mList.setOnItemClickListener(new ListItemClickedListener());
 	}
 
-	private void launchSerieService(Show show, ResultReceiver resultReceiver) {
+	private void launchSerieService(Show show) {
 		Intent intent = new Intent(this, TVDBService.class);
 		intent.putExtra(TVDBService.EXTRA_INPUT_SHOW, show);
-		intent.putExtra(TVDBService.EXTRA_INPUT_RESULT_RECEIVER, resultReceiver);
+		intent.putExtra(TVDBService.EXTRA_INPUT_RESULT_RECEIVER, mSerieServiceResultReceiver);
 		startService(intent);
 	}
 
@@ -117,7 +117,7 @@ public class AmbiguityShow extends RoboListActivity {
 			clicked.setId(mShow.getId());
 			clicked.setTVDBConnected(false);
 			clicked.setShowName(mShow.getShowName());
-			launchSerieService(clicked, mSerieServiceResultReceiver);
+			launchSerieService(clicked);
 		}
 	}
 }

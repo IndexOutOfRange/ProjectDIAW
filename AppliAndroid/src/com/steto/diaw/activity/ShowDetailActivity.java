@@ -2,6 +2,7 @@ package com.steto.diaw.activity;
 
 import java.io.Serializable;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import roboguice.activity.RoboExpandableListActivity;
@@ -17,6 +18,7 @@ import android.os.ResultReceiver;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -100,6 +102,23 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.show_detail, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_update_show_data:
+                launchSerieService(true);
+                return true;
+        }
+        return false;
+    }
+
     private void resolveAmbiguity(List<Show> ambiguous) {
 		Intent intent = new Intent(ShowDetailActivity.this, AmbiguityShow.class);
 		intent.putExtra(AmbiguityShow.INPUT_POTENTIAL_SHOW, (Serializable) ambiguous);
@@ -148,15 +167,16 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 			Ln.e(e);
 			Toast.makeText(this, "Erreur lors de la récupération des episodes de la serie", Toast.LENGTH_SHORT).show();
 		}
-		setProgressBarIndeterminateVisibility(true);
-		launchSerieService();
+		launchSerieService(false);
 		launchBannerService();
 	}
 
-	private void launchSerieService() {
-		if (!mShow.isTVDBConnected()) {
+	private void launchSerieService(boolean forceRefresh) {
+		if (!mShow.isTVDBConnected() || forceRefresh) {
+            setProgressBarIndeterminateVisibility(true);
 			Intent intent = new Intent(this, TVDBService.class);
 			intent.putExtra(TVDBService.EXTRA_INPUT_SHOW, mShow);
+            intent.putExtra(TVDBService.EXTRA_INPUT_FORCE_REFRESH, forceRefresh);
 			intent.putExtra(TVDBService.EXTRA_INPUT_RESULT_RECEIVER, mShowResultReceiver);
 			startService(intent);
 		}
@@ -165,6 +185,7 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 	private void launchBannerService() {
 		if (mShow.getBannerURL() != null && mShow.getBanner() == null && !mBannerIsDownloading) {
 			mBannerIsDownloading = true;
+            setProgressBarIndeterminateVisibility(true);
 			Intent intent = new Intent(this, BannerService.class);
 			intent.putExtra(BannerService.EXTRA_INPUT_SHOW, mShow);
 			intent.putExtra(BannerService.EXTRA_INPUT_RESULT_RECEIVER, mBannerResultReceiver);
@@ -219,7 +240,8 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 			TextView genre = (TextView) mHeaderContainer.findViewById(R.id.activity_show_detail_genre);
 			genre.setText(mShow.getGenre());
 			TextView onAir = (TextView) mHeaderContainer.findViewById(R.id.activity_show_detail_on_air);
-			onAir.setText(mShow.getDateDebut() != null ? mShow.getDateDebut().toString() : "loading");
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+			onAir.setText(mShow.getDateDebut() != null ? sdf.format(mShow.getDateDebut()) : "loading");
 			TextView statut = (TextView) mHeaderContainer.findViewById(R.id.activity_show_detail_statut);
 			statut.setText(mShow.getStatus());
 			TextView nbSeasons = (TextView) mHeaderContainer.findViewById(R.id.activity_show_nb_seasons);

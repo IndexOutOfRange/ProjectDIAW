@@ -37,15 +37,17 @@ public class TVDBService extends AbstractIntentService {
 	public static final String EXTRA_INPUT_SHOW = "EXTRA_INPUT_SHOW";
 	public static final String EXTRA_OUTPUT_DATA = "EXTRA_OUTPUT_DATA";
 	public static final String EXTRA_OUTPUT_AMBIGUITY = "EXTRA_OUTPUT_AMBIGUITY";
+    public static final String EXTRA_INPUT_FORCE_REFRESH = "EXTRA_INPUT_FORCE_REFRESH";
 
-	@Inject
+    @Inject
 	private DatabaseHelper mDatabaseHelper;
 	private Show mInputShow;
 	private List<Show> mShowList;
 	private int mIdTvdb = 0;
 	private boolean mContainsAmbiguity = false;
+    private Boolean mForceRefresh;
 
-	public TVDBService() {
+    public TVDBService() {
 		super(NAME);
 	}
 
@@ -53,7 +55,7 @@ public class TVDBService extends AbstractIntentService {
 	protected void processInputExtras(Bundle bundle) {
 		super.processInputExtras(bundle);
 		mInputShow = (Show) bundle.get(EXTRA_INPUT_SHOW);
-
+        mForceRefresh = (Boolean) bundle.get(EXTRA_INPUT_FORCE_REFRESH);
 	}
 
 	@Override
@@ -128,7 +130,7 @@ public class TVDBService extends AbstractIntentService {
 	private List<Show> getShowsFromId() {
 		List<Show> listShow = null;
 
-		if (!mInputShow.isTVDBConnected()) {
+		if (!mInputShow.isTVDBConnected() || mForceRefresh) {
 			try {
 				Response response = getResponse();
 				if (response.getStatusCode() == HttpStatus.SC_OK) {

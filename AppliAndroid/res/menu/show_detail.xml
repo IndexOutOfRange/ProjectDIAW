@@ -2,8 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:id="@+id/menu_remove_show_link"
-        android:icon="@drawable/ic_menu_stop"
-        android:title="@string/rename_remove_show_link"/>
+        android:id="@+id/menu_update_show_data"
+        android:icon="@drawable/ic_menu_refresh"
+        android:title="@string/update_show_data"/>
 
 </menu>

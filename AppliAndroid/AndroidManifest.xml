@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.steto.projectdiaw"
     android:versionCode="1"
-    android:versionName="DIAW-V0.DEV" >
+    android:versionName="TVSM-V0.DEV" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -65,7 +65,6 @@
         <service android:name="com.steto.diaw.service.ParseDeleteEpisodeService" />
         <service android:name="com.steto.diaw.service.TVDBService" />
         <service android:name="com.steto.diaw.service.BannerService" />
-        <service android:name="com.steto.diaw.service.IMDBService" />
 
         <!--
         ContentProvider to store episode data.
@@ -74,7 +73,10 @@
         as an attachment point for the SyncAdapter. See res/xml/syncadapter.xml and SyncService.java.
 
         Since this ContentProvider is not exported, it will not be accessible outside of this app's
-        package.
+        package.
+
+
+
         -->
         <provider
             android:name="com.steto.diaw.provider.EpisodeProvider"

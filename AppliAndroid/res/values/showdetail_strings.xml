@@ -2,11 +2,13 @@
 <resources>
 
     <string name="rename_show">Renommer la série</string>
-    <string name="rename_remove_show_link">Retirer les données de la série</string>
+    <string name="update_show_data">Mettre à jour</string>
     <string name="search_show_dialog">Renommer la série pour faire une recherche ?</string>
     <string name="dialog_rename_show_name">nom de la série</string>
     <string name="dialog_search_show_name">nom de la série à chercher</string>
     <string name="season_text_format">Saison %1$d (%2$d épisodes)</string>
     <string name="no_result_for_showname">Aucune série ne correspond à ce nom.</string>
+    <string name="first_aired_label">Première diffusion : </string>
+    <string name="nb_seasons_label"> saison(s)</string>
 
 </resources>

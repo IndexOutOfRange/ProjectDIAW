@@ -103,20 +103,6 @@ public class ListShowsActivity extends DrawerActivity {
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		setProgressBarIndeterminateVisibility(mUpdateInProgress);
-
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.shows_list, menu);
-
-		// Associate searchable configuration with the SearchView
-		SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-		SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
-		searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-		return super.onCreateOptionsMenu(menu);
-	}
-
-	@Override
 	protected int getLayoutContentFrame() {
 		return R.layout.activity_list_shows;
 	}
@@ -128,7 +114,6 @@ public class ListShowsActivity extends DrawerActivity {
 
 	@Override
 	protected void manageIconsInActionBar(Menu menu, boolean drawerOpen) {
-		menu.findItem(R.id.menu_search).setVisible(!drawerOpen);
 	}
 
 	@Override

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content" >
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/activity_show_detail_image"
@@ -13,7 +13,7 @@
             android:layout_height="@dimen/header_image_height"
             android:background="@color/gris_fonce"
             android:contentDescription="@string/desc_banner_show"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"/>
 
         <LinearLayout
             android:id="@+id/activity_show_detail_info_layout"
@@ -23,67 +23,102 @@
             android:background="@drawable/rectangle_gradient"
             android:orientation="vertical"
             android:padding="@dimen/small"
-            android:visibility="gone" >
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/activity_show_detail_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text=""
-                android:textSize="@dimen/text_big" />
+                android:textSize="@dimen/text_big"/>
 
-            <TextView
-                android:id="@+id/activity_show_detail_on_air"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/activity_show_detail_on_air_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/first_aired_label"/>
+
+                <TextView
+                    android:id="@+id/activity_show_detail_on_air"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""/>
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:weightSum="2" >
+                android:weightSum="2">
 
-                <TextView
-                    android:id="@+id/activity_show_nb_seasons"
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="" />
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/activity_show_nb_episodes"
+                    <TextView
+                        android:id="@+id/activity_show_nb_seasons"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""/>
+
+                    <TextView
+                        android:id="@+id/activity_show_nb_seasons_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/nb_seasons_label"/>
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="right"
-                    android:text="" />
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/activity_show_nb_episodes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""/>
+                    <TextView
+                        android:id="@+id/activity_show_nb_episodes_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" episode(s)"/>
+                    </LinearLayout>
             </LinearLayout>
 
             <TextView
                 android:id="@+id/activity_show_detail_genre"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="" />
+                android:text=""/>
 
             <TextView
                 android:id="@+id/activity_show_detail_statut"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="right"
-                android:text="" />
+                android:text=""/>
 
             <TextView
                 android:id="@+id/activity_show_detail_summary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="" />
+                android:text=""/>
         </LinearLayout>
     </RelativeLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/gradient" />
+        android:background="@drawable/gradient"/>
 
 </FrameLayout>

@@ -78,10 +78,6 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 		initializeLayoutList();
 		mActionBarTranslucideHelper.setOnScrollChangedListener(getExpandableListView());
 
-		if (mShow.isTVDBConnected()) {
-			setProgressBarIndeterminateVisibility(false);
-			initializeData();
-		}
 	}
 
 	@Override
@@ -95,117 +91,16 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 		}
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.show_detail, menu);
-		return super.onCreateOptionsMenu(menu);
-	}
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mShow.isTVDBConnected()) {
+            setProgressBarIndeterminateVisibility(false);
+            initializeData();
+        }
+    }
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case android.R.id.home:
-				onBackPressed();
-				return true;
-			case R.id.menu_rename:
-				renameShow();
-				return true;
-			case R.id.menu_remove_show_link:
-				removeShowLink();
-				return true;
-			default:
-				return super.onOptionsItemSelected(item);
-		}
-	}
-
-	private void removeShowLink() {
-		// suppression du lien des Episode
-		for (Season season : mListSeasons) {
-			for (Episode episode : season.getEpisodes()) {
-				try {
-					if (!episode.isSeen()) {
-						mDatabaseHelper.getDao(Episode.class).delete(episode);
-					} else {
-						episode.setEpisodeName(null);
-						mDatabaseHelper.getDao(Episode.class).update(episode);
-					}
-				} catch (SQLException e) {
-					Ln.e(e);
-				}
-			}
-		}
-		// suppression du lien du Show
-		try {
-			mShow.setBanner((byte[]) null);
-			mShow.setBannerURL(null);
-			mShow.setChaine(null);
-			mShow.setDateDebut(null);
-			mShow.setGenre(null);
-			mShow.setIMDBID(null);
-			mShow.setStatus(null);
-			mShow.setResume(null);
-			mShow.setNumberSeasons(0);
-			mShow.setNumberEpisodes(0);
-			mShow.setTVDBConnected(false);
-			mShow.setTVDBID(0);
-			mDatabaseHelper.getDao(Show.class).update(mShow);
-		} catch (SQLException e) {
-			Ln.e(e);
-		}
-		Intent intent = new Intent(getApplicationContext(), ShowDetailActivity.class);
-		intent.putExtra(EXTRA_SHOW, mShow);
-		startActivity(intent);
-		finish();
-	}
-
-	private void searchSerieWithAnotherName() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		LayoutInflater inflater = getLayoutInflater();
-		View viewInDialog = inflater.inflate(R.layout.dialog_rename, null);
-		final EditText nameShowEditText = (EditText) viewInDialog.findViewById(R.id.dialog_rename_episode_name);
-		nameShowEditText.setHint(R.string.dialog_search_show_name);
-		nameShowEditText.setText(mShow.getShowName());
-		builder.setCancelable(false);
-		builder.setView(viewInDialog)
-				// Add action buttons
-				.setPositiveButton(R.string.btn_ok, new DialogInterface.OnClickListener() {
-
-					@Override
-					public void onClick(DialogInterface dialog, int id) {
-						mShow.setShowName(nameShowEditText.getText().toString());
-						setProgressBarIndeterminateVisibility(true);
-						launchSerieService();
-					}
-				})
-				.setNegativeButton(R.string.btn_annuler, new DialogInterface.OnClickListener() {
-
-					public void onClick(DialogInterface dialog, int id) {
-						dialog.dismiss();
-					}
-				})
-				.setTitle(R.string.search_show_dialog);
-		AlertDialog dialog = builder.create();
-		dialog.show();
-	}
-
-	private void renameShow() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		LayoutInflater inflater = getLayoutInflater();
-		View viewInDialog = inflater.inflate(R.layout.dialog_rename, null);
-		final EditText nameShowEditText = (EditText) viewInDialog.findViewById(R.id.dialog_rename_episode_name);
-		nameShowEditText.setHint(R.string.dialog_rename_show_name);
-		nameShowEditText.setText(mShow.getShowName());
-
-		builder.setView(viewInDialog)
-				// Add action buttons
-				.setPositiveButton(R.string.btn_ok, new OnRenameOKClickListener(nameShowEditText))
-				.setNegativeButton(R.string.btn_annuler, new OnRenameCancelClickListener())
-				.setTitle(R.string.rename_show);
-		AlertDialog dialog = builder.create();
-		dialog.show();
-	}
-
-	private void resolveAmbiguity(List<Show> ambiguous) {
+    private void resolveAmbiguity(List<Show> ambiguous) {
 		Intent intent = new Intent(ShowDetailActivity.this, AmbiguityShow.class);
 		intent.putExtra(AmbiguityShow.INPUT_POTENTIAL_SHOW, (Serializable) ambiguous);
 		intent.putExtra(AmbiguityShow.INPUT_AMBIGUOUS_SHOW, (Serializable) mShow);
@@ -423,7 +318,6 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 				int detailedResultCode = resultData.getInt(AbstractIntentService.EXTRA_OUTPUT_DETAILED_RESULT_CODE);
 				if (detailedResultCode == AbstractIntentService.PARSING_ERROR) {
 					Toast.makeText(ShowDetailActivity.this, R.string.no_result_for_showname, Toast.LENGTH_SHORT).show();
-					searchSerieWithAnotherName();
 				} else {
 					Toast.makeText(ShowDetailActivity.this, "Unable to get result from service", Toast.LENGTH_SHORT).show();
 				}
@@ -431,35 +325,4 @@ public class ShowDetailActivity extends RoboExpandableListActivity {
 		}
 	}
 
-	private class OnRenameOKClickListener implements DialogInterface.OnClickListener {
-
-		private final EditText nameShowEditText;
-
-		public OnRenameOKClickListener(EditText nameShowEditText) {
-			this.nameShowEditText = nameShowEditText;
-		}
-
-		@Override
-		public void onClick(DialogInterface dialog, int id) {
-			try {
-				setProgressBarIndeterminate(true);
-				String newName = nameShowEditText.getText().toString();
-				// rename all tv shows in this activity
-
-				// FIXME should call ParseUpdateEpisodeService...
-
-				ShowDao dao = mDatabaseHelper.getDao(Show.class);
-				dao.renameShow(mShow, newName);
-
-				// new ShowDetailActivity
-				Intent intentDetail = new Intent(ShowDetailActivity.this, ShowDetailActivity.class);
-				intentDetail.putExtra(ShowDetailActivity.EXTRA_SHOW_NAME, newName);
-				startActivity(intentDetail);
-				finish();
-			} catch (SQLException e) {
-				Log.e("ShowDetail", "impossible de renommer la serie");
-				dialog.dismiss();
-			}
-		}
-	}
 }

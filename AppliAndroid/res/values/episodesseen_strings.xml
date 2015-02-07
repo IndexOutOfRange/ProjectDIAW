@@ -9,6 +9,8 @@
     <!-- celllist -->
     <string name="hint_section">Section</string>
     <string name="hint_show_title">TV Show</string>
+    <string name="hint_show_firs_aired">15-02-2015</string>
+    <string name="hint_show_firs_aired_label">First aired : </string>
 
     <!-- Dialog -->
     <string name="dialog_rename_episode_name">nom de l\'épisode</string>

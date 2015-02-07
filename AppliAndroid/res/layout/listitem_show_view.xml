@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:ellipsize="marquee"
         android:text="@string/hint_show_title"
-        android:textAllCaps="true"
+        android:textAllCaps="false"
         android:textSize="@dimen/text_big" />
 
     <TextView

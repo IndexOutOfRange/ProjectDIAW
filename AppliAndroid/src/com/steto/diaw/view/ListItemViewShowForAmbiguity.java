@@ -11,18 +11,18 @@ import com.steto.projectdiaw.R;
 
 import java.text.SimpleDateFormat;
 
-public class ListItemViewShow extends LinearLayout {
+public class ListItemViewShowForAmbiguity extends LinearLayout {
 
     private TextView mFirstAiredTextView;
     private LinearLayout mLinearLayout;
     private TextView mNameTextView;
     private TextView mInfoTextView;
 
-    public ListItemViewShow(Context context) {
+    public ListItemViewShowForAmbiguity(Context context) {
         super(context);
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        inflater.inflate(R.layout.listitem_show_view, this);
+        inflater.inflate(R.layout.listitem_show_view_for_ambiguity, this);
 
         mLinearLayout = (LinearLayout) findViewById(R.id.listitem_show_layout);
         mNameTextView = (TextView) findViewById(R.id.listitem_show_name_tv);
@@ -38,11 +38,15 @@ public class ListItemViewShow extends LinearLayout {
         if (!TextUtils.isEmpty(show.getShowName())) {
             mNameTextView.setText(show.getShowName());
         }
-        if (show.getNumberEpisodes() == 0) {
-            mInfoTextView.setText(String.format(getResources().getString(R.string.show_without_data_format_d), show.getNumberEpisodesSaw()));
+
+        mInfoTextView.setText(show.getResume());
+        if( show.getDateDebut() != null ) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            mFirstAiredTextView.setText(sdf.format(show.getDateDebut()));
         } else {
-            mInfoTextView.setText(String.format(getResources().getString(R.string.episode_seen_total_format_d_d), show.getNumberEpisodesSaw(), show.getNumberEpisodes()));
+            mFirstAiredTextView.setText("");
         }
+
     }
 
     public void setLayoutBackgroundState(int[] state) {

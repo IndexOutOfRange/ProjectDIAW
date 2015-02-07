@@ -69,12 +69,9 @@ public class EpisodeDao extends BaseDaoImpl<Episode, String> {
 	}
 
 	public List<Episode> queryFromShowName(String name) throws SQLException {
-		SelectArg nameArg = new SelectArg();
 		QueryBuilder<Episode, String> queryBuilder = queryBuilder();
-		queryBuilder.where().eq(Episode.COLUMN_SHOWNAME, nameArg);
-		PreparedQuery<Episode> prepare = queryBuilder.prepare();
-		nameArg.setValue(name);
-		return query(prepare);
+		queryBuilder.where().eq(Episode.COLUMN_SHOWNAME, name);
+		return queryBuilder.query();
 	}
 
 	public List<Episode> queryFromShowNameSeen(String name) throws SQLException {
@@ -200,12 +197,22 @@ public class EpisodeDao extends BaseDaoImpl<Episode, String> {
 	// ---------------------------- //
 	// DELETE //
 	// ---------------------------- //
-	public int deleteEpisodeAfterRename(Episode ep) throws SQLException {
+	public Episode deleteEpisodeAfterRename(Episode ep) throws SQLException {
+        //on supprime l'ancien episode avec son ancien nom de serie
 		DeleteBuilder<Episode, String> deleteBuilder = deleteBuilder();
 		deleteBuilder.where().eq(Episode.COLUMN_OBJECT_ID, ep.getObjectId());
 		delete(deleteBuilder.prepare());
 
-		return create(ep);
+        Episode episodeAlreadyInBDD = queryForId(ep.getId());
+        if( episodeAlreadyInBDD != null ) {
+            //on a deja synchronise cette episode en mode "non vu".
+            episodeAlreadyInBDD.setSeen(ep.isSeen());
+            episodeAlreadyInBDD.setUpdatedAt(ep.getUpdatedAt());
+            update(episodeAlreadyInBDD);
+            return episodeAlreadyInBDD;
+        } else {
+            return createIfNotExists(ep);
+        }
 	}
 
 	// ---------------------------- //

@@ -11,15 +11,8 @@ import com.steto.diaw.view.ListItemViewShow;
 
 public class ListShowAdapter extends AbstractSelectableItemListAdapter<Show> {
 
-	private boolean ambitguity;
-
 	public ListShowAdapter(Context ctx, List<Show> all) {
-		this(ctx, all, false);
-	}
-
-	public ListShowAdapter(Context ctx, List<Show> all, boolean showSummary) {
 		super(ctx, all);
-		this.ambitguity = showSummary;
 	}
 
 	@Override
@@ -30,7 +23,7 @@ public class ListShowAdapter extends AbstractSelectableItemListAdapter<Show> {
 		} else {
 			current = (ListItemViewShow) view;
 		}
-		current.setData(getItem(i), ambitguity);
+		current.setData(getItem(i));
 
 		if (mCheckedItems.contains(Integer.valueOf(i))) {
 			// if this item is checked - set checked state

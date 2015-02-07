@@ -10,6 +10,7 @@ import org.apache.http.HttpStatus;
 
 import roboguice.util.Ln;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.inject.Inject;
 import com.steto.diaw.dao.DatabaseHelper;
@@ -84,7 +85,8 @@ public class ParseUpdateEpisodeService extends AbstractIntentService {
 				} else {
 					mServiceStatusCode = AbstractIntentService.HTTP_ERROR;
 					setServiceResponseCode(ServiceResponseCode.KO);
-					return;
+                    Log.w("parseUpdateEpisodeService", "Erreur " + response.getStatusCode() + " lors de l'appel au parseUpdateEpisodeService" );
+                    Log.w("parseUpdateEpisodeService", "Index  : " + mIndex + " Objet : " + mEpisodeToUpdateList.get(mIndex).toString());
 				}
 			} catch (IOException e) {
 				Ln.e(e.getCause());
@@ -116,7 +118,14 @@ public class ParseUpdateEpisodeService extends AbstractIntentService {
 
 	@Override
 	protected String getQuery() {
-		return "/1/classes/Show/" + mEpisodeToUpdateList.get(mIndex).getObjectId();
+        String id = mEpisodeToUpdateList.get(mIndex).getObjectId();
+        if( id != null) {
+            return "/1/classes/Show/" + id;
+        } else {
+            Log.w("parseUpdateEpisodeService", "tentative d'appel au parseUpdateEpisodeService avec un id null.");
+            Log.w("parseUpdateEpisodeService", "Index  : " + mIndex + " Objet : " + mEpisodeToUpdateList.get(mIndex).toString());
+            return "/1/classes/Show/" + id;
+        }
 	}
 
 	@Override

@@ -1,9 +1,5 @@
 package com.steto.diaw.activity;
 
-import java.util.List;
-
-import roboguice.activity.RoboListActivity;
-import roboguice.inject.ContentView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,10 +11,19 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.steto.diaw.adapter.ListShowAdapter;
+import com.steto.diaw.adapter.ListShowAdapterForAmbiguity;
 import com.steto.diaw.model.Show;
 import com.steto.diaw.service.TVDBService;
 import com.steto.diaw.service.model.AbstractIntentService.ServiceResponseCode;
 import com.steto.projectdiaw.R;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+
+import roboguice.activity.RoboListActivity;
+import roboguice.inject.ContentView;
 
 @ContentView(R.layout.activity_ambiguity_show)
 public class AmbiguityShow extends RoboListActivity {
@@ -28,7 +33,7 @@ public class AmbiguityShow extends RoboListActivity {
 
 	private Show mShow;
 	private List<Show> mAllSuggestedShow;
-	private ListShowAdapter mAdapter;
+	private ListShowAdapterForAmbiguity mAdapter;
 
 	private ListView mList;
 	private ResultReceiver mSerieServiceResultReceiver;
@@ -70,13 +75,25 @@ public class AmbiguityShow extends RoboListActivity {
 	}
 
 	public void setAllSuggestedShow(List<Show> allSuggestedShow) {
+        List<Show> uniqueSuggestedShow = new ArrayList<Show>();
+        for(Show show : allSuggestedShow) {
+            boolean alreadyPresent = false;
+            for(Show uniqueShow : uniqueSuggestedShow) {
+                if( uniqueShow.getTVDBID() == show.getTVDBID()) {
+                    alreadyPresent = true;
+                }
+            }
+            if( !alreadyPresent ) {
+                uniqueSuggestedShow.add(show);
+            }
+        }
 		if (mAllSuggestedShow == null) {
-			mAllSuggestedShow = allSuggestedShow;
-			mAdapter = new ListShowAdapter(this, mAllSuggestedShow, true);
+			mAllSuggestedShow = new ArrayList<Show>(uniqueSuggestedShow);
+			mAdapter = new ListShowAdapterForAmbiguity(this, mAllSuggestedShow);
 			mList.setAdapter(mAdapter);
 		} else {
 			mAllSuggestedShow.clear();
-			mAllSuggestedShow.addAll(allSuggestedShow);
+			mAllSuggestedShow.addAll(uniqueSuggestedShow);
 			mAdapter.notifyDataSetChanged();
 		}
 

@@ -4,13 +4,13 @@
     <!-- Login -->
     <string name="login_label">Login</string>
     <string name="pass_label">Password</string>
-    <string name="msg_send_vlc_plugin">Recevoir le plugin VLC par email</string>
     <string name="login_text_button">Login</string>
-    <string name="msg_app_description_login_screen">Bienvenue dans l\'application qui va vous permettre de gérer vos
-		séries ainsi que d\'etre tenu informé des evolutions de vos series préférées.	</string>
-    <string name="msg_pourquoi_se_loger">En ayant un compte l\'application vous permettra de suivre l\'évolution des
-		séries que vous regardez.	</string>
-    <string name="email_hint">mon@adresse.mail</string>
-    <string name="email_error">Veuillez indiquer votre email</string>
+    <string name="register_text_button">Register</string>
+    <string name="msg_app_description_login_screen">Welcome to Tv Show Me. With this application you will never be lost watching your beloved shows.</string>
+    <string name="msg_pourquoi_se_loger">By logging in you can instantly know where you stopped in every show you watch.</string>
+    <string name="login_hint">user</string>
+    <string name="login_error">Wrong username</string>
+    <string name="pass_hint">pass</string>
+    <string name="pass_error">Wrong password</string>
 
 </resources>

@@ -2,7 +2,7 @@
 <resources>
 
     <!-- Manifest -->
-    <string name="app_name">TV Show me</string>
+    <string name="app_name">TV Show Me</string>
     <string name="activity_title_list_show">Mes séries</string>
     <string name="activity_title_home">Derniers épisodes</string>
     <string name="activity_title_login">Connection TV Show me</string>
@@ -39,5 +39,6 @@
 	
 	<string name="episode_seen_total_format_d_d">%1$d épisodes vus sur un total de %2$d épisodes</string>
 	<string name="show_without_data_format_d">%1$d épisodes vus - veuillez synchroniser la série.</string>
+
 
 </resources>

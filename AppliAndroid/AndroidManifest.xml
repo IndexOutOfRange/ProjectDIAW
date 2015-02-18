@@ -65,6 +65,8 @@
         <service android:name="com.steto.diaw.service.ParseDeleteEpisodeService" />
         <service android:name="com.steto.diaw.service.TVDBService" />
         <service android:name="com.steto.diaw.service.BannerService" />
+        <service android:name="com.steto.diaw.service.LoginService" />
+        <service android:name="com.steto.diaw.service.SigningUpService" />
 
         <!--
         ContentProvider to store episode data.

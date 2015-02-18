@@ -10,12 +10,13 @@ import android.os.Handler;
 import android.os.ResultReceiver;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.inject.Inject;
+import com.steto.diaw.service.LoginService;
 import com.steto.diaw.service.ParseGetEpisodeService;
+import com.steto.diaw.service.SigningUpService;
 import com.steto.diaw.service.model.AbstractIntentService.ServiceResponseCode;
 import com.steto.diaw.tools.Tools;
 import com.steto.projectdiaw.R;
@@ -24,11 +25,13 @@ import com.steto.projectdiaw.R;
 public class LoginActivity extends RoboActivity {
 
 	@InjectView(R.id.login_button)
-	private Button mValidateButton;
-	@InjectView(R.id.email_edit_text)
-	private EditText mMailText;
-	@InjectView(R.id.send_plugin)
-	private CheckBox mSendPlugin;
+	private Button mLoginButton;
+	@InjectView(R.id.register_button)
+	private Button mRegisterButton;
+	@InjectView(R.id.login_edit_text)
+	private EditText mLoginText;
+    @InjectView(R.id.pass_edit_text)
+    private EditText mPassText;
 	@InjectView(R.id.login_form_layout)
 	private View mEcranLogin;
 
@@ -43,7 +46,8 @@ public class LoginActivity extends RoboActivity {
 	}
 
 	private void initializeListeners() {
-		mValidateButton.setOnClickListener(new OnValidateListener());
+		mLoginButton.setOnClickListener(new OnLoginClickListener());
+        mRegisterButton.setOnClickListener(new OnRegisterClickListener());
 	}
 
 	private void getShowsFromNetwork(String login) {
@@ -53,24 +57,86 @@ public class LoginActivity extends RoboActivity {
 		startService(in);
 	}
 
-	private final class OnValidateListener implements View.OnClickListener {
+    private void validateLoginPass(final String login, final String pass) {
+        Intent in = new Intent( this, LoginService.class);
+        in.putExtra(LoginService.EXTRA_INPUT_LOGIN, login);
+        in.putExtra(LoginService.EXTRA_INPUT_PASS, pass);
+        in.putExtra(LoginService.EXTRA_INPUT_RESULT_RECEIVER, new ResultReceiver(new Handler()) {
+            @Override
+            protected void onReceiveResult(int resultCode, Bundle resultData) {
+                super.onReceiveResult(resultCode, resultData);
+                if(resultCode == ServiceResponseCode.OK.value) {
+                    Toast.makeText(LoginActivity.this, "Successfully logged in as " + login,Toast.LENGTH_LONG).show();
+                    mSharedPreferences.edit().putString(Tools.SHARED_PREF_LOGIN, login).commit();
+                    getShowsFromNetwork(login);
+                } else {
+                    mEcranLogin.setVisibility(View.VISIBLE);
+                    getActionBar().setTitle(R.string.app_name);
+                    Toast.makeText(LoginActivity.this, "Error while logging",Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+        startService(in);
+
+    }
+
+    private void registerLoginPass(final String login, final String pass) {
+        Intent in = new Intent( this, SigningUpService.class);
+        in.putExtra(SigningUpService.EXTRA_INPUT_LOGIN, login);
+        in.putExtra(SigningUpService.EXTRA_INPUT_PASS, pass);
+        in.putExtra(SigningUpService.EXTRA_INPUT_RESULT_RECEIVER, new ResultReceiver(new Handler()) {
+            @Override
+            protected void onReceiveResult(int resultCode, Bundle resultData) {
+                super.onReceiveResult(resultCode, resultData);
+                if(resultCode == ServiceResponseCode.OK.value) {
+                    Toast.makeText(LoginActivity.this, "Successfully registred as " + login,Toast.LENGTH_LONG).show();
+                    mSharedPreferences.edit().putString(Tools.SHARED_PREF_LOGIN, login).commit();
+                    getShowsFromNetwork(login);
+                } else {
+                    mEcranLogin.setVisibility(View.VISIBLE);
+                    getActionBar().setTitle(R.string.app_name);
+                    Toast.makeText(LoginActivity.this, "Username " + login + " already taken.",Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+        startService(in);
+
+    }
+	private final class OnLoginClickListener implements View.OnClickListener {
 
 		@Override
 		public void onClick(View view) {
-			if (!"".equals(mMailText.getText().toString())) {
+			if (!"".equals(mLoginText.getText().toString())) {
 				mEcranLogin.setVisibility(View.GONE);
 				getActionBar().setTitle(R.string.loading);
 
-				String mail = mMailText.getText().toString();
-				mSharedPreferences.edit().putString(Tools.SHARED_PREF_LOGIN, mail).commit();
-				getShowsFromNetwork(mail);
+				String login = mLoginText.getText().toString();
+                String pass = mLoginText.getText().toString();
+                validateLoginPass(login, pass);
 			} else {
-				mMailText.setError(getString(R.string.email_error));
+				mLoginText.setError(getString(R.string.login_error));
 			}
 		}
 	}
 
-	private final class ShowResultReceiver extends ResultReceiver {
+    private final class OnRegisterClickListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View view) {
+            if (!"".equals(mLoginText.getText().toString())) {
+                mEcranLogin.setVisibility(View.GONE);
+                getActionBar().setTitle(R.string.loading);
+
+                String login = mLoginText.getText().toString();
+                String pass = mLoginText.getText().toString();
+                registerLoginPass(login, pass);
+            } else {
+                mLoginText.setError(getString(R.string.login_error));
+            }
+        }
+    }
+
+    private final class ShowResultReceiver extends ResultReceiver {
 
 		public ShowResultReceiver() {
 			super(new Handler());
